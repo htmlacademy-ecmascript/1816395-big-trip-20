@@ -33,7 +33,7 @@ function createTripSortTemplate() {
   );
 }
 
-export class SortsEventsTripView {
+export default class SortsEventsTripView {
   getTemplate() {
     return createTripSortTemplate();
   }

@@ -44,7 +44,7 @@ function createTripEventItemTemplate() {
   );
 }
 
-export class TripEventsItemView {
+export default class TripEventsItemView {
   getTemplate() {
     return createTripEventItemTemplate();
   }

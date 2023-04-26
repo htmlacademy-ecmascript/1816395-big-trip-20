@@ -30,7 +30,7 @@ function createTripFiltersTemplate() {
   );
 }
 
-export class TripFiltersView {
+export default class TripFiltersView {
   getTemplate() {
     return createTripFiltersTemplate();
   }

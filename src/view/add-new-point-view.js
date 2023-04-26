@@ -169,7 +169,7 @@ function createAddNewPointTemplate() {
   );
 }
 
-export class AddNewPointView {
+export default class AddNewPointView {
   getTemplate() {
     return createAddNewPointTemplate();
   }
