@@ -1,6 +1,7 @@
 import { TripFiltersView } from './view/trip-filters-trip-view.js';
 import { SortsEventsTripView } from './view/sort-events-trip-view.js';
 import { AddNewPointView } from './view/add-new-point-view.js';
+import { EditPointView } from './view/edit-point-view.js';
 import { render } from './render.js';
 
 const siteBodyElement = document.querySelector('body');
@@ -12,4 +13,5 @@ const tripEventsElement = siteBodyElement.querySelector('.trip-events');
 render(new TripFiltersView(), filterContainerElement);
 render(new SortsEventsTripView(), tripEventsElement);
 render(new AddNewPointView(), tripEventsElement);
+render(new EditPointView(), tripEventsElement);
 
