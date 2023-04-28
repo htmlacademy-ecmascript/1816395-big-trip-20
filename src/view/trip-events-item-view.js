@@ -1,7 +1,7 @@
 import { createElement } from '../render.js';
 
 function createTripEventItemTemplate() {
-  return (
+  return (/*html*/
     `
     <li class="trip-events__item">
     <div class="event">

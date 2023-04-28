@@ -1,7 +1,7 @@
 import { createElement } from '../render.js';
 
 function createTripFiltersTemplate() {
-  return (
+  return (/*html*/
     `
   <form class="trip-filters" action="#" method="get">
     <div class="trip-filters__filter">
