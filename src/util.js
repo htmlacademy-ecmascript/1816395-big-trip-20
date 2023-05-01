@@ -30,8 +30,8 @@ const util = {
     return array[Math.floor(Math.random() * array.length)];
   },
 
-  getRandomCount: function () {
-    return Math.floor(Math.random() * CONST_DATA.countLimit);
+  getRandomCount: function (countLimit) {
+    return Math.floor(Math.random() * countLimit);
   },
 
 
