@@ -22,6 +22,10 @@ const util = {
     ).format(CONST_DATA.formatDate);
   },
 
+  getRandomArrayElement: function (array) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
+
 
 };
 
