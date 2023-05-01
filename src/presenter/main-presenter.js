@@ -18,7 +18,10 @@ export default class MainPresenter {
       headerContainer: filterContainerElement,
       infoContainer: infoContainerElement
     });
-    const contentPresenter = new ContentPresenter({ contentContainer: tripEventsElement });
+    const contentPresenter = new ContentPresenter({
+      contentContainer: tripEventsElement,
+      tripPointsModel: this.tripPointsModel
+    });
 
     headerPresenter.init();
     contentPresenter.init();
