@@ -9,6 +9,10 @@ const tripEventsElement = siteBodyElement.querySelector('.trip-events');
 
 
 export default class MainPresenter {
+  constructor({ tripPointsModel }) {
+    this.tripPointsModel = tripPointsModel;
+  }
+
   init() {
     const headerPresenter = new HeaderPresenter({
       headerContainer: filterContainerElement,
