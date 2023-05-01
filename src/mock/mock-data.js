@@ -31,7 +31,7 @@ const getTripPoint = () => {
     offers: [
       getOffers()
     ],
-    type: 'taxi'
+    type: util.getRandomArrayElement(CONST_DATA.typeTripPoint)
 
   };
 };
