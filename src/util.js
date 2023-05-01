@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { CONST_DATA } from '../mock/const-data.js';
 
 const util = {
@@ -12,8 +13,11 @@ const util = {
     const
       start = new Date(CONST_DATA.years[0], 0, 1),
       end = new Date(CONST_DATA.years[1], 0, 1);
-    return new Date(start.getTime()
-      + Math.random() * (end.getTime() - start.getTime()));
+    return dayjs(
+      new Date(start.getTime()
+        + Math.random() * (end.getTime() - start.getTime()))
+    ).format(CONST_DATA.formatDate);
+
   }
 
 };
