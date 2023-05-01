@@ -5,6 +5,9 @@ const CONST_DATA = {
   countLimit: 10,
   offers: [
     'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
+  ],
+  typeTripPoint:[
+    'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
   ]
   cities: [
     'Abidjan',
