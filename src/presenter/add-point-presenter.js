@@ -3,7 +3,7 @@ import AddNewPointView from '../view/add-new-point-view.js';
 import { render } from '../render.js';
 
 export default class AddPointPresenter {
-  pointComponent = new AddNewPointView();
+  addPointComponent = new AddNewPointView();
 
   constructor({pointContainer,tripPoints}) {
     this.pointContainer = pointContainer;
@@ -11,7 +11,7 @@ export default class AddPointPresenter {
   }
 
   init() {
-    render(this.pointComponent, this.pointContainer);
+    render(this.addPointComponent, this.pointContainer);
   }
 
 }
