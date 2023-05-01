@@ -32,6 +32,6 @@ const getTripPoint = () => {
       getOffers()
     ],
     type: util.getRandomArrayElement(CONST_DATA.typeTripPoint)
-
   };
+  return tripPoint;
 };
