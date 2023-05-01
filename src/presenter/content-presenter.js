@@ -20,12 +20,18 @@ export default class ContentPresenter {
     render(this.contentComponent, this.contentContainer);
     render(this.sortComponent, contentBox, RenderPosition.AFTERBEGIN);
 
-    const addPointPresenter = new AddPointPresenter({ pointContainer: contentBox });
+    const addPointPresenter = new AddPointPresenter({
+      pointContainer: contentBox,
+      tripPointsModel: this.tripPointsModel
+    });
     addPointPresenter.init();
-    for (let i = 0; i < 3; i++) {
-      const pointPresenter = new PointPresenter({ pointContainer: contentBox });
-      pointPresenter.init();
-    }
+
+    const pointPresenter = new PointPresenter({
+      pointContainer: contentBox,
+      tripPointsModel: this.tripPointsModel
+    });
+    pointPresenter.init();
+
   }
 }
 
