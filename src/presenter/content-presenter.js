@@ -10,8 +10,9 @@ export default class ContentPresenter {
   contentComponent = new TripListEventsView();
   sortComponent = new SortsEventsTripView();
 
-  constructor({ contentContainer }) {
+  constructor({ contentContainer, tripPointsModel }) {
     this.contentContainer = contentContainer;
+    this.tripPointsModel = tripPointsModel;
   }
 
   init() {
