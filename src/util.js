@@ -22,9 +22,13 @@ const util = {
     ).format(CONST_DATA.formatDate);
   },
 
+  getRandomBooleanValue: function () {
+    return CONST_DATA.booleanValue[Math.floor(Math.random) * CONST_DATA.booleanValue.length];
+  },
+
   getRandomArrayElement: function (array) {
     return array[Math.floor(Math.random() * array.length)];
-  }
+  },
 
 
 };
