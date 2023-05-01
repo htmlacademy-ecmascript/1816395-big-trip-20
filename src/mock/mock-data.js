@@ -44,4 +44,6 @@ const getTripPoints = () => {
   return tripPoints;
 };
 
-export {getTripPoints};
+const getNewTripPoint = () => getNewTripPoint();
+
+export { getTripPoints, getNewTripPoint };
