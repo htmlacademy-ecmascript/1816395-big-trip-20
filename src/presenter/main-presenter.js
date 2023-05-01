@@ -14,13 +14,15 @@ export default class MainPresenter {
   }
 
   init() {
+    this.tripPoints = [...this.tripPointsModel.getPoints()];
     const headerPresenter = new HeaderPresenter({
       headerContainer: filterContainerElement,
-      infoContainer: infoContainerElement
+      infoContainer: infoContainerElement,
+      tripPoints: this.tripPoints
     });
     const contentPresenter = new ContentPresenter({
       contentContainer: tripEventsElement,
-      tripPointsModel: this.tripPointsModel
+      tripPoints: this.tripPoints
     });
 
     headerPresenter.init();
