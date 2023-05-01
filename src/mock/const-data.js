@@ -8,7 +8,7 @@ const CONST_DATA = {
   ],
   typeTripPoint:[
     'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
-  ]
+  ],
   cities: [
     'Abidjan',
     'Adana',
@@ -215,7 +215,6 @@ const CONST_DATA = {
     'Sapporo',
     'Sevastopol',
     'Seoul',
-    'Xi’an',
     'Sydney',
     'Simferopol',
     'Singapore',
