@@ -1,6 +1,7 @@
 const CONST_DATA = {
   years: [2023, 2024],
   formatDate: 'YYYY-MM-DDTHH:mm:ss',
+  booleanValue: [true, false],
   cities: [
     'Abidjan',
     'Adana',
