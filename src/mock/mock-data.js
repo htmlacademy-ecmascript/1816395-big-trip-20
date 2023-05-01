@@ -35,3 +35,13 @@ const getTripPoint = () => {
   };
   return tripPoint;
 };
+
+const getTripPoints = () => {
+  const tripPoints = [];
+  for (let i = 0; i < util.getRandomCount(CONST_DATA.countLimit); i++) {
+    tripPoints.push(getTripPoint());
+  }
+  return tripPoints;
+};
+
+export {getTripPoints};
