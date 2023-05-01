@@ -27,12 +27,13 @@ const util = {
 
 const getRandomPeriod = () => {
   const period = [];
-  period.push(util.getRandomDate);
-  let endPeriod = util.getRandomDate;
-  while (dayjs(endPeriod).isAfter(period[0])) {
-    endPeriod = util.getRandomDate;
+  period.push(util.getRandomDate());
+  let endPeriod = util.getRandomDate();
+  while (dayjs(period[0]).isAfter(endPeriod)) {
+    endPeriod = util.getRandomDate();
   }
-  return period.push(endPeriod);
+  period.push(endPeriod);
+  return period;
 
 };
 
