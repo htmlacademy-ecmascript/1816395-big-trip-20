@@ -46,4 +46,8 @@ const getTripPoints = () => {
 
 const getNewTripPoint = () => getNewTripPoint();
 
-export { getTripPoints, getNewTripPoint };
+const newTrip = getTripPoints();
+
+const getRandomTripPoint = () => util.getRandomArrayElement(newTrip);
+
+export { getTripPoints, getNewTripPoint ,getRandomTripPoint };
