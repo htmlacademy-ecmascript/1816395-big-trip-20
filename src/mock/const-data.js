@@ -3,6 +3,9 @@ const CONST_DATA = {
   formatDate: 'YYYY-MM-DDTHH:mm:ss',
   booleanValue: [true, false],
   countLimit: 10,
+  offers: [
+    'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
+  ]
   cities: [
     'Abidjan',
     'Adana',
