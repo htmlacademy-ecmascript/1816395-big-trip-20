@@ -1,7 +1,14 @@
 import { getRandomPeriod, util } from '../util.js';
 import { CONST_DATA } from '../mock/const-data.js';
 
-
+const getOffer = (offerTitle) => {
+  const newOffer = {
+    id: util.getUniqId(),
+    title: offerTitle,
+    price: util.getRandomPrice()
+  };
+  return newOffer;
+};
 
 const getOffers = () => {
   const newOffers = [];
