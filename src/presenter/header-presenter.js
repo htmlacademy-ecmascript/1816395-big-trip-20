@@ -7,9 +7,10 @@ export default class HeaderPresenter {
   filterComponent = new TripFiltersView();
   infoComponent = new TripEventsInfoView();
 
-  constructor({ headerContainer, infoContainer }) {
+  constructor({ headerContainer, infoContainer, tripPoints }) {
     this.headerContainer = headerContainer;
     this.infoContainer = infoContainer;
+    this.tripPoints = tripPoints;
   }
 
   init() {

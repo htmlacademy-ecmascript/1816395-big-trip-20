@@ -5,9 +5,9 @@ import { render } from '../render.js';
 export default class PointPresenter {
   pointComponent = new TripEventsItemView();
 
-  constructor({ pointContainer, tripPointsModel }) {
+  constructor({ pointContainer, tripPoints }) {
     this.pointContainer = pointContainer;
-    this.tripPointsModel = tripPointsModel;
+    this.tripPoints = tripPoints;
   }
 
   init() {
