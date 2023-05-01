@@ -31,7 +31,11 @@ const util = {
   },
 
   getRandomCount: function (countLimit) {
-    return Math.floor(Math.random() * countLimit);
+    let count = Math.floor(Math.random() * countLimit);
+    while (!count) {
+      count = Math.floor(Math.random() * countLimit);
+    }
+    return count;
   },
 
 
