@@ -7,6 +7,10 @@ const CONST_DATA = {
   offers: [
     'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
   ],
+  descriptionPlaces: [
+    'beautiful place', 'picturesque place', 'cozy corner'
+  ],
+  descriptionCity: ', is a beautiful city, a true pearl, with crowded streets.',
   typeTripPoint: [
     'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
   ],
