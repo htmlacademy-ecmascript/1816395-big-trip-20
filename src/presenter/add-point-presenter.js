@@ -4,9 +4,11 @@ import { render } from '../render.js';
 
 export default class AddPointPresenter {
 
-  constructor({ pointContainer, tripPoints }) {
+  constructor({ pointContainer, tripPoints, destinationsList, offersList }) {
     this.pointContainer = pointContainer;
     this.tripPoints = tripPoints;
+    this.destinationsList = destinationsList;
+    this.offersList = offersList;
   }
 
   init() {

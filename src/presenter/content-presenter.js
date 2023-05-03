@@ -10,9 +10,11 @@ export default class ContentPresenter {
   contentComponent = new TripListEventsView();
   sortComponent = new SortsEventsTripView();
 
-  constructor({ contentContainer, tripPoints }) {
+  constructor({ contentContainer, tripPoints, destinationsList, offersList }) {
     this.contentContainer = contentContainer;
     this.tripPoints = tripPoints;
+    this.destinationsList = destinationsList;
+    this. offersList = offersList;
   }
 
   init() {
@@ -22,13 +24,17 @@ export default class ContentPresenter {
 
     const addPointPresenter = new AddPointPresenter({
       pointContainer: contentBox,
-      tripPoints: this.tripPoints
+      tripPoints: this.tripPoints,
+      destinationsList: this.destinationsList,
+      offersList: this.offersList
     });
     addPointPresenter.init();
 
     const pointPresenter = new PointPresenter({
       pointContainer: contentBox,
-      tripPoints: this.tripPoints
+      tripPoints: this.tripPoints,
+      destinationsList: this.destinationsList,
+      offersList: this.offersList
     });
     pointPresenter.init();
 

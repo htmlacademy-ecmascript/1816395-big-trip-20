@@ -9,20 +9,29 @@ const tripEventsElement = siteBodyElement.querySelector('.trip-events');
 
 
 export default class MainPresenter {
-  constructor({ tripPointsModel }) {
+  constructor({ tripPointsModel, destinationsModel, offersModel }) {
     this.tripPointsModel = tripPointsModel;
+    this.destinationsModel = destinationsModel;
+    this.offersModel = offersModel;
   }
 
   init() {
     this.tripPoints = [...this.tripPointsModel.getPoints()];
+    this.destinationsList = [...this.destinationsModel.getDestinationsList()];
+    this.offersList = [...this.offersModel.getOffersList()];
+
     const headerPresenter = new HeaderPresenter({
       headerContainer: filterContainerElement,
       infoContainer: infoContainerElement,
-      tripPoints: this.tripPoints
+      tripPoints: this.tripPoints,
+      destinationsList: this.destinationsList,
+      offersList: this.offersList
     });
     const contentPresenter = new ContentPresenter({
       contentContainer: tripEventsElement,
-      tripPoints: this.tripPoints
+      tripPoints: this.tripPoints,
+      destinationsList: this.destinationsList,
+      offersList: this.offersList
     });
 
     headerPresenter.init();

@@ -7,10 +7,12 @@ export default class HeaderPresenter {
   filterComponent = new TripFiltersView();
   infoComponent = new TripEventsInfoView();
 
-  constructor({ headerContainer, infoContainer, tripPoints }) {
+  constructor({ headerContainer, infoContainer, tripPoints, destinationsList, offersList }) {
     this.headerContainer = headerContainer;
     this.infoContainer = infoContainer;
     this.tripPoints = tripPoints;
+    this.destinationsList = destinationsList;
+    this.offersList = offersList;
   }
 
   init() {

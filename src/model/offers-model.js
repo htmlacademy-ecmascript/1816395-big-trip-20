@@ -5,7 +5,7 @@ export default class OffersModel {
   offersList = getOffersList();
 
 
-  getPoints() {
+  getOffersList() {
     return this.offersList;
   }
 }

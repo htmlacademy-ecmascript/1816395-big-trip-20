@@ -5,7 +5,7 @@ export default class DestinationsModel {
   destinationList = getDestinationList();
 
 
-  getPoints() {
+  getDestinationsList() {
     return this.destinationList;
   }
 }
