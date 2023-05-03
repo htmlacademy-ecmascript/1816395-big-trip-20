@@ -1,5 +1,7 @@
 import { getRandomPeriod, util } from '../util.js';
 import { CONST_DATA } from './const-data.js';
+import { offers } from './offers-data.js';
+import { destinationList } from './destination-data.js';
 
 
 const getTripPoint = () => {

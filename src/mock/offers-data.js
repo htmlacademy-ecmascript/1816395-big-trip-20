@@ -27,9 +27,11 @@ const getAllOffers = () => {
       offers: getOffers()
     };
   }
+
   return allOffers;
 };
 
 const offers = getAllOffers();
+
 
 export { offers };

@@ -25,7 +25,10 @@ const getDestination = () => {
 
 const getAllDestinations = () => {
   const allDestinations = [];
-  return util.getRandomArray(allDestinations, getDestination);
+  for (let i = 0; i < util.getRandomCount(CONST_DATA.countLimit); i++) {
+    allDestinations[i] = getDestination();
+  }
+  return allDestinations;
 };
 
 const destinationList = getAllDestinations();
