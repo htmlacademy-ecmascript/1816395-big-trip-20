@@ -39,5 +39,7 @@ const getDestinationId = (city) => {
   return findDestination.id;
 };
 
-export { destinationList, getDestinationId };
+const getDestinationList = () => destinationList;
+
+export { destinationList, getDestinationId , getDestinationList};
 
