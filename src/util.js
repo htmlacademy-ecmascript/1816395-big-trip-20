@@ -38,6 +38,15 @@ const util = {
     return count;
   },
 
+  getDestinationNames: function (destinationList) {
+    const destinationNames = destinationList.map ((destination) => destination.name);
+    return destinationNames;
+  },
+
+  humanizeDateInfo: function (date) {
+    return date ? dayjs(date).format(CONST_DATA.formatDateInfo) : '';
+  }
+
 
 };
 

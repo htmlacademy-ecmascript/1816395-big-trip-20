@@ -4,8 +4,7 @@ import TripEventsInfoView from '../view/trip-event-info-view.js';
 import { render, RenderPosition } from '../render.js';
 
 export default class HeaderPresenter {
-  filterComponent = new TripFiltersView();
-  infoComponent = new TripEventsInfoView();
+
 
   constructor({ headerContainer, infoContainer, tripPoints, destinationsList, offersList }) {
     this.headerContainer = headerContainer;
@@ -15,8 +14,15 @@ export default class HeaderPresenter {
     this.offersList = offersList;
   }
 
+  filterComponent = new TripFiltersView();
+
+
   init() {
-    render(this.infoComponent, this.infoContainer, RenderPosition.AFTERBEGIN);
+    render(new TripEventsInfoView({
+      destinationsList: this.destinationsList,
+      offersList: this.offersList,
+      tripPoints: this.tripPoints
+    }), this.infoContainer, RenderPosition.AFTERBEGIN);
     render(this.filterComponent, this.headerContainer);
   }
 }
