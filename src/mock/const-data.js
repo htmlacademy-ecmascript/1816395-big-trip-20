@@ -1,4 +1,5 @@
 const CONST_DATA = {
+  pictureURL: 'https://loremflickr.com/248/152?random=',
   years: [2023, 2024],
   formatDate: 'YYYY-MM-DDTHH:mm:ss',
   booleanValue: [true, false],
