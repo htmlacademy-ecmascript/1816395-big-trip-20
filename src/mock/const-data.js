@@ -6,7 +6,10 @@ const CONST_DATA = {
   offers: [
     'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
   ],
-  typeTripPoint:[
+  typeTripPoint: [
+    'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
+  ],
+  typeOffers :[
     'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
   ],
   cities: [
