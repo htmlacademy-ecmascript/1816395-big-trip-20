@@ -1,7 +1,7 @@
 import { getDestinationList } from '../mock/destination-data.js';
 
 
-export default class DestinationModel {
+export default class DestinationsModel {
   destinationList = getDestinationList();
 
 

@@ -2,10 +2,10 @@ import { getOffersList } from '../mock/offers-data.js';
 
 
 export default class OffersModel {
-  offers = getOffersList();
+  offersList = getOffersList();
 
 
   getPoints() {
-    return this.offers;
+    return this.offersList;
   }
 }
