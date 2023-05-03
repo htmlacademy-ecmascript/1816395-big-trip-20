@@ -31,7 +31,17 @@ const getAllOffers = () => {
   return allOffers;
 };
 
+
 const offers = getAllOffers();
+const getOffersId = (type) => {
+  const id = [];
+  offers.forEach((offer) => {
+    if (offer.type === type) {
+      offer.offers.forEach((element) => id.push(element.id));
+    }
+  });
+  return id;
+};
 
 
-export { offers };
+export { offers, getOffersId };

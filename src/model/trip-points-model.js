@@ -10,6 +10,7 @@ export default class TripPointsModel {
   // tripPoints = Array.from({ length: POINTS_COUNT }, getRandomTripPoint);
   tripPoints = getTripPoints();
 
+
   getPoints() {
     return this.tripPoints;
   }
