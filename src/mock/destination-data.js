@@ -15,7 +15,7 @@ const getPictures = (city) => {
 const getDestination = () => {
   const city = util.getRandomArrayElement(CONST_DATA.cities);
   const newDestination = {
-    id: util.getUniqId,
+    id: util.getUniqId(),
     description: `${city}${CONST_DATA.descriptionCity}`,
     name: city,
     pictures: getPictures(city)
@@ -33,5 +33,11 @@ const getAllDestinations = () => {
 
 const destinationList = getAllDestinations();
 
-export { destinationList };
+
+const getDestinationId = (city) => {
+  const findDestination = destinationList.find((destination) => destination.name === city);
+  return findDestination.id;
+};
+
+export { destinationList, getDestinationId };
 
