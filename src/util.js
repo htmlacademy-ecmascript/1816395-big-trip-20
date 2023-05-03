@@ -38,6 +38,13 @@ const util = {
     return count;
   },
 
+  getRandomArray: function (array, func) {
+    for (let i; i < this.getRandomCount(CONST_DATA.countLimit); i++) {
+      array[i] = func();
+    }
+    return array;
+  }
+
 
 };
 
