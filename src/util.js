@@ -23,7 +23,7 @@ const util = {
   },
 
   getRandomBooleanValue: function () {
-    return CONST_DATA.booleanValue[Math.floor(Math.random) * CONST_DATA.booleanValue.length];
+    return CONST_DATA.booleanValue[Math.floor(Math.random() * CONST_DATA.booleanValue.length)];
   },
 
   getRandomArrayElement: function (array) {
@@ -39,7 +39,7 @@ const util = {
   },
 
   getDestinationNames: function (destinationList) {
-    const destinationNames = destinationList.map ((destination) => destination.name);
+    const destinationNames = destinationList.map((destination) => destination.name);
     return destinationNames;
   },
 
