@@ -15,7 +15,7 @@ const getTripPoint = () => {
     dateFrom: randomPeriod[0],
     dateTo: randomPeriod[1],
     destination: getDestinationId(city),
-    isFavorite: util.getRandomBooleanValue,
+    isFavorite: util.getRandomBooleanValue(),
     offers: [
       getOffersId(typePoint)
     ],

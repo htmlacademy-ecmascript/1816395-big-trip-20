@@ -1,8 +1,12 @@
 const CONST_DATA = {
-  formatDateInfo:'MMM DD',
   pictureURL: 'https://loremflickr.com/248/152?random=',
   years: [2023, 2024],
+  formatDateMinutes : 'MM',
+  formatDateHoursMinutes: 'HH MM',
+  formatDateDaysHoursMinutes: 'DD HH mm',
   formatDate: 'YYYY-MM-DDTHH:mm:ss',
+  formatDateInfo:'MMM DD',
+  formatDatePoint:'HH:mm',
   booleanValue: [true, false],
   countLimit: 10,
   offers: [

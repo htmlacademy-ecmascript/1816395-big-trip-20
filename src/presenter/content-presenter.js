@@ -14,7 +14,7 @@ export default class ContentPresenter {
     this.contentContainer = contentContainer;
     this.tripPoints = tripPoints;
     this.destinationsList = destinationsList;
-    this. offersList = offersList;
+    this.offersList = offersList;
   }
 
   init() {

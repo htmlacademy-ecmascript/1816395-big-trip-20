@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import { CONST_DATA } from '../src/mock/const-data.js';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 const util = {
   getUniqId: function () {
@@ -45,6 +47,37 @@ const util = {
 
   humanizeDateInfo: function (date) {
     return date ? dayjs(date).format(CONST_DATA.formatDateInfo) : '';
+  },
+
+  humanizeDatePoint: function (date) {
+    return date ? dayjs(date).format(CONST_DATA.formatDatePoint) : '';
+  },
+
+  getDestinationById: function (destinationId, destinationList) {
+    const findDestination = destinationList.find((element) => element.id === destinationId);
+    return findDestination.name;
+  },
+
+  getOffersById: function (typeTripPoint, tripPointOffers, offersList) {
+    const currentOffers = offersList.find((offers) => offers.type === typeTripPoint);
+    const offersById = [];
+    for (const offers of currentOffers.offers) {
+      tripPointOffers[0].forEach((offer) => {
+        if (offer === offers.id) {
+          offersById.push(offers);
+        }
+      });
+    }
+    return offersById;
+  },
+
+  getPeriodExtension: (tripPoint) => {
+    const
+      start = tripPoint.dateFrom,
+      end = tripPoint.dateTo;
+
+    const gap = dayjs.duration(dayjs(end) - dayjs(start), 'millisecond');
+    return gap.format('DD[d] HH[h] MM[m]');
   }
 
 
