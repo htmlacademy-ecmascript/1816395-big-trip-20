@@ -3,9 +3,16 @@ import { util } from '../util.js';
 
 function createTripEventItemTemplate(tripPoint, destinationList, offersList) {
 
-  const generateFavorite = (isFavorite) =>
-    isFavorite ? 'event__favorite-btn--active--repeat'
-      : '';
+  const generateFavorite = (isFavorite) => {
+    console.log(isFavorite)
+    if (isFavorite) {
+      return 'event__favorite-btn--active';
+    } else {
+      return '';
+    }
+
+  };
+
 
   const generateOfferTag = (offer) => {
 
