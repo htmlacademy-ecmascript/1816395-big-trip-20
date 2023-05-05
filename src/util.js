@@ -72,14 +72,25 @@ const util = {
   },
 
   getPeriodExtension: (tripPoint) => {
-    const
-      start = tripPoint.dateFrom,
-      end = tripPoint.dateTo;
+    if (tripPoint) {
+      const
+        start = tripPoint.dateFrom,
+        end = tripPoint.dateTo;
 
-    const gap = dayjs.duration(dayjs(end) - dayjs(start), 'millisecond');
-    return gap.format('DD[d] HH[h] MM[m]');
+      const periodExtension = dayjs.duration(dayjs(end) - dayjs(start), 'millisecond');
+
+      if (periodExtension.asMilliseconds() >= CONST_DATA.secondsInDay) {
+        return periodExtension.format(CONST_DATA.formatDateDaysHoursMinutes);
+      } else {
+        if (periodExtension.asMilliseconds() >= CONST_DATA.secondsInHour) {
+          return periodExtension.format(CONST_DATA.formatDateHoursMinutes)
+        } else {
+          return periodExtension.asMilliseconds().format(CONST_DATA.formatDateMinutes)
+        }
+      }
+
+    }
   }
-
 
 };
 
