@@ -13,6 +13,7 @@ const CONST_DATA = {
   booleanValue: [true, false],
   countLimit: 10,
   sortItems: ['Day', 'Event', 'Time', 'Price', 'Offers'],
+  filters: ['Everything', 'Future', 'Present', 'Past', 'Accept filter'],
   offers: [
     'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
   ],
