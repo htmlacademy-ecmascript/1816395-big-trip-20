@@ -12,7 +12,13 @@ export default class AddPointPresenter {
   }
 
   init() {
-    render(new AddNewPointView({ point: this.tripPoints[0] }), this.pointContainer);
+    render(new AddNewPointView({
+      tripPoint: this.tripPoints[0],
+      destinationsList: this.destinationsList,
+      offersList: this.offersList
+
+    }), this.pointContainer);
+
   }
 
 }

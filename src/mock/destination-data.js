@@ -5,7 +5,7 @@ const getPictures = (city) => {
   const pictures = [];
   for (let i = 0; i < util.getRandomCount(CONST_DATA.countLimit); i++) {
     pictures[i] = {
-      src: `${CONST_DATA.pictureURL}${util.getRandomPrice}`,
+      src: `${CONST_DATA.pictureURL}${util.getRandomPrice()}`,
       description: `${city}, ${util.getRandomArrayElement(CONST_DATA.descriptionPlaces)}`
     };
   }

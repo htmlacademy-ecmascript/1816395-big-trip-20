@@ -9,6 +9,7 @@ const CONST_DATA = {
   formatDate: 'YYYY-MM-DDTHH:mm:ss',
   formatDateInfo:'MMM DD',
   formatDatePoint:'HH:mm',
+  formatDateAddPoint:'DD/MM/YY mm:ss',
   booleanValue: [true, false],
   countLimit: 10,
   offers: [

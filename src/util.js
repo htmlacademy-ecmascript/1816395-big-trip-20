@@ -55,7 +55,7 @@ const util = {
 
   getDestinationById: function (destinationId, destinationList) {
     const findDestination = destinationList.find((element) => element.id === destinationId);
-    return findDestination.name;
+    return findDestination;
   },
 
   getOffersById: function (typeTripPoint, tripPointOffers, offersList) {
