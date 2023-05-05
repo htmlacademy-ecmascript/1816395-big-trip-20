@@ -12,6 +12,7 @@ const CONST_DATA = {
   formatDateAddPoint:'DD/MM/YY mm:ss',
   booleanValue: [true, false],
   countLimit: 10,
+  sortItems: ['Day', 'Event', 'Time', 'Price', 'Offers'],
   offers: [
     'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
   ],
