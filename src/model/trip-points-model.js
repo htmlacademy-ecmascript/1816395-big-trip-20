@@ -6,6 +6,7 @@ export default class TripPointsModel {
 
 
   getPoints() {
+    console.log(this.tripPoints)
     return this.tripPoints;
   }
 }

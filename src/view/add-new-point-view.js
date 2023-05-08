@@ -26,10 +26,10 @@ function createTypeItemTemplate(type) {
   );
 }
 
-function createAvailableOfferTemplate(offer) {
+function createAvailableOfferTemplate(offer, checked) {
   return (/*html*/`
   <div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${checked}>
     <label class="event__offer-label" for="event-offer-luggage-1">
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
@@ -40,11 +40,19 @@ function createAvailableOfferTemplate(offer) {
 `);
 }
 
+
 function createAvailableOffersListTemplate(tripPoint, offersList) {
   let offersTemplate = '';
-  const offersById = util.getOffersById(tripPoint.type, tripPoint.offers, offersList);
-  offersById.forEach((offer) => {
-    const offerTemplate = createAvailableOfferTemplate(offer);
+  let offerTemplate = '';
+  const offersByType = util.getOffersByType(tripPoint.type, offersList);
+  offersByType.forEach((offerAvailable) => {
+    tripPoint.offers.forEach((offerTripPoint, index) => {
+      if (offerAvailable.id === offerTripPoint[index]) {
+        offerTemplate = createAvailableOfferTemplate(offerAvailable, 'checked');
+      } else {
+        offerTemplate = createAvailableOfferTemplate(offerAvailable, '');
+      }
+    });
     offersTemplate = offersTemplate + offerTemplate;
   });
 
@@ -114,7 +122,7 @@ function createAddNewPointTemplate(tripPoint, destinationsList, offersList) {
                   <div class="event__field-group  event__field-group--price">
                     <label class="event__label" for="event-price-1">
                       <span class="visually-hidden">Price</span>
-                      &euro;
+                      &euro; ${tripPoint.basePrice}
                     </label>
                     <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
                   </div>

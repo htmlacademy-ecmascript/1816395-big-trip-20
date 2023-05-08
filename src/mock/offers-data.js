@@ -37,7 +37,7 @@ const getOffersId = (type) => {
   const id = [];
   offers.forEach((offer) => {
     if (offer.type === type) {
-      offer.offers.forEach((element) => id.push(element.id));
+      id.push(util.getRandomArrayElement(offer.offers).id);
     }
   });
   return id;

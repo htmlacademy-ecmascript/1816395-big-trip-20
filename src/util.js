@@ -9,7 +9,6 @@ const util = {
     return random.toString(16).substring(2);
   },
 
-
   getRandomPrice: function () {
     return Math.floor(Math.random() * 10000 * Math.random());
   },
@@ -58,10 +57,14 @@ const util = {
     return findDestination;
   },
 
+  getOffersByType: function (typeTripPoint, offersList) {
+    return offersList.find((offers) => offers.type === typeTripPoint).offers;
+  },
+
   getOffersById: function (typeTripPoint, tripPointOffers, offersList) {
-    const currentOffers = offersList.find((offers) => offers.type === typeTripPoint);
+    const currentOffers = this.getOffersByType(typeTripPoint, offersList);
     const offersById = [];
-    for (const offers of currentOffers.offers) {
+    for (const offers of currentOffers) {
       tripPointOffers[0].forEach((offer) => {
         if (offer === offers.id) {
           offersById.push(offers);
@@ -86,7 +89,7 @@ const util = {
         if (periodExtension.asMilliseconds() >= CONST_DATA.secondsInHour) {
           return periodExtension.format(CONST_DATA.formatDateHoursMinutes);
         } else {
-          return periodExtension.asMilliseconds().format(CONST_DATA.formatDateMinutes);
+          return periodExtension.format(CONST_DATA.formatDateMinutes);
         }
       }
 
