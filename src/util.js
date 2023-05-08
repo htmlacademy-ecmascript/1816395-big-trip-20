@@ -60,6 +60,7 @@ const util = {
 
   getOffersById: function (typeTripPoint, tripPointOffers, offersList) {
     const currentOffers = offersList.find((offers) => offers.type === typeTripPoint);
+    console.log(currentOffers)
     const offersById = [];
     for (const offers of currentOffers.offers) {
       tripPointOffers[0].forEach((offer) => {

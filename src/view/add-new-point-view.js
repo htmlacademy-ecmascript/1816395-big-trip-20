@@ -4,12 +4,12 @@ import { createElement } from '../render.js';
 import { util } from '../util.js';
 
 
-function generateEventTypeBtn() {
+function generateEventTypeBtn(type) {
   return (/*html*/
     `
   <label class="event__type  event__type-btn" for="event-type-toggle-1">
     <span class="visually-hidden">Choose event type</span>
-    <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+    <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
   </label>
   <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 `);
@@ -19,7 +19,7 @@ function createTypeItemTemplate(type) {
   return (/*html*/
     `
     <div class="event__type-item">
-      <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+      <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
       <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-taxi-1">${type}</label>
     </div>
 `
@@ -51,8 +51,8 @@ function createAvailableOffersListTemplate(tripPoint, offersList) {
   return offersTemplate;
 }
 
-function createImageTemplate(srcImage) {
-  return (/*html*/`<img class="event__photo" src=${srcImage} alt="Event photo">`);
+function createImageTemplate(srcImage, descriptionImage) {
+  return (/*html*/`<img class="event__photo" src=${srcImage} alt=${descriptionImage}>`);
 }
 
 function createImagesTemplate(images) {
@@ -81,7 +81,7 @@ function createAddNewPointTemplate(tripPoint, destinationsList, offersList) {
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
-                    ${generateEventTypeBtn()}
+                    ${generateEventTypeBtn(tripPoint.type)}
                     <div class="event__type-list">
                       <fieldset class="event__type-group">
                         <legend class="visually-hidden">Event type</legend>
@@ -92,7 +92,7 @@ function createAddNewPointTemplate(tripPoint, destinationsList, offersList) {
 
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">
-                      Flight
+                      ${tripPoint.type}
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination"
                       value=${util.getDestinationById(tripPoint.destination, destinationsList).name} list="destination-list-1">
@@ -139,7 +139,7 @@ function createAddNewPointTemplate(tripPoint, destinationsList, offersList) {
 
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
-                        ${createImagesTemplate(util.getDestinationById(tripPoint.destination, destinationsList).pictures)}
+                        ${createImagesTemplate(util.getDestinationById(tripPoint.destination, destinationsList).pictures, util.getDestinationById(tripPoint.destination, destinationsList).description)}
                       </div>
                     </div>
                   </section>

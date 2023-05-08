@@ -27,7 +27,7 @@ const getAllOffers = () => {
       offers: getOffers()
     };
   }
-
+console.log(allOffers)
   return allOffers;
 };
 

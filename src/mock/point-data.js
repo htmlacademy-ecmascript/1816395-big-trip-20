@@ -24,14 +24,7 @@ const getTripPoint = () => {
   return tripPoint;
 };
 
-const getTripPoints = () => {
-  const tripPoints = [];
-  for (let i = 0; i < util.getRandomCount(CONST_DATA.countLimit); i++) {
-    tripPoints.push(getTripPoint());
-  }
-  console.log(tripPoints)
-  return tripPoints;
-};
+const getTripPoints = () => Array.from({ length: util.getRandomCount(CONST_DATA.countLimit) }, () => getTripPoint());
 
 const getNewTripPoint = () => getNewTripPoint();
 
