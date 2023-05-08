@@ -60,7 +60,6 @@ const util = {
 
   getOffersById: function (typeTripPoint, tripPointOffers, offersList) {
     const currentOffers = offersList.find((offers) => offers.type === typeTripPoint);
-    console.log(currentOffers)
     const offersById = [];
     for (const offers of currentOffers.offers) {
       tripPointOffers[0].forEach((offer) => {
@@ -69,10 +68,11 @@ const util = {
         }
       });
     }
+
     return offersById;
   },
 
-  getPeriodExtension: (tripPoint) => {
+  getPeriodExtension: function (tripPoint) {
     if (tripPoint) {
       const
         start = tripPoint.dateFrom,
@@ -84,29 +84,28 @@ const util = {
         return periodExtension.format(CONST_DATA.formatDateDaysHoursMinutes);
       } else {
         if (periodExtension.asMilliseconds() >= CONST_DATA.secondsInHour) {
-          return periodExtension.format(CONST_DATA.formatDateHoursMinutes)
+          return periodExtension.format(CONST_DATA.formatDateHoursMinutes);
         } else {
-          return periodExtension.asMilliseconds().format(CONST_DATA.formatDateMinutes)
+          return periodExtension.asMilliseconds().format(CONST_DATA.formatDateMinutes);
         }
       }
 
     }
-  }
+  },
 
+  getRandomPeriod: function () {
+    const period = [];
+    period.push(util.getRandomDate());
+    let endPeriod = util.getRandomDate();
+    while (dayjs(period[0]).isAfter(endPeriod)) {
+      endPeriod = util.getRandomDate();
+    }
+    period.push(endPeriod);
+    return period;
+
+  }
 };
 
-const getRandomPeriod = () => {
-  const period = [];
-  period.push(util.getRandomDate());
-  let endPeriod = util.getRandomDate();
-  while (dayjs(period[0]).isAfter(endPeriod)) {
-    endPeriod = util.getRandomDate();
-  }
-  period.push(endPeriod);
-  return period;
 
-};
-
-
-export { util, getRandomPeriod };
+export { util };
 

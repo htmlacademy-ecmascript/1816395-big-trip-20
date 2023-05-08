@@ -1,11 +1,11 @@
-import { getRandomPeriod, util } from '../util.js';
+import { util } from '../util.js';
 import { CONST_DATA } from './const-data.js';
 import { offers, getOffersId } from './offers-data.js';
 import { destinationList, getDestinationId } from './destination-data.js';
 
 
 const getTripPoint = () => {
-  const randomPeriod = getRandomPeriod();
+  const randomPeriod = util.getRandomPeriod();
   const typePoint = util.getRandomArrayElement(offers).type;
   const city = util.getRandomArrayElement(destinationList).name;
   const tripPoint = {
