@@ -1,6 +1,6 @@
 import { util } from '../util.js';
 import { CONST_DATA } from './const-data.js';
-import { offers, getOffersId } from './offers-data.js';
+import { offers, getRandomOffersId } from './offers-data.js';
 import { destinationList, getDestinationId } from './destination-data.js';
 
 
@@ -17,7 +17,7 @@ const getTripPoint = () => {
     destination: getDestinationId(city),
     isFavorite: util.getRandomBooleanValue(),
     offers: [
-      getOffersId(typePoint)
+      getRandomOffersId(typePoint)
     ],
     type: typePoint
   };
