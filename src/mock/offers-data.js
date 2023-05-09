@@ -27,13 +27,12 @@ const getAllOffers = () => {
       offers: getOffers()
     };
   }
-console.log(allOffers)
   return allOffers;
 };
 
 
 const offers = getAllOffers();
-const getOffersId = (type) => {
+const getRandomOffersId = (type) => {
   const id = [];
   offers.forEach((offer) => {
     if (offer.type === type) {
@@ -46,4 +45,4 @@ const getOffersId = (type) => {
 const getOffersList = () => offers;
 
 
-export { offers, getOffersId , getOffersList};
+export { offers, getRandomOffersId , getOffersList};
