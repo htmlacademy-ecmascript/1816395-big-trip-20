@@ -1,11 +1,11 @@
-import { getRandomPeriod, util } from '../util.js';
+import { util } from '../util.js';
 import { CONST_DATA } from './const-data.js';
-import { offers, getOffersId } from './offers-data.js';
+import { offers, getRandomOffersId } from './offers-data.js';
 import { destinationList, getDestinationId } from './destination-data.js';
 
 
 const getTripPoint = () => {
-  const randomPeriod = getRandomPeriod();
+  const randomPeriod = util.getRandomPeriod();
   const typePoint = util.getRandomArrayElement(offers).type;
   const city = util.getRandomArrayElement(destinationList).name;
   const tripPoint = {
@@ -17,21 +17,14 @@ const getTripPoint = () => {
     destination: getDestinationId(city),
     isFavorite: util.getRandomBooleanValue(),
     offers: [
-      getOffersId(typePoint)
+      getRandomOffersId(typePoint)
     ],
     type: typePoint
   };
   return tripPoint;
 };
 
-const getTripPoints = () => {
-  const tripPoints = [];
-  for (let i = 0; i < util.getRandomCount(CONST_DATA.countLimit); i++) {
-    tripPoints.push(getTripPoint());
-  }
-  console.log(tripPoints)
-  return tripPoints;
-};
+const getTripPoints = () => Array.from({ length: util.getRandomCount(CONST_DATA.countLimit) }, () => getTripPoint());
 
 const getNewTripPoint = () => getNewTripPoint();
 

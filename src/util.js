@@ -9,7 +9,6 @@ const util = {
     return random.toString(16).substring(2);
   },
 
-
   getRandomPrice: function () {
     return Math.floor(Math.random() * 10000 * Math.random());
   },
@@ -58,20 +57,25 @@ const util = {
     return findDestination;
   },
 
+  getOffersByType: function (typeTripPoint, offersList) {
+    return offersList.find((offers) => offers.type === typeTripPoint).offers;
+  },
+
   getOffersById: function (typeTripPoint, tripPointOffers, offersList) {
-    const currentOffers = offersList.find((offers) => offers.type === typeTripPoint);
+    const currentOffers = this.getOffersByType(typeTripPoint, offersList);
     const offersById = [];
-    for (const offers of currentOffers.offers) {
+    for (const offers of currentOffers) {
       tripPointOffers[0].forEach((offer) => {
         if (offer === offers.id) {
           offersById.push(offers);
         }
       });
     }
+
     return offersById;
   },
 
-  getPeriodExtension: (tripPoint) => {
+  getPeriodExtension: function (tripPoint) {
     if (tripPoint) {
       const
         start = tripPoint.dateFrom,
@@ -83,29 +87,28 @@ const util = {
         return periodExtension.format(CONST_DATA.formatDateDaysHoursMinutes);
       } else {
         if (periodExtension.asMilliseconds() >= CONST_DATA.secondsInHour) {
-          return periodExtension.format(CONST_DATA.formatDateHoursMinutes)
+          return periodExtension.format(CONST_DATA.formatDateHoursMinutes);
         } else {
-          return periodExtension.asMilliseconds().format(CONST_DATA.formatDateMinutes)
+          return periodExtension.format(CONST_DATA.formatDateMinutes);
         }
       }
 
     }
-  }
+  },
 
+  getRandomPeriod: function () {
+    const period = [];
+    period.push(util.getRandomDate());
+    let endPeriod = util.getRandomDate();
+    while (dayjs(period[0]).isAfter(endPeriod)) {
+      endPeriod = util.getRandomDate();
+    }
+    period.push(endPeriod);
+    return period;
+
+  }
 };
 
-const getRandomPeriod = () => {
-  const period = [];
-  period.push(util.getRandomDate());
-  let endPeriod = util.getRandomDate();
-  while (dayjs(period[0]).isAfter(endPeriod)) {
-    endPeriod = util.getRandomDate();
-  }
-  period.push(endPeriod);
-  return period;
 
-};
-
-
-export { util, getRandomPeriod };
+export { util };
 
