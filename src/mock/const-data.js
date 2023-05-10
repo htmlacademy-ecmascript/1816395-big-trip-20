@@ -14,7 +14,7 @@ const CONST_DATA = {
   countLimit: 10,
   sortItems: ['Day', 'Event', 'Time', 'Price', 'Offers'],
   filters: ['Everything', 'Future', 'Present', 'Past', 'Accept filter'],
-  offers: [
+  offersTitle: [
     'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
   ],
   descriptionPlaces: [

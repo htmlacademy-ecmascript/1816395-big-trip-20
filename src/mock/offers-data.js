@@ -10,39 +10,29 @@ const getOffer = (offerTitle) => {
   return newOffer;
 };
 
-const getOffers = () => {
-  const newOffers = [];
-  for (let i = 0; i < util.getRandomCount(CONST_DATA.offers.length); i++) {
-    newOffers[i] = getOffer(CONST_DATA.offers[i]);
-  }
-  return newOffers;
-};
+const getOffers = () => util
+  .getRandomData(CONST_DATA.offersTitle)
+  .map((offerTitle) => getOffer(offerTitle));
 
 
-const getAllOffers = () => {
-  const allOffers = [];
-  for (let i = 0; i < util.getRandomCount(CONST_DATA.countLimit); i++) {
-    allOffers[i] = {
-      type: util.getRandomArrayElement(CONST_DATA.typeOffers),
-      offers: getOffers()
-    };
-  }
-  return allOffers;
-};
+const getAllOffers = () => Array.from({ length: util.getRandomCount(CONST_DATA.countLimit) }, (element = {
+  'type': util.getRandomArrayElement(CONST_DATA.typeOffers),
+  'offers': getOffers()
+}) => element);
 
 
 const offers = getAllOffers();
 const getRandomOffersId = (type) => {
-  const id = [];
+  const ids = [];
   offers.forEach((offer) => {
     if (offer.type === type) {
-      id.push(util.getRandomArrayElement(offer.offers).id);
+      ids.push(util.getRandomArrayElement(offer.offers).id);
     }
   });
-  return id;
+  return ids;
 };
 
 const getOffersList = () => offers;
 
 
-export { offers, getRandomOffersId , getOffersList};
+export { offers, getRandomOffersId, getOffersList };

@@ -106,6 +106,10 @@ const util = {
     period.push(endPeriod);
     return period;
 
+  },
+
+  getRandomData: function (data) {
+    return data.slice(0,this.getRandomCount(data.length));
   }
 };
 
