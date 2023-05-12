@@ -2,12 +2,15 @@
 *Класс для управления сущностью пунктов назначения
 */
 export default class DestinationsModel {
+  #destinations = null;
+  #service = null;
+
   /**
    * @param {object} сервис с данными для управления сущностью
    **/
   constructor(service) {
-    this._service = service;
-    this._destinations = this._service.getDestinations();
+    this.#service = service;
+    this.#destinations = this.#service.getDestinations();
   }
 
   /**
@@ -16,7 +19,7 @@ export default class DestinationsModel {
    */
 
   get() {
-    return this._destinations;
+    return this.#destinations;
   }
 
   /**
@@ -25,7 +28,7 @@ export default class DestinationsModel {
    * @returns {object}
    */
 
-  getDestinationById(id) {
-    return this._destinations.find((destination) => destination.id === id);
+  getById(id) {
+    return this.#destinations.find((destination) => destination.id === id);
   }
 }
