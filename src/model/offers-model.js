@@ -3,6 +3,8 @@
  */
 
 export default class OffersModel {
+  #service = null;
+  #offers = null;
 
   /**
    * Инициализация данных которые приходят из точки входа
@@ -10,8 +12,8 @@ export default class OffersModel {
    */
 
   constructor(service) {
-    this.service = service;
-    this.offers = this.service.getOffers();
+    this.#service = service;
+    this.#offers = this.#service.getOffers();
   }
   /**
    * Метод для получения дополнительных предложений
@@ -19,14 +21,17 @@ export default class OffersModel {
    */
 
   get() {
-    return this.offers;
+    return this.#offers;
   }
 
+  /**
+   * Метод для поиска дополнительного предложения по типу
+   * @param {string} type тип по которому нужно найти дополнительное предложение
+   * @returns объект с дополнительным предложением
+   */
 
-  // offersList = getOffersList();
+  getByType(type) {
+    return this.#offers.find((offer) => offer.type === type);
+  }
 
-
-  // getOffersList() {
-  //   return this.offersList;
-  // }
 }
