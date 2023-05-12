@@ -31,9 +31,12 @@ export default class MainPresenter {
       contentContainer: tripEventsElement,
       tripPoints: this.tripPoints,
       destinationsList: this.destinationsList,
-      offersList: this.offersList
+      offersList: this.offersList,
+      destinationsModel: this.destinationsModel,
+      offersModel: this.offersModel
     });
 
+    // console.log(this.destinationsList,this.tripPoints)
     headerPresenter.init();
     contentPresenter.init();
   }

@@ -1,5 +1,11 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { util } from '../util.js';
+
+/**
+ * Составляет разметку для DOM элемента дополнительного предложения
+ * @param {object} offer Дополнительное предложение
+ * @returns строку с HTML разметкой дополнительного предложения
+ */
 
 function createOfferHTML(offer) {
   return (/*html*/
@@ -13,14 +19,27 @@ function createOfferHTML(offer) {
   );
 }
 
+/**
+ * Составляет разметку для DOM элемента со списком дополнительные предложений
+ * @param {Array} offers массив дополнительных предложений
+ * @returns строку с HTML разметкой для списка дополнительных предложений
+ */
+
 function createOffersHtml(offers) {
   return offers
     .map((offer) => createOfferHTML(offer))
     .join('');
 }
 
+/**
+ * Составляет шаблон точки путешествия
+ * @param {object} tripPoint точка путешествия
+ * @param {Array} destinationList список пунктов назначения
+ * @param {Array} offersList список дополнительных предложений
+ * @returns строку с разметкой шаблона
+ */
 
-function createTripEventItemTemplate(tripPoint, destinationList, offersList) {
+function createTripEventTemplate(tripPoint, destination, offers) {
 
   const
     dateStartTrip = tripPoint.dateFrom,
@@ -43,10 +62,10 @@ function createTripEventItemTemplate(tripPoint, destinationList, offersList) {
     tripPrice = tripPoint.basePrice;
 
   const
-    destinationName = util.getDestinationById(tripPoint.destination, destinationList).name,
-    offersById = util.getOffersById(tripPoint.type, tripPoint.offers, offersList),
-    offersHtml = createOffersHtml(offersById);
+    destinationName = destination.name,
+    offersById = offers,
 
+    offersHtml = createOffersHtml(offersById);
   return (/*html*/
     `
     <li class="trip-events__item">
@@ -86,32 +105,39 @@ function createTripEventItemTemplate(tripPoint, destinationList, offersList) {
   );
 }
 
-export default class TripEventsItemView {
-  constructor({ tripPoint, destinationsList, offersList, }) {
-    this.tripPoint = tripPoint;
-    this.destinationsList = destinationsList;
-    this.offersList = offersList;
+/**
+ * Класс для управления компонентом для отрисовки точки путешествия
+ */
 
+export default class TripPointView extends AbstractView {
+  #tripPoint = null;
+  #destination = null;
+  #offers = null;
 
+  /**
+   * Инициализация данных из Points-presenter
+   * @param {object} tripPoint точка путешествия
+   * @param {Array} destination пункт назначения
+   * @param {object} offers объект дополнительных предложений одного типа
+   */
+
+  constructor({ tripPoint, destination, offer, }) {
+    super();
+    this.#tripPoint = tripPoint;
+    this.#destination = destination;
+    this.#offers = offer.offers;
   }
 
-  getTemplate() {
-    return createTripEventItemTemplate(
-      this.tripPoint,
-      this.destinationsList,
-      this.offersList
+  /**
+   * Получение шаблона точки путешествия
+   */
+
+  get template() {
+    return createTripEventTemplate(
+      this.#tripPoint,
+      this.#destination,
+      this.#offers
     );
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }
