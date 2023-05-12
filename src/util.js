@@ -52,6 +52,7 @@ const util = {
     return date ? dayjs(date).format(CONST_DATA.formatDatePoint) : '';
   },
 
+
   getDestinationById: function (destinationId, destinationList) {
     const findDestination = destinationList.find((element) => element.id === destinationId);
     return findDestination;
@@ -109,7 +110,7 @@ const util = {
   },
 
   getRandomData: function (data) {
-    return data.slice(0,this.getRandomCount(data.length));
+    return data.slice(0, this.getRandomCount(data.length));
   }
 };
 

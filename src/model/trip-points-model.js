@@ -1,11 +1,26 @@
-import { getTripPoints } from '../mock/point-data.js';
 
+/**
+ * Класс для управления сущностями точек путешествия
+ */
 
 export default class TripPointsModel {
-  tripPoints = getTripPoints();
 
+  /**
+   * Инициализация данных которые приходят из точки входа
+   * @param {object} service сервис с данными управления сущностью
+   */
 
-  getPoints() {
+  constructor(service) {
+    this.service = service;
+    this.tripPoints = this.service.getTripPoints();
+  }
+
+  /**
+   * Метод для получения точек путешествия
+   * @returns Массив точек путешествия
+   */
+
+  get() {
     return this.tripPoints;
   }
 }

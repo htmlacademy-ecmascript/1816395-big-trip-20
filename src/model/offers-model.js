@@ -1,11 +1,32 @@
-import { getOffersList } from '../mock/offers-data.js';
-
+/**
+ * Класс для управления сущностями дополнительных предложений
+ */
 
 export default class OffersModel {
-  offersList = getOffersList();
 
+  /**
+   * Инициализация данных которые приходят из точки входа
+   * @param {object} service сервис с данными для управления сущностью
+   */
 
-  getOffersList() {
-    return this.offersList;
+  constructor(service) {
+    this.service = service;
+    this.offers = this.service.getOffers();
   }
+  /**
+   * Метод для получения дополнительных предложений
+   * @returns Массив дополнительных предложений
+   */
+
+  get() {
+    return this.offers;
+  }
+
+
+  // offersList = getOffersList();
+
+
+  // getOffersList() {
+  //   return this.offersList;
+  // }
 }

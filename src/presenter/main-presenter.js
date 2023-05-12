@@ -16,9 +16,9 @@ export default class MainPresenter {
   }
 
   init() {
-    this.tripPoints = [...this.tripPointsModel.getPoints()];
-    this.destinationsList = [...this.destinationsModel.getDestinationsList()];
-    this.offersList = [...this.offersModel.getOffersList()];
+    this.tripPoints = [...this.tripPointsModel.get()];
+    this.destinationsList = [...this.destinationsModel.get()];
+    this.offersList = [...this.offersModel.get()];
 
     const headerPresenter = new HeaderPresenter({
       headerContainer: filterContainerElement,
