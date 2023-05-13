@@ -6,15 +6,16 @@ export default class DestinationsModel {
   #service = null;
 
   /**
-   * @param {object} сервис с данными для управления сущностью
+   * @param {object} Сервис с данными для управления сущностью
+   * @param {Array} Получение копии массива сущности пунктов назначения с помощью сервиса
    **/
   constructor(service) {
     this.#service = service;
-    this.#destinations = this.#service.getDestinations();
+    this.#destinations = [...this.#service.getDestinations()];
   }
 
   /**
-   * Метод для получения пунктов назначения
+   * Метод для копии сущностей о пунктах назначения
    * @returns {Array} Массив пунктов назначения
    */
 
@@ -25,7 +26,7 @@ export default class DestinationsModel {
   /**
    * Метод поиска места назначения по его идентификатору
    * @param {string} id Идентификатор пункта назначения
-   * @returns {object}
+   * @returns {object} Объект с пунктом назначения
    */
 
   getById(id) {

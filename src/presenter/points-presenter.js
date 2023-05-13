@@ -3,29 +3,25 @@ import TripPointView from '../view/trip-point-view.js';
 
 export default class PointsPresenter {
   #pointPresenterContainer = null;
-  #tripPoints = null;
-  #destinationsList = null;
-  #offersList = null;
+  #tripPointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
 
   constructor({
     pointPresenterContainer,
-    tripPoints,
-    destinationsList,
-    offersList,
+    tripPointsModel,
     destinationsModel,
     offersModel
+
   }) {
     this.#pointPresenterContainer = pointPresenterContainer;
-    this.#tripPoints = tripPoints;
-    this.#destinationsList = destinationsList;
-    this.#offersList = offersList;
+    this.#tripPointsModel = tripPointsModel;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
   }
 
   init() {
+
     this.#renderPointsPresenter();
   }
 
@@ -40,11 +36,14 @@ export default class PointsPresenter {
   }
 
   #renderPointsPresenter() {
-    for (let i = 1; i < this.#tripPoints.length; i++) {
+    const tripPoints = this.#tripPointsModel.get();
+
+
+    for (let i = 1; i < tripPoints.length; i++) {
       this.#renderTripPoint(
-        this.#tripPoints[i],
-        this.#destinationsModel.getById(this.#tripPoints[i].destination),
-        this.#offersModel.getByType(this.#tripPoints[i].type)
+        tripPoints[i],
+        this.#destinationsModel.getById(tripPoints[i].destination),
+        this.#offersModel.getByType(tripPoints[i].type)
       );
     }
   }

@@ -9,15 +9,16 @@ export default class OffersModel {
   /**
    * Инициализация данных которые приходят из точки входа
    * @param {object} service сервис с данными для управления сущностью
+   * @param {Array} Получение массива копии сущности дополнительных предложений с помощью сервиса
    */
 
   constructor(service) {
     this.#service = service;
-    this.#offers = this.#service.getOffers();
+    this.#offers = [...this.#service.getOffers()];
   }
   /**
    * Метод для получения дополнительных предложений
-   * @returns Массив дополнительных предложений
+   * @returns Массив копии сущностей дополнительных предложений
    */
 
   get() {

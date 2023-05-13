@@ -4,26 +4,33 @@ import TripEventsInfoView from '../view/trip-event-info-view.js';
 import { render, RenderPosition } from '../render.js';
 
 export default class HeaderPresenter {
+  #headerContainer = null;
+  #infoContainer = null;
+  #tripPointsModel = null;
+  #destinationsModel = null;
+  #offersModel = null;
+  #filterComponent = new TripFiltersView();
 
 
-  constructor({ headerContainer, infoContainer, tripPoints, destinationsList, offersList }) {
-    this.headerContainer = headerContainer;
-    this.infoContainer = infoContainer;
-    this.tripPoints = tripPoints;
-    this.destinationsList = destinationsList;
-    this.offersList = offersList;
+  constructor({ headerContainer, infoContainer, tripPointsModel, destinationsModel, offersModel }) {
+    this.#headerContainer = headerContainer;
+    this.#infoContainer = infoContainer;
+    this.#tripPointsModel = tripPointsModel;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
   }
-
-  filterComponent = new TripFiltersView();
 
 
   init() {
+    const tripPoints = this.#tripPointsModel.get();
+    const destinationsList = this.#destinationsModel.get();
+    const offersList = this.#offersModel.get();
+
     render(new TripEventsInfoView({
-      destinationsList: this.destinationsList,
-      offersList: this.offersList,
-      tripPoints: this.tripPoints
-    }), this.infoContainer, RenderPosition.AFTERBEGIN);
-    render(this.filterComponent, this.headerContainer);
+      destinationsList: destinationsList,
+      offersList: offersList,
+      tripPoints: tripPoints
+    }), this.#infoContainer, RenderPosition.AFTERBEGIN);
+    render(this.#filterComponent, this.#headerContainer);
   }
 }
-

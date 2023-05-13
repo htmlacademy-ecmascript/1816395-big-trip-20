@@ -7,44 +7,45 @@ import { render, RenderPosition } from '../render.js';
 
 
 export default class ContentPresenter {
-  contentComponent = new TripListEventsView();
-  sortComponent = new SortsEventsTripView();
+  #contentComponent = new TripListEventsView();
+  #sortComponent = new SortsEventsTripView();
+
+  #contentContainer = null;
+  #tripPointsModel = null;
+  #destinationsModel = null;
+  #offersModel = null;
 
   constructor({
     contentContainer,
-    tripPoints,
-    destinationsList,
-    offersList,
+    tripPointsModel,
     destinationsModel,
-    offersModel
+    offersModel,
   }) {
-    this.contentContainer = contentContainer;
-    this.tripPoints = tripPoints;
-    this.destinationsList = destinationsList;
-    this.offersList = offersList;
-    this.destinationsModel = destinationsModel;
-    this.offersModel = offersModel;
+    this.#contentContainer = contentContainer;
+    this.#tripPointsModel = tripPointsModel;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
+
   }
 
   init() {
-    const contentBox = this.contentComponent.getElement();
-    render(this.contentComponent, this.contentContainer);
-    render(this.sortComponent, contentBox, RenderPosition.AFTERBEGIN);
+    const contentBox = this.#contentComponent.getElement();
+    render(this.#contentComponent, this.#contentContainer);
+    render(this.#sortComponent, contentBox, RenderPosition.AFTERBEGIN);
 
     const addPointPresenter = new AddPointPresenter({
       pointContainer: contentBox,
-      tripPoints: this.tripPoints,
-      destinationsList: this.destinationsList,
-      offersList: this.offersList
+      tripPointsModel: this.#tripPointsModel,
+      destinationsModel: this.#destinationsModel,
+      offersModel: this.#offersModel
     });
     addPointPresenter.init();
+
     const pointsPresenter = new PointsPresenter({
       pointPresenterContainer: contentBox,
-      tripPoints: this.tripPoints,
-      destinationsList: this.destinationsList,
-      offersList: this.offersList,
-      destinationsModel: this.destinationsModel,
-      offersModel: this.offersModel
+      tripPointsModel: this.#tripPointsModel,
+      destinationsModel: this.#destinationsModel,
+      offersModel: this.#offersModel
     });
     pointsPresenter.init();
 
