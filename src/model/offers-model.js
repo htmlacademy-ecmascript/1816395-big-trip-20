@@ -35,4 +35,28 @@ export default class OffersModel {
     return this.#offers.find((offer) => offer.type === type);
   }
 
+  /**
+   * Метод для поиска дополнительных предложений по идентификаторам  дополнительных предложений  точки путешествия
+   * @param {object} offersTripPoint Объект с идентификаторами дополнительных предложений точки путешествия
+   * @returns объект с дополнительным предложением
+   */
+
+  getById(offersTripPoint) {
+    if (offersTripPoint) {
+
+
+      const
+        typeOffer = offersTripPoint.type,
+        offersTripPointIds = offersTripPoint.offers,
+        offersOfType = this.getByType(typeOffer);
+
+      return offersTripPointIds
+        .map((id) => offersOfType.offers
+          .find((offer) => offer.id === id)
+        );
+    } else {
+      return [];
+    }
+  }
+
 }

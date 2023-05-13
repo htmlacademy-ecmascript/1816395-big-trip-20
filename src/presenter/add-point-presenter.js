@@ -1,6 +1,10 @@
 import AddNewPointView from '../view/add-new-point-view.js';
+import { render } from '../framework/render.js';
 
-import { render } from '../render.js';
+
+/**
+ * Класс призентора управляющего рендером AddNewPointView
+ */
 
 export default class AddPointPresenter {
   #pointContainer = null;
@@ -8,6 +12,13 @@ export default class AddPointPresenter {
   #destinationsModel = null;
   #offersModel = null;
 
+  /**
+   * Инициализация получения сущностей от ContentPresenter
+   * @param {object} pointContainer Объект с контейнером для отрисовки призентора
+   * @param {object} tripPointsModel Объект с сущностью модели точек путешествия
+   * @param {object} destinationsModel Объект с сущностью модели пунктов назначения
+   * @param {object} offersModel Объект с сущностью модели дополнительных предложений
+   */
 
   constructor({ pointContainer, tripPointsModel, destinationsModel, offersModel }) {
     this.#pointContainer = pointContainer;
@@ -16,18 +27,28 @@ export default class AddPointPresenter {
     this.#offersModel = offersModel;
   }
 
+  /**
+   * Метод инициализации призентора
+   */
+
   init() {
+    this.#renderAddNewPointView();
+  }
+
+  /**
+   * Метод рендера призентора
+   */
+
+  #renderAddNewPointView() {
     const tripPoints = this.#tripPointsModel.get();
-    const destinationsList = this.#destinationsModel.get();
-    const offersList = this.#offersModel.get();
+    const tripPoint = tripPoints[0];
 
     render(new AddNewPointView({
-      tripPoint: tripPoints[0],
-      destinationsList: destinationsList,
-      offersList: offersList
+      tripPoint: tripPoint,
+      destination: this.#destinationsModel.getById(tripPoint.destination),
+      availableOffersTripPoint: this.#offersModel.getByType(tripPoint.type)
 
     }), this.#pointContainer);
-
   }
 
 }

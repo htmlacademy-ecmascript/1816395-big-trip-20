@@ -52,6 +52,10 @@ const util = {
     return date ? dayjs(date).format(CONST_DATA.formatDatePoint) : '';
   },
 
+  humanizeDateEditPoint: function (date){
+    return dayjs(date).format(CONST_DATA.formatDateAddPoint)
+  },
+
 
   getDestinationById: function (destinationId, destinationList) {
     const findDestination = destinationList.find((element) => element.id === destinationId);
