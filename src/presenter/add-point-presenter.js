@@ -40,7 +40,7 @@ export default class AddPointPresenter {
    */
 
   #renderAddNewPointView() {
-    const tripPoints = this.#tripPointsModel.get();
+    const tripPoints = this.#tripPointsModel.tripPoints;
     const tripPoint = tripPoints[0];
 
     render(new AddNewPointView({

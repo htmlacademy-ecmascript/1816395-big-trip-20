@@ -21,7 +21,7 @@ export default class OffersModel {
    * @returns Массив копии сущностей дополнительных предложений
    */
 
-  get() {
+  get offers() {
     return this.#offers;
   }
 

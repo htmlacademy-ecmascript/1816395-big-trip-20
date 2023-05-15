@@ -14,8 +14,8 @@ export default class TripPointsModel {
    */
 
   constructor(service) {
-    this.service = service;
-    this.tripPoints = [...this.service.getTripPoints()];
+    this.#service = service;
+    this.#tripPoints = [...this.#service.getTripPoints()];
   }
 
   /**
@@ -23,7 +23,7 @@ export default class TripPointsModel {
    * @returns Массив точек путешествия
    */
 
-  get() {
-    return this.tripPoints;
+  get tripPoints() {
+    return this.#tripPoints;
   }
 }

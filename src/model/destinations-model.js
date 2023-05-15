@@ -19,7 +19,7 @@ export default class DestinationsModel {
    * @returns {Array} Массив пунктов назначения
    */
 
-  get() {
+  get destinations () {
     return this.#destinations;
   }
 

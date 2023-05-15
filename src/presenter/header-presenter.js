@@ -45,9 +45,9 @@ export default class HeaderPresenter {
    */
 
   #render() {
-    const tripPoints = this.#tripPointsModel.get();
-    const destinationsList = this.#destinationsModel.get();
-    const offersList = this.#offersModel.get();
+    const tripPoints = this.#tripPointsModel.tripPoints;
+    const destinationsList = this.#destinationsModel.destinations;
+    const offersList = this.#offersModel.offers;
 
     render(new TripEventsInfoView({
       destinationsList: destinationsList,
