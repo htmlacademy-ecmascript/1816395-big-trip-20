@@ -1,8 +1,8 @@
 import ContentView from '../view/content-view.js';
 import SortsEventsTripView from '../view/sort-events-trip-view.js';
-import PointsPresenter from './points-presenter.js';
+import PointPresenter from './point-presenter.js';
 import AddPointPresenter from './add-point-presenter.js';
-import { render, RenderPosition } from '../framework/render.js';
+import { render, RenderPosition, replace } from '../framework/render.js';
 
 /**
  * Класс призентора управляющего созданием экземпляров AddPointPresenter и PointsPresenter
@@ -37,7 +37,17 @@ export default class ContentPresenter {
    */
 
   init() {
-    this.#render();
+    this.#renderContent();
+  }
+
+  /**
+   * Метод отвечает за рендеринг ContentView и SortsEventsTripView
+   * @param {object} contentBox Объект с контейнером для рендера ContentView и SortsEventsTripView
+   */
+
+  #renderComponents(contentBox) {
+    render(this.#contentComponent, this.#contentContainer);
+    render(this.#sortComponent, contentBox, RenderPosition.AFTERBEGIN);
   }
 
   /**
@@ -45,9 +55,21 @@ export default class ContentPresenter {
    * и рендерит ContentView и SortsEventsTripView
    */
 
-  #render() {
+  #renderContent() {
     const contentBox = this.#contentComponent.element;
 
+    // this.#renderAddPointPresenter(contentBox);
+    this.#renderPointPresenters(contentBox);
+
+    this.#renderComponents(contentBox);
+  }
+
+  /**
+   * Метод который рендерит AddPointPresenter
+   * @param {object} contentBox Объект с компонентов в котором будет проходить рендер AddPointPresenter
+   */
+
+  #renderAddPointPresenter(contentBox) {
     const addPointPresenter = new AddPointPresenter({
       pointContainer: contentBox,
       tripPointsModel: this.#tripPointsModel,
@@ -55,25 +77,27 @@ export default class ContentPresenter {
       offersModel: this.#offersModel
     });
     addPointPresenter.init();
-
-    const pointsPresenter = new PointsPresenter({
-      pointPresenterContainer: contentBox,
-      tripPointsModel: this.#tripPointsModel,
-      destinationsModel: this.#destinationsModel,
-      offersModel: this.#offersModel
-    });
-    pointsPresenter.init(contentBox);
-
-    this.#renderComponents(contentBox);
   }
 
   /**
-   * Метод отвечает за рендеринг ContentView и SortsEventsTripView
-   * @param {object} contentBox Объект с контейнером для рендера ContentView и SortsEventsTripView
-   */
-  #renderComponents(contentBox) {
-    render(this.#contentComponent, this.#contentContainer);
-    render(this.#sortComponent, contentBox, RenderPosition.AFTERBEGIN);
+ * Метод который рендерит PointsPresenter`
+ * @param {object} contentBox Объект с компонентов в котором будет проходить рендер PointsPresenter
+ */
+
+  #renderPointPresenters(contentBox) {
+    const tripPoints = this.#tripPointsModel.tripPoints;
+
+    for (let i = 0; i < tripPoints.length; i++) {
+      const pointPresenter = new PointPresenter({
+        pointPresenterContainer: contentBox,
+        tripPoint: tripPoints[i],
+        destination: this.#destinationsModel.getById(tripPoints[i].destination),
+        offerTripPoint: this.#offersModel.getByType(tripPoints[i].type)
+      });
+
+      pointPresenter.init();
+    }
+
+
   }
 }
-

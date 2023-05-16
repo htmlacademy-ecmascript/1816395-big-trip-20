@@ -8,29 +8,29 @@ import { render } from '../framework/render.js';
 
 export default class PointsPresenter {
   #pointPresenterContainer = null;
-  #tripPointsModel = null;
-  #destinationsModel = null;
-  #offersModel = null;
+  #tripPoint = null;
+  #destination = null;
+  #offerTripPoint = null;
 
   /**
    * Инициализация получения сущностей от ContentPresenter
    * @param {object} pointPresenterContainer Объект с контейнером для отрисовки призентора
-   * @param {object} tripPointsModel Объект с сущностью модели точек путешествия
-   * @param {object} destinationsModel Объект с сущностью модели пунктов назначения
-   * @param {object} offersModel Объект с сущностью модели дополнительных предложений
+   * @param {object} tripPoint Объект с сущностью модели точек путешествия
+   * @param {object} destination Объект с сущностью модели пунктов назначения
+   * @param {object} offerTripPoint Объект с сущностью модели дополнительных предложений
    */
 
   constructor({
     pointPresenterContainer,
-    tripPointsModel,
-    destinationsModel,
-    offersModel
+    tripPoint,
+    destination,
+    offerTripPoint
 
   }) {
     this.#pointPresenterContainer = pointPresenterContainer;
-    this.#tripPointsModel = tripPointsModel;
-    this.#destinationsModel = destinationsModel;
-    this.#offersModel = offersModel;
+    this.#tripPoint = tripPoint;
+    this.#destination = destination;
+    this.#offerTripPoint = offerTripPoint;
   }
 
   /**
@@ -39,7 +39,7 @@ export default class PointsPresenter {
 
   init() {
 
-    this.#renderPointsPresenter();
+    this.#renderTripPoint();
   }
 
   /**
@@ -49,30 +49,15 @@ export default class PointsPresenter {
    * @param {object} offers сущность дополнительных предложения точки путешествия
    */
 
-  #renderTripPoint(tripPoint, destination, offers) {
+  #renderTripPoint() {
     const tripPointComponent = new TripPointView({
-      tripPoint: tripPoint,
-      destination: destination,
-      offer: offers
+      tripPoint: this.#tripPoint,
+      destination: this.#destination,
+      offer: this.#offerTripPoint
     });
 
     render(tripPointComponent, this.#pointPresenterContainer);
   }
 
-  /**
-   * метод который управляет рендером  всех компонентов TripPointView
-   */
-
-  #renderPointsPresenter() {
-    const tripPoints = this.#tripPointsModel.tripPoints;
-
-    for (let i = 1; i < tripPoints.length; i++) {
-      this.#renderTripPoint(
-        tripPoints[i],
-        this.#destinationsModel.getById(tripPoints[i].destination),
-        this.#offersModel.getByType(tripPoints[i].type)
-      );
-    }
-  }
 
 }
