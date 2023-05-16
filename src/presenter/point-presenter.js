@@ -11,6 +11,8 @@ export default class PointPresenter {
   #tripPoint = null;
   #destination = null;
   #offerTripPoint = null;
+  #onEditClick = null;
+  #tripPointComponent = null;
 
   /**
    * Инициализация получения сущностей от ContentPresenter
@@ -24,13 +26,15 @@ export default class PointPresenter {
     pointPresenterContainer,
     tripPoint,
     destination,
-    offerTripPoint
+    offerTripPoint,
+    onEditClick
 
   }) {
     this.#pointPresenterContainer = pointPresenterContainer;
     this.#tripPoint = tripPoint;
     this.#destination = destination;
     this.#offerTripPoint = offerTripPoint;
+    this.#onEditClick = onEditClick;
   }
 
   /**
@@ -38,7 +42,7 @@ export default class PointPresenter {
    */
 
   init() {
-
+    this.#setTripPointComponent();
     this.#renderTripPoint();
   }
 
@@ -50,14 +54,21 @@ export default class PointPresenter {
    */
 
   #renderTripPoint() {
-    const tripPointComponent = new TripPointView({
-      tripPoint: this.#tripPoint,
-      destination: this.#destination,
-      offer: this.#offerTripPoint
-    });
-
-    render(tripPointComponent, this.#pointPresenterContainer);
+    render(this.#tripPointComponent, this.#pointPresenterContainer);
   }
 
+
+  #setTripPointComponent() {
+    this.#tripPointComponent = new TripPointView({
+      tripPoint: this.#tripPoint,
+      destination: this.#destination,
+      offer: this.#offerTripPoint,
+      onEditClick: this.#onEditClick
+    });
+  }
+
+  get tripPointComponent() {
+    return this.#tripPointComponent;
+  }
 
 }

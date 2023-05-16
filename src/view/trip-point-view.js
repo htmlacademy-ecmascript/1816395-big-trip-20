@@ -113,19 +113,26 @@ export default class TripPointView extends AbstractView {
   #tripPoint = null;
   #destination = null;
   #offers = null;
+  #handleEditClick = null;
 
   /**
    * Инициализация данных из Points-presenter
-   * @param {object} tripPoint точка путешествия
-   * @param {Array} destination пункт назначения
-   * @param {object} offers объект дополнительных предложений одного типа
+   * @param {object} tripPoint Точка путешествия
+   * @param {Array} destination Пункт назначения
+   * @param {object} offer Объект дополнительных предложений одного типа
+   * @param {object} onEditClick Объект с функцией которая будет срабатывать при событии клика
+
    */
 
-  constructor({ tripPoint, destination, offer, }) {
+  constructor({ tripPoint, destination, offer, onEditClick }) {
     super();
     this.#tripPoint = tripPoint;
     this.#destination = destination;
     this.#offers = offer.offers;
+    this.#handleEditClick = onEditClick;
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#editClickHandler);
   }
 
   /**
@@ -139,5 +146,16 @@ export default class TripPointView extends AbstractView {
       this.#offers
     );
   }
+
+  /**
+   * Метод описывает приватный обработчик события и используется стрелочная функция, что бы this
+   * у функции был по месту вызова функции
+   * @param {object} evt Объект события (Элемент, на котором сработал обработчик)
+   */
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 
 }

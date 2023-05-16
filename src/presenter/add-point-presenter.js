@@ -7,24 +7,27 @@ import { render } from '../framework/render.js';
  */
 
 export default class AddPointPresenter {
-  #pointContainer = null;
-  #tripPointsModel = null;
-  #destinationsModel = null;
-  #offersModel = null;
+  #pointPresenterContainer = null;
+  #tripPoint = null;
+  #destination = null;
+  #offerTripPoint = null;
+  #onFormSubmit = null;
+  #addPointComponent = null;
 
   /**
    * Инициализация получения сущностей от ContentPresenter
-   * @param {object} pointContainer Объект с контейнером для отрисовки призентора
-   * @param {object} tripPointsModel Объект с сущностью модели точек путешествия
-   * @param {object} destinationsModel Объект с сущностью модели пунктов назначения
+   * @param {object} pointPresenterContainer Объект с контейнером для отрисовки призентора
+   * @param {object} tripPoint Объект с сущностью модели точек путешествия
+   * @param {object} destination Объект с сущностью модели пунктов назначения
    * @param {object} offersModel Объект с сущностью модели дополнительных предложений
    */
 
-  constructor({ pointContainer, tripPointsModel, destinationsModel, offersModel }) {
-    this.#pointContainer = pointContainer;
-    this.#tripPointsModel = tripPointsModel;
-    this.#destinationsModel = destinationsModel;
-    this.#offersModel = offersModel;
+  constructor({ pointPresenterContainer, tripPoint, destination, offerTripPoint, onFormSubmit }) {
+    this.#pointPresenterContainer = pointPresenterContainer;
+    this.#tripPoint = tripPoint;
+    this.#destination = destination;
+    this.#offerTripPoint = offerTripPoint;
+    this.#onFormSubmit = onFormSubmit;
   }
 
   /**
@@ -32,6 +35,7 @@ export default class AddPointPresenter {
    */
 
   init() {
+    this.#setAddPointComponent();
     this.#renderAddNewPointView();
   }
 
@@ -40,15 +44,23 @@ export default class AddPointPresenter {
    */
 
   #renderAddNewPointView() {
-    const tripPoints = this.#tripPointsModel.tripPoints;
-    const tripPoint = tripPoints[0];
 
-    render(new AddNewPointView({
-      tripPoint: tripPoint,
-      destination: this.#destinationsModel.getById(tripPoint.destination),
-      availableOffersTripPoint: this.#offersModel.getByType(tripPoint.type)
-
-    }), this.#pointContainer);
+    render(this.#addPointComponent, this.#pointPresenterContainer);
   }
+
+  #setAddPointComponent() {
+    this.#addPointComponent = new AddNewPointView({
+      tripPoint: this.#tripPoint,
+      destination: this.#destination,
+      availableOffersTripPoint: this.#offerTripPoint,
+      onFormSubmit: this.#onFormSubmit
+    });
+  }
+
+  get addPointComponent() {
+    return this.#addPointComponent;
+  }
+
+
 
 }

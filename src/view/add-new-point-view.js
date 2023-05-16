@@ -296,13 +296,30 @@ export default class AddNewPointView extends AbstractView {
   #tripPoint = null;
   #destination = null;
   #availableOffersTripPoint = null;
+  #handleFormSubmit = null;
 
-  constructor({ tripPoint, destination, availableOffersTripPoint }) {
+  /**
+ * Инициализация данных из Points-presenter
+ * @param {object} tripPoint Точка путешествия
+ * @param {Array} destination Пункт назначения
+ * @param {object} offer Объект дополнительных предложений одного типа
+ * @param {object} handleFormSubmit Объект с функцией которая будет срабатывать при подтверждении формы
+ */
+
+  constructor({ tripPoint, destination, availableOffersTripPoint, onFormSubmit }) {
     super();
     this.#tripPoint = tripPoint;
     this.#destination = destination;
     this.#availableOffersTripPoint = availableOffersTripPoint;
+    this.#handleFormSubmit = onFormSubmit;
+
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
+
+  /**
+   * Получение шаблона точки путешествия
+   */
 
   get template() {
     return createAddPointTemplate(
@@ -311,6 +328,17 @@ export default class AddNewPointView extends AbstractView {
       this.#availableOffersTripPoint,
     );
   }
+
+  /**
+ * Метод описывает приватный обработчик события и используется стрелочная функция, что бы this
+ * у функции был по месту вызова функции
+ * @param {object} evt Объект события (Элемент, на котором сработал обработчик)
+ */
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 
 }
 
