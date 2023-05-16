@@ -20,6 +20,8 @@ export default class PointPresenter {
    * @param {object} tripPoint Объект с сущностью модели точек путешествия
    * @param {object} destination Объект с сущностью модели пунктов назначения
    * @param {object} offerTripPoint Объект с сущностью модели дополнительных предложений
+   * @param {object} onEditClick Объект функцией которая будет срабатывать при событии клика
+
    */
 
   constructor({
@@ -47,16 +49,19 @@ export default class PointPresenter {
   }
 
   /**
-   * Метод создает экземпляр компонента TripPointView
-   * @param {object} tripPoint сущность точки путешествия
-   * @param {object} destination сущность пункта назначения точки путешествия
-   * @param {object} offers сущность дополнительных предложения точки путешествия
+   * Метод рендерит компонент TripPointView
    */
 
   #renderTripPoint() {
     render(this.#tripPointComponent, this.#pointPresenterContainer);
   }
 
+  /**
+   * Метод создает экземпляр компонента TripPointView
+   * @param {object} tripPoint сущность точки путешествия
+   * @param {object} destination сущность пункта назначения точки путешествия
+   * @param {object} offers сущность дополнительных предложения точки путешествия
+   */
 
   #setTripPointComponent() {
     this.#tripPointComponent = new TripPointView({
@@ -66,6 +71,10 @@ export default class PointPresenter {
       onEditClick: this.#onEditClick
     });
   }
+
+  /**
+   * Метод возвращает экземпляр компонента TripPointView
+   */
 
   get tripPointComponent() {
     return this.#tripPointComponent;

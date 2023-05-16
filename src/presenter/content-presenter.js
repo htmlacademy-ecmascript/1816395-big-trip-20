@@ -3,7 +3,6 @@ import SortsEventsTripView from '../view/sort-events-trip-view.js';
 import PointPresenter from './point-presenter.js';
 import AddPointPresenter from './add-point-presenter.js';
 import { render, RenderPosition, replace } from '../framework/render.js';
-import AbstractView from '../framework/view/abstract-view.js';
 
 /**
  * Класс призентора управляющего созданием экземпляров AddPointPresenter и PointsPresenter
@@ -59,9 +58,7 @@ export default class ContentPresenter {
   #renderContent() {
     const contentBox = this.#contentComponent.element;
 
-    // this.#renderAddPointPresenter(contentBox);
     this.#renderTripPoints(contentBox);
-
     this.#renderComponents(contentBox);
   }
 

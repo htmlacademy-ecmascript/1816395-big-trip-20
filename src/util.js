@@ -53,7 +53,7 @@ const util = {
   },
 
   humanizeDateEditPoint: function (date){
-    return dayjs(date).format(CONST_DATA.formatDateAddPoint)
+    return dayjs(date).format(CONST_DATA.formatDateAddPoint);
   },
 
 

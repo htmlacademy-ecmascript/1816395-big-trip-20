@@ -20,6 +20,7 @@ export default class AddPointPresenter {
    * @param {object} tripPoint Объект с сущностью модели точек путешествия
    * @param {object} destination Объект с сущностью модели пунктов назначения
    * @param {object} offersModel Объект с сущностью модели дополнительных предложений
+   * @param {object} onFormSubmit Объект функцией которая будет срабатывать при подтверждении формы
    */
 
   constructor({ pointPresenterContainer, tripPoint, destination, offerTripPoint, onFormSubmit }) {
@@ -40,13 +41,20 @@ export default class AddPointPresenter {
   }
 
   /**
-   * Метод рендера призентора
+   * Метод рендерит компонент AddNewPointView
    */
 
   #renderAddNewPointView() {
 
     render(this.#addPointComponent, this.#pointPresenterContainer);
   }
+
+  /**
+   * Метод создает экземпляр компонента AddNewPointView
+   * @param {object} tripPoint сущность точки путешествия
+   * @param {object} destination сущность пункта назначения точки путешествия
+   * @param {object} availableOffersTripPoint сущность дополнительных предложения точки путешествия
+   */
 
   #setAddPointComponent() {
     this.#addPointComponent = new AddNewPointView({
@@ -57,10 +65,13 @@ export default class AddPointPresenter {
     });
   }
 
+  /**
+   * Метод возвращает экземпляр компонента AddNewPointView
+   */
+
   get addPointComponent() {
     return this.#addPointComponent;
   }
-
 
 
 }
