@@ -6,7 +6,7 @@ import { render } from '../framework/render.js';
  * Класс призентора управляющего рендером TripPointView
  */
 
-export default class PointsPresenter {
+export default class PointPresenter {
   #pointPresenterContainer = null;
   #tripPoint = null;
   #destination = null;
@@ -43,7 +43,7 @@ export default class PointsPresenter {
   }
 
   /**
-   * Метод создает экземпляр компонента ripPointView
+   * Метод создает экземпляр компонента TripPointView
    * @param {object} tripPoint сущность точки путешествия
    * @param {object} destination сущность пункта назначения точки путешествия
    * @param {object} offers сущность дополнительных предложения точки путешествия
