@@ -45,9 +45,10 @@ export default class ContentPresenter {
    * @param {object} contentBox Объект с контейнером для рендера ContentView и SortsEventsTripView
    */
 
-  #renderComponents(contentBox) {
+  #renderComponents() {
+    render(this.#sortComponent, this.#contentContainer);
     render(this.#contentComponent, this.#contentContainer);
-    render(this.#sortComponent, contentBox, RenderPosition.AFTERBEGIN);
+
   }
 
   /**
@@ -62,20 +63,6 @@ export default class ContentPresenter {
     this.#renderComponents(contentBox);
   }
 
-  /**
-   * Метод который рендерит AddPointPresenter
-   * @param {object} contentBox Объект с компонентов в котором будет проходить рендер AddPointPresenter
-   */
-
-  #renderAddPointPresenter(contentBox) {
-    const addPointPresenter = new AddPointPresenter({
-      pointContainer: contentBox,
-      tripPointsModel: this.#tripPointsModel,
-      destinationsModel: this.#destinationsModel,
-      offersModel: this.#offersModel
-    });
-    addPointPresenter.init();
-  }
 
   /**
  * Метод который рендерит PointsPresenter`
