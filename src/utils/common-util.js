@@ -1,9 +1,21 @@
 import dayjs from 'dayjs';
-import { CONST_COMMON_DATA } from '../const/common-const';
+import { CONST_COMMON_DATA } from '../const/common-const.js';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
 const commonUtil = {
+  dateIsFuture: function (date) {
+    return date ? dayjs(date).isAfter(dayjs()) : false;
+  },
+
+  dateIsPast: function (date) {
+    return date ? dayjs(date).isBefore(dayjs()) : false;
+  },
+
+  dateIsPresent: function (date) {
+    return date ? dayjs(date).format(CONST_COMMON_DATA.formatDateOneDay) === dayjs().format(CONST_COMMON_DATA.formatDateOneDay) : false;
+  },
+
   humanizeDateInfo: function (date) {
     return date ? dayjs(date).format(CONST_COMMON_DATA.formatDateInfo) : '';
   },

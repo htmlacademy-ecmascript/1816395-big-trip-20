@@ -1,7 +1,6 @@
 import { CONST_COMMON_DATA } from '../const/common-const.js';
 import { commonUtil } from '../utils/common-util.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { mockUtil } from '../utils/mock-util.js';
 
 /**
  * Создание разметки всплывающего меню выбора типа поездки
@@ -39,8 +38,8 @@ function createEventTypeWrapperHTML(tripPointType) {
     return (/*html*/
       `
       <div class="event__type-item">
-        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-taxi-1">${type}</label>
+        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="${type}" value="${type}">
+        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type}">${type}</label>
       </div>
   `
     );
@@ -106,8 +105,8 @@ function createTripEventDestinationHTML(tripPointType, destinationName) {
 function createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd) {
 
   const
-    eventStartTime = mockUtil.humanizeDateEditPoint(tripPointDateStart),
-    eventEndTime = mockUtil.humanizeDateEditPoint(tripPointDateEnd);
+    eventStartTime = commonUtil.humanizeDateEditPoint(tripPointDateStart),
+    eventEndTime = commonUtil.humanizeDateEditPoint(tripPointDateEnd);
 
   return (/*html*/ `
   <div class="event__field-group  event__field-group--time">
@@ -315,12 +314,15 @@ export default class EditPointView extends AbstractView {
     this.#availableOffersTripPoint = availableOffersTripPoint;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleCloseEditClick = onCloseEditClick;
+
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
 
-
     this.element.querySelector('.event__rollup-btn')
       .addEventListener('click', this.#closeEditClickHandler);
+
+    this.element.querySelectorAll('.event__type-label')
+      .forEach((element) => element.addEventListener('click', this.#typeClickHandler));
   }
 
   /**
@@ -349,6 +351,12 @@ export default class EditPointView extends AbstractView {
   #closeEditClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleCloseEditClick();
+  };
+
+  #typeClickHandler = (evt) => {
+    evt.preventDefault();
+    this.element.querySelector('.event__type-output')
+      .textContent = evt.target.textContent;
   };
 
 }

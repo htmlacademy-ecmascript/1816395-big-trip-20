@@ -19,7 +19,6 @@ export default class PointPresenter {
    * @param {object} destination Объект с сущностью модели пунктов назначения
    * @param {object} offerTripPoint Объект с сущностью модели дополнительных предложений
    * @param {object} onEditClick Объект функцией которая будет срабатывать при событии клика
-
    */
 
   constructor({

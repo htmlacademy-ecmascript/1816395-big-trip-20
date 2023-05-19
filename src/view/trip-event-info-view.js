@@ -9,15 +9,18 @@ import { commonUtil } from '../utils/common-util.js';
 
 const createInfoDestinationsHTML = (destinations) => {
   const destinationsNames = commonUtil.getDestinationNames(destinations);
+  if (destinationsNames.length < 3) {
+    return destinationsNames
+      .map((destinationName, index) => {
+        const isDestinationLast = index === destinationsNames.length - 1
+          ? ` ${destinationName}`
+          : `${destinationName} &mdash;`;
+        return isDestinationLast;
+      })
+      .join('');
+  }
+  return `${destinationsNames[0]}  &mdash; . . . &mdash; ${destinationsNames[destinationsNames.length - 1]}`;
 
-  return destinationsNames
-    .map((destinationName, index) => {
-      const isDestinationLast = index === destinationsNames.length - 1
-        ? `${destinationName}`
-        : `${destinationName} &mdash;`;
-      return isDestinationLast;
-    })
-    .join('');
 };
 
 /**
