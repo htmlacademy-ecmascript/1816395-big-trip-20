@@ -9,31 +9,36 @@ const tripEventsElement = siteBodyElement.querySelector('.trip-events');
 
 
 export default class MainPresenter {
+  #tripPointsModel = null;
+  #destinationsModel = null;
+  #offersModel = null;
+
   constructor({ tripPointsModel, destinationsModel, offersModel }) {
-    this.tripPointsModel = tripPointsModel;
-    this.destinationsModel = destinationsModel;
-    this.offersModel = offersModel;
+    this.#tripPointsModel = tripPointsModel;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
   }
 
   init() {
-    this.tripPoints = [...this.tripPointsModel.getPoints()];
-    this.destinationsList = [...this.destinationsModel.getDestinationsList()];
-    this.offersList = [...this.offersModel.getOffersList()];
+    this.tripPoints = this.#tripPointsModel.tripPoints;
+    this.destinationsList = this.#destinationsModel.destinations;
+    this.offersList = this.#offersModel.offers;
 
     const headerPresenter = new HeaderPresenter({
       headerContainer: filterContainerElement,
       infoContainer: infoContainerElement,
-      tripPoints: this.tripPoints,
-      destinationsList: this.destinationsList,
-      offersList: this.offersList
+      tripPointsModel: this.#tripPointsModel,
+      destinationsModel:  this.#destinationsModel,
+      offersModel: this.#offersModel
     });
     const contentPresenter = new ContentPresenter({
       contentContainer: tripEventsElement,
-      tripPoints: this.tripPoints,
-      destinationsList: this.destinationsList,
-      offersList: this.offersList
+      tripPointsModel: this.#tripPointsModel,
+      destinationsModel:  this.#destinationsModel,
+      offersModel: this.#offersModel
     });
 
+    // console.log(this.destinationsList,this.tripPoints)
     headerPresenter.init();
     contentPresenter.init();
   }

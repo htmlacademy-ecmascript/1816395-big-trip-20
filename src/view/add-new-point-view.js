@@ -1,156 +1,290 @@
-import dayjs from 'dayjs';
 import { CONST_DATA } from '../mock/const-data.js';
-import { createElement } from '../render.js';
 import { util } from '../util.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
+/**
+ * Создание разметки всплывающего меню выбора типа поездки
+ * @param {string} tripPointType Строка с типом точки путешествия
+ * @returns Строку с разметкой всплывающего меню выбора типа поездки
+ */
 
-function generateEventTypeBtn(type) {
-  return (/*html*/
-    `
+function createEventTypeWrapperHTML(tripPointType) {
+
+  const eventTypeBtn = createEventTypeBtnHTML(tripPointType);
+  /**
+   * Создает разметку кнопки типа точки путешествия
+   * @param {string} type Строка с типом точки путешествия
+   * @returns Строку с разметкой кнопки типа точки путешествия
+   */
+
+  function createEventTypeBtnHTML(type) {
+    return (/*html*/
+      `
   <label class="event__type  event__type-btn" for="event-type-toggle-1">
     <span class="visually-hidden">Choose event type</span>
     <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
   </label>
   <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 `);
-}
+  }
 
-function createTypeItemTemplate(type) {
-  return (/*html*/
-    `
-    <div class="event__type-item">
-      <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-      <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-taxi-1">${type}</label>
+  /**
+   * Создает разметку иконки для выбора типа точки путешествия
+   * @param {string} type Строка с типом точки путешествия
+   * @returns Строку с разметкой иконки для выбора типа точки путешествия
+   */
+
+  function createTypeItemHTML(type) {
+    return (/*html*/
+      `
+      <div class="event__type-item">
+        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-taxi-1">${type}</label>
+      </div>
+  `
+    );
+  }
+
+  /**
+   * Создает разметку для всех иконок выбора типа точки путешествия
+   * @param {Array} typesOffers Массив всех типов дополнительных путешествий
+   * @returns Строку с разметкой всех иконок выбора типа точки путешествия
+   */
+
+  function generateEventIcon(typesOffers) {
+    return typesOffers
+      .map((typeOffers) => createTypeItemHTML(typeOffers))
+      .join('');
+  }
+
+
+  return (/*html*/ `
+    <div class="event__type-wrapper">
+      ${eventTypeBtn}
+      <div class="event__type-list">
+        <fieldset class="event__type-group">
+          <legend class="visually-hidden">Event type</legend>
+          ${generateEventIcon(CONST_DATA.typeOffers)}
+        </fieldset>
+      </div>
     </div>
-`
-  );
+  `);
 }
 
-function createAvailableOfferTemplate(offer, checked) {
-  return (/*html*/`
-  <div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${checked}>
-    <label class="event__offer-label" for="event-offer-luggage-1">
-      <span class="event__offer-title">${offer.title}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${offer.price}</span>
+/**
+ * Создает разметку с названием пункта назначения
+ * @param {string} tripPointType Строка с типом точки путешествия
+ * @param {string} destinationName Строка с названием пункта назначения
+ * @returns Строку с разметкой названия пункта назначения
+ */
+
+function createTripEventDestinationHTML(tripPointType, destinationName) {
+  return (/*html*/ `
+  <div class="event__field-group  event__field-group--destination">
+  <label class="event__label  event__type-output" for="event-destination-1">
+    ${tripPointType}
+  </label>
+  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination"
+    value=${destinationName} list="destination-list-1">
+  <datalist id="destination-list-1">
+    <option value="Amsterdam"></option>
+    <option value="Geneva"></option>
+    <option value="Chamonix"></option>
+  </datalist>
+</div>
+  `);
+}
+
+/**
+ * Создает разметку с датой пребывания в точке путешествия
+ * @param {string} tripPointDateStart Строка с началом пребывания в точке путешествия
+ * @param {string} tripPointDateEnd Строка с завершением пребывания в точке путешествия
+ * @returns Строку с разметкой даты пребывания в точке путешествия
+ */
+
+function createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd) {
+
+  const
+    eventStartTime = util.humanizeDateEditPoint(tripPointDateStart),
+    eventEndTime = util.humanizeDateEditPoint(tripPointDateEnd);
+
+  return (/*html*/ `
+  <div class="event__field-group  event__field-group--time">
+    <label class="visually-hidden" for="event-start-time-1">From</label>
+    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${eventStartTime}">
+    &mdash;
+    <label class="visually-hidden" for="event-end-time-1">To</label>
+    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${eventEndTime}">
+</div>
+  `);
+}
+
+/**
+ * Создает разметку с возможными и выбранными дополнительными предложениями для точки путешествия
+ * @param {object} tripPoint Объект с точкой путешествия
+ * @param {Array} availableOffersTripPoint Массив с доступными дополнительными предложениями для точки путешествия
+ * @param {Array} offersOfTripPoint Массив выбранных дополнительных предложений в точке путешествия
+ * @returns Строку с разметкой  возможных и выбранных дополнительных предложений для точки путешествия
+ */
+
+function createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint) {
+
+  /**
+   * Создает разметку с дополнительного предложения
+   * @param {object} offer Объект с дополнительным предложением
+   * @param {string} checked Строка с данными о статусе дополнительного предложения
+   * @returns Строку с дополнительным предложением
+   */
+
+  function createAvailableOfferHtml(offer, checked) {
+    const
+      offerTitle = offer.title,
+      offerPrice = offer.price;
+    return (/*html*/`
+    <div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${checked}>
+      <label class="event__offer-label" for="event-offer-luggage-1">
+        <span class="event__offer-title">${offerTitle}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offerPrice}</span>
+      </label>
+    </div>
+
+  `);
+  }
+
+  /**
+   * Создает разметку всего списка дополнительных предложений для точки путешествия
+   * @param {Array} tripPointOffers Массив с идентификаторами дополнительных предложений выбранных в точке путешествия
+   * @param {object} availableOffers Объект всех дополнительных предложений для типа точки путешествия
+   * @returns Строку с разметкой всех дополнительных предложений для тоски путешествия
+   */
+
+  function createAvailableOffersListHtml(tripPointOffers, availableOffers) {
+    return availableOffers.offers.map((offer) =>
+      tripPointOffers.find((id) => offer.id === id) ?
+        createAvailableOfferHtml(offer, 'checked')
+        : createAvailableOfferHtml(offer, '')
+    ).join('');
+
+  }
+
+  return (/*html*/ `
+  <section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+    <div class="event__available-offers">
+      ${createAvailableOffersListHtml(tripPoint.offers, availableOffersTripPoint)}
+    </div>
+  </section>
+  `);
+}
+
+
+/**
+ * Создает разметку со стоимостью пребывания в точке путешествия
+ * @param {string} tripPointPrice Строка со стоимостью
+ * @returns Строку с разметкой стоимости пребывания в точке путешествия
+ */
+function createTripEventPriceHTML(tripPointPrice) {
+  return (/*html*/ `
+  <div class="event__field-group  event__field-group--price">
+    <label class="event__label" for="event-price-1">
+      <span class="visually-hidden">Price</span>
+      &euro; ${tripPointPrice}
     </label>
+    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
   </div>
-
-`);
+  `);
 }
 
+/**
+ * Создает разметку с детальной информацией о пункте назначения
+ * @param {string} destinationName Строка на название пункта назначения
+ * @param {string} destinationDescription Строка с описанием пункта назначения
+ * @param {Array} destinationPictures Массив с адресами фотографий пункта назначения
+ * @returns строку с разметкой детальной информации о пункте назначения
+ */
 
-function createAvailableOffersListTemplate(tripPoint, offersList) {
-  let offersTemplate = '';
-  let offerTemplate = '';
-  const offersByType = util.getOffersByType(tripPoint.type, offersList);
-  offersByType.forEach((offerAvailable) => {
-    tripPoint.offers.forEach((offerTripPoint, index) => {
-      if (offerAvailable.id === offerTripPoint[index]) {
-        offerTemplate = createAvailableOfferTemplate(offerAvailable, 'checked');
-      } else {
-        offerTemplate = createAvailableOfferTemplate(offerAvailable, '');
+function createTripEventDestinationDetailsHTML(destinationName, destinationDescription, destinationPictures) {
+
+  function createImageHtml(srcImage, descriptionImage) {
+    return (/*html*/`<img class="event__photo" src=${srcImage} alt=${descriptionImage}>`);
+  }
+
+  function createImagesHtml(images) {
+    let imagesTemplate = '';
+    images.forEach(
+      (image) => {
+        imagesTemplate = imagesTemplate + createImageHtml(image.src);
       }
-    });
-    offersTemplate = offersTemplate + offerTemplate;
-  });
+    );
+    return imagesTemplate;
+  }
+  return (/*html*/ `
+  <section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">
+      ${destinationName}
+    </p>
 
-  return offersTemplate;
+    <div class="event__photos-container">
+      <div class="event__photos-tape">
+        ${createImagesHtml(destinationPictures, destinationDescription)}
+      </div>
+    </div>
+  </section>
+  `);
 }
 
-function createImageTemplate(srcImage, descriptionImage) {
-  return (/*html*/`<img class="event__photo" src=${srcImage} alt=${descriptionImage}>`);
-}
+/**
+ * Создает разметку компонента добавления или редактирования точки путешествия
+ * @param {object} tripPoint Объект с сущностью точки путешествия
+ * @param {object} destination Объект с сущностью пункта назначения точки путешествия
+ * @param {object} availableOffersTripPoint Объект с доступными дополнительными предложениями точки путешествия
+ * @returns Строку с разметкой компонента добавления или редактирования точки путешествия
+ */
 
-function createImagesTemplate(images) {
-  let imagesTemplate = '';
-  images.forEach(
-    (image) => {
-      imagesTemplate = imagesTemplate + createImageTemplate(image.src);
-    }
-  );
-  return imagesTemplate;
-}
+function createAddPointTemplate(tripPoint, destination, availableOffersTripPoint) {
+  const
+    destinationName = destination.name,
+    destinationDescription = destination.description,
+    destinationPictures = destination.pictures,
+    tripPointType = tripPoint.type,
+    tripPointDateStart = tripPoint.dateFrom,
+    tripPointDateEnd = tripPoint.dateTo,
+    tripPointPrice = tripPoint.basePrice;
 
-function generateEventType(typeData) {
-  let eventTypeTag = '';
-  typeData.forEach((type) => {
-    eventTypeTag = eventTypeTag + createTypeItemTemplate(type);
-  });
-  return eventTypeTag;
-}
+  const
+    tripEventTypeWrapperHTML = createEventTypeWrapperHTML(tripPointType),
+    tripEventDestinationHTML = createTripEventDestinationHTML(tripPointType, destinationName),
+    tripEventTimeHTML = createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd),
+    tripEventPriceHTML = createTripEventPriceHTML(tripPointPrice),
+    tripEventAvailableOffersHTML = createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint),
+    tripEventDestinationDetailsHTML = createTripEventDestinationDetailsHTML(destinationName, destinationDescription, destinationPictures);
 
-function createAddNewPointTemplate(tripPoint, destinationsList, offersList) {
 
   return (/*html*/
     `
     <li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
-                  <div class="event__type-wrapper">
-                    ${generateEventTypeBtn(tripPoint.type)}
-                    <div class="event__type-list">
-                      <fieldset class="event__type-group">
-                        <legend class="visually-hidden">Event type</legend>
-                        ${generateEventType(CONST_DATA.typeOffers)}
-                      </fieldset>
-                    </div>
-                  </div>
+                  ${tripEventTypeWrapperHTML}
 
-                  <div class="event__field-group  event__field-group--destination">
-                    <label class="event__label  event__type-output" for="event-destination-1">
-                      ${tripPoint.type}
-                    </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination"
-                      value=${util.getDestinationById(tripPoint.destination, destinationsList).name} list="destination-list-1">
-                    <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
-                    </datalist>
-                  </div>
+                  ${tripEventDestinationHTML}
 
-                  <div class="event__field-group  event__field-group--time">
-                    <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(tripPoint.dateFrom).format(CONST_DATA.formatDateAddPoint)}">
-                    &mdash;
-                    <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(tripPoint.dateTo).format(CONST_DATA.formatDateAddPoint)}">
-                  </div>
+                  ${tripEventTimeHTML}
 
-                  <div class="event__field-group  event__field-group--price">
-                    <label class="event__label" for="event-price-1">
-                      <span class="visually-hidden">Price</span>
-                      &euro; ${tripPoint.basePrice}
-                    </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
-                  </div>
+                  ${tripEventPriceHTML}
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                   <button class="event__reset-btn" type="reset">Cancel</button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
-                    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
-                    <div class="event__available-offers">
-                      ${createAvailableOffersListTemplate(tripPoint, offersList)}
-                    </div>
-                  </section>
+                  ${tripEventAvailableOffersHTML}
 
-                  <section class="event__section  event__section--destination">
-                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">
-                      ${util.getDestinationById(tripPoint.destination, destinationsList).description}
-                    </p>
-
-                    <div class="event__photos-container">
-                      <div class="event__photos-tape">
-                        ${createImagesTemplate(util.getDestinationById(tripPoint.destination, destinationsList).pictures, util.getDestinationById(tripPoint.destination, destinationsList).description)}
-                      </div>
-                    </div>
-                  </section>
+                  ${tripEventDestinationDetailsHTML}
                 </section>
               </form>
             </li>
@@ -158,31 +292,53 @@ function createAddNewPointTemplate(tripPoint, destinationsList, offersList) {
   );
 }
 
-export default class AddNewPointView {
-  constructor({ tripPoint, destinationsList, offersList }) {
-    this.tripPoint = tripPoint;
-    this.destinationsList = destinationsList;
-    this.offersList = offersList;
+export default class AddNewPointView extends AbstractView {
+  #tripPoint = null;
+  #destination = null;
+  #availableOffersTripPoint = null;
+  #handleFormSubmit = null;
+
+  /**
+ * Инициализация данных из Points-presenter
+ * @param {object} tripPoint Точка путешествия
+ * @param {Array} destination Пункт назначения
+ * @param {object} offer Объект дополнительных предложений одного типа
+ * @param {object} handleFormSubmit Объект с функцией которая будет срабатывать при подтверждении формы
+ */
+
+  constructor({ tripPoint, destination, availableOffersTripPoint, onFormSubmit }) {
+    super();
+    this.#tripPoint = tripPoint;
+    this.#destination = destination;
+    this.#availableOffersTripPoint = availableOffersTripPoint;
+    this.#handleFormSubmit = onFormSubmit;
+
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
 
-  getTemplate() {
-    return createAddNewPointTemplate(
-      this.tripPoint,
-      this.destinationsList,
-      this.offersList
+  /**
+   * Получение шаблона точки путешествия
+   */
+
+  get template() {
+    return createAddPointTemplate(
+      this.#tripPoint,
+      this.#destination,
+      this.#availableOffersTripPoint,
     );
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  /**
+ * Метод описывает приватный обработчик события и используется стрелочная функция, что бы this
+ * у функции был по месту вызова функции
+ * @param {object} evt Объект события (Элемент, на котором сработал обработчик)
+ */
 
-    return this.element;
-  }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 
-  removeElement() {
-    this.element = null;
-  }
 }
 

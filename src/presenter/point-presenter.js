@@ -1,26 +1,83 @@
-import TripEventsItemView from '../view/trip-events-item-view.js';
+import TripPointView from '../view/trip-point-view.js';
+import { render } from '../framework/render.js';
 
-import { render } from '../render.js';
+
+/**
+ * Класс призентора управляющего рендером TripPointView
+ */
 
 export default class PointPresenter {
+  #pointPresenterContainer = null;
+  #tripPoint = null;
+  #destination = null;
+  #offerTripPoint = null;
+  #onEditClick = null;
+  #tripPointComponent = null;
 
-  constructor({ pointContainer, tripPoints, destinationsList, offersList }) {
-    this.pointContainer = pointContainer;
-    this.tripPoints = tripPoints;
-    this.destinationsList = destinationsList;
-    this.offersList = offersList;
+  /**
+   * Инициализация получения сущностей от ContentPresenter
+   * @param {object} pointPresenterContainer Объект с контейнером для отрисовки призентора
+   * @param {object} tripPoint Объект с сущностью модели точек путешествия
+   * @param {object} destination Объект с сущностью модели пунктов назначения
+   * @param {object} offerTripPoint Объект с сущностью модели дополнительных предложений
+   * @param {object} onEditClick Объект функцией которая будет срабатывать при событии клика
+
+   */
+
+  constructor({
+    pointPresenterContainer,
+    tripPoint,
+    destination,
+    offerTripPoint,
+    onEditClick
+
+  }) {
+    this.#pointPresenterContainer = pointPresenterContainer;
+    this.#tripPoint = tripPoint;
+    this.#destination = destination;
+    this.#offerTripPoint = offerTripPoint;
+    this.#onEditClick = onEditClick;
   }
 
+  /**
+   * Метод инициализации призентора
+   */
+
   init() {
-    for (let i = 1; i < this.tripPoints.length; i++) {
-      render(
-        new TripEventsItemView({
-          tripPoint: this.tripPoints[i],
-          destinationsList: this.destinationsList,
-          offersList: this.offersList
-        }),
-        this.pointContainer);
-    }
+    this.#setTripPointComponent();
+    this.#renderTripPoint();
+  }
+
+  /**
+   * Метод рендерит компонент TripPointView
+   */
+
+  #renderTripPoint() {
+    render(this.#tripPointComponent, this.#pointPresenterContainer);
+  }
+
+  /**
+   * Метод создает экземпляр компонента TripPointView
+   * @param {object} tripPoint сущность точки путешествия
+   * @param {object} destination сущность пункта назначения точки путешествия
+   * @param {object} offers сущность дополнительных предложения точки путешествия
+   */
+
+  #setTripPointComponent() {
+    this.#tripPointComponent = new TripPointView({
+      tripPoint: this.#tripPoint,
+      destination: this.#destination,
+      offer: this.#offerTripPoint,
+      onEditClick: this.#onEditClick
+    });
+  }
+
+  /**
+   * Метод возвращает экземпляр компонента TripPointView
+   */
+
+  get tripPointComponent() {
+    return this.#tripPointComponent;
   }
 
 }

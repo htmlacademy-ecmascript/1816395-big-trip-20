@@ -1,32 +1,64 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { util } from '../util.js';
 
+/**
+ * Создает разметку перечня пунктов назначения
+ * @param {Array} destinations Массив пунктов назначения
+ * @returns Строку с разметкой перечня пунктов назначения
+ */
+
+const createInfoDestinationsHTML = (destinations) => {
+  const destinationsNames = util.getDestinationNames(destinations);
+
+  return destinationsNames
+    .map((destinationName, index) => {
+      const isDestinationLast = index === destinationsNames.length - 1
+        ? `${destinationName}`
+        : `${destinationName} &mdash;`;
+      return isDestinationLast;
+    })
+    .join('');
+};
+
+/**
+ * Создает разметку даты путешествия по всем точкам путешествия
+ * @param {Array} tripPoints Массив всех точек путешествия
+ * @returns Строку с разметкой даты путешествия по всем точкам путешествия
+ */
+
+function createInfoDateHTML(tripPoints) {
+  const
+    firstTripPointStartDate = tripPoints[0].dateFrom,
+    lastTripPointEndDate = tripPoints[tripPoints.length - 1].dateTo;
+
+  const
+    dateFrom = util.humanizeDateInfo(firstTripPointStartDate),
+    dateTo = util.humanizeDateInfo(lastTripPointEndDate);
+
+  return (/*html*/
+    `${dateFrom}&nbsp;&mdash;&nbsp;${dateTo}`
+  );
+}
+
+/**
+ * Создает шаблон разметки информации о путешествии
+ * @param {Array} destinationsList Массив пунктов назначения
+ * @param {Array} tripPoints Массив всех точек путешествия
+ * @returns Строку шаблона разметки информации о путешествии
+ */
+
 function createTripEventInfoTemplate(destinationsList, tripPoints) {
-  const generateInfoDestinations = (destinations) => {
-    const destinationsNames = util.getDestinationNames(destinations);
-    let infoTagContent = '';
-    destinationsNames.forEach((element, index) => {
-      if (index === destinationsNames.length - 1) {
-        infoTagContent = `${infoTagContent} ${element}`;
-      } else {
-        infoTagContent = `${infoTagContent} ${element} &mdash; `;
-      }
-
-    });
-    return infoTagContent;
-  };
-
-  const generateInfoDate = (points) =>
-    `${util.humanizeDateInfo(points[0].dateFrom)}&nbsp;&mdash;&nbsp;${util.humanizeDateInfo(points[points.length - 1].dateTo)}`;
-
+  const
+    infoDestinationsHTML = createInfoDestinationsHTML(destinationsList),
+    infoDateHTML = createInfoDateHTML(tripPoints);
 
   return (/*html*/
     `
     <section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
-      <h1 class="trip-info__title">${generateInfoDestinations(destinationsList)}</h1>
+      <h1 class="trip-info__title">${infoDestinationsHTML}</h1>
 
-      <p class="trip-info__dates">${generateInfoDate(tripPoints)}</p>
+      <p class="trip-info__dates">${infoDateHTML}</p>
     </div>
 
     <p class="trip-info__cost">
@@ -37,25 +69,25 @@ function createTripEventInfoTemplate(destinationsList, tripPoints) {
   );
 }
 
-export default class TripEventsInfoView {
+/**
+ * Класс для управления компонентом для отрисовки TripEventsInfoView
+ */
+
+export default class TripEventsInfoView extends AbstractView {
+  #destinationsList = null;
+  #tripPoints = null;
+
   constructor({ destinationsList, tripPoints }) {
-    this.destinationsList = destinationsList;
-    this.tripPoints = tripPoints;
+    super();
+    this.#destinationsList = destinationsList;
+    this.#tripPoints = tripPoints;
   }
 
-  getTemplate() {
-    return createTripEventInfoTemplate(this.destinationsList, this.tripPoints);
-  }
+  /**
+   * Метод возвращает шаблон разметки информации о путешествии
+   */
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createTripEventInfoTemplate(this.#destinationsList, this.#tripPoints);
   }
 }
