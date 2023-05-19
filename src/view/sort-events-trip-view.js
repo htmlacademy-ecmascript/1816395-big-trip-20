@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { CONST_DATA } from '../mock/const-data.js';
+import { CONST_COMMON_DATA } from '../const/common-const.js';
 
 /**
  * Возвращает разметку критерия сортировки точек путешествия
@@ -10,7 +10,7 @@ import { CONST_DATA } from '../mock/const-data.js';
 function createTripSortItemHTML(sortItem) {
   return (/*html*/`
 
-    <div class="trip-sort__item  trip-sort__item--${sortItem.toLowerCase}">
+    <div class="trip-sort__item  trip-sort__item--${sortItem.toLowerCase()}">
       <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day">
       <label class="trip-sort__btn" for="sort-day">${sortItem}</label>
     </div>
@@ -36,7 +36,7 @@ function createTripSortItemsHTML(sortItems) {
  */
 
 function createTripSortTemplate() {
-  const sortItems = CONST_DATA.sortItems;
+  const sortItems = CONST_COMMON_DATA.sortItems;
 
   const tripSortItemsHTML = createTripSortItemsHTML(sortItems);
 

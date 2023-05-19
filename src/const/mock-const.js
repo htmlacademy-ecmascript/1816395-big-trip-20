@@ -1,31 +1,11 @@
-const CONST_DATA = {
+const CONST_MOCK_DATA = {
   pictureURL: 'https://loremflickr.com/248/152?random=',
-  years: [2023, 2024],
-  secondsInDay : 86400000,
-  secondsInHour: 3600000,
-  formatDateMinutes : 'MM[m]',
-  formatDateHoursMinutes: 'HH[h] MM[m]',
-  formatDateDaysHoursMinutes: 'DD[d] HH[h] MM[m]',
-  formatDate: 'YYYY-MM-DDTHH:mm:ss',
-  formatDateInfo:'MMM DD',
-  formatDatePoint:'HH:mm',
-  formatDateAddPoint:'DD/MM/YY mm:ss',
+  years: [2022, 2024],
   booleanValue: [true, false],
   countLimit: 10,
-  sortItems: ['Day', 'Event', 'Time', 'Price', 'Offers'],
-  filters: ['Everything', 'Future', 'Present', 'Past', 'Accept filter'],
-  offersTitle: [
-    'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
-  ],
+  descriptionCity: ', is a beautiful city, a true pearl, with crowded streets.',
   descriptionPlaces: [
     'beautiful place', 'picturesque place', 'cozy corner'
-  ],
-  descriptionCity: ', is a beautiful city, a true pearl, with crowded streets.',
-  typeTripPoint: [
-    'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
-  ],
-  typeOffers :[
-    'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
   ],
   cities: [
     'Abidjan',
@@ -302,7 +282,6 @@ const CONST_DATA = {
     'Jurmala',
     'Yangon, Rangoon',
   ]
-
 };
 
-export { CONST_DATA };
+export { CONST_MOCK_DATA };
