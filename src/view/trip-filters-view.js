@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { CONST_DATA } from '../mock/const-data.js';
+import { CONST_COMMON_DATA } from '../const/common-const.js';
 
 /**
  * Создает разметку для одного критерия фильтрации точек путешествия
@@ -36,7 +36,7 @@ function createTripFilterListHTML(filterList) {
  */
 
 function createTripFiltersTemplate() {
-  const filtersList = CONST_DATA.filters;
+  const filtersList = CONST_COMMON_DATA.filters;
   const tripFilterListHTML = createTripFilterListHTML(filtersList);
 
   return (/*html*/

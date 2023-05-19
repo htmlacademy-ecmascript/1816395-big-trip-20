@@ -1,5 +1,5 @@
-import { CONST_DATA } from '../mock/const-data.js';
-import { util } from '../util.js';
+import { CONST_COMMON_DATA } from '../const/common-const.js';
+import { commonUtil } from '../utils/common-util.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 /**
@@ -64,7 +64,7 @@ function createEventTypeWrapperHTML(tripPointType) {
       <div class="event__type-list">
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
-          ${generateEventIcon(CONST_DATA.typeOffers)}
+          ${generateEventIcon(CONST_COMMON_DATA.typeOffers)}
         </fieldset>
       </div>
     </div>
@@ -105,8 +105,8 @@ function createTripEventDestinationHTML(tripPointType, destinationName) {
 function createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd) {
 
   const
-    eventStartTime = util.humanizeDateEditPoint(tripPointDateStart),
-    eventEndTime = util.humanizeDateEditPoint(tripPointDateEnd);
+    eventStartTime = commonUtil.humanizeDateEditPoint(tripPointDateStart),
+    eventEndTime = commonUtil.humanizeDateEditPoint(tripPointDateEnd);
 
   return (/*html*/ `
   <div class="event__field-group  event__field-group--time">
@@ -246,48 +246,46 @@ function createTripEventDestinationDetailsHTML(destinationName, destinationDescr
  */
 
 function createAddPointTemplate(tripPoint, destination, availableOffersTripPoint) {
-  const
-    destinationName = destination.name,
-    destinationDescription = destination.description,
-    destinationPictures = destination.pictures,
-    tripPointType = tripPoint.type,
-    tripPointDateStart = tripPoint.dateFrom,
-    tripPointDateEnd = tripPoint.dateTo,
-    tripPointPrice = tripPoint.basePrice;
+  const destinationName = destination.name;
+  const destinationDescription = destination.description;
+  const destinationPictures = destination.pictures;
+  const tripPointType = tripPoint.type;
+  const tripPointDateStart = tripPoint.dateFrom;
+  const tripPointDateEnd = tripPoint.dateTo;
+  const tripPointPrice = tripPoint.basePrice;
 
-  const
-    tripEventTypeWrapperHTML = createEventTypeWrapperHTML(tripPointType),
-    tripEventDestinationHTML = createTripEventDestinationHTML(tripPointType, destinationName),
-    tripEventTimeHTML = createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd),
-    tripEventPriceHTML = createTripEventPriceHTML(tripPointPrice),
-    tripEventAvailableOffersHTML = createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint),
-    tripEventDestinationDetailsHTML = createTripEventDestinationDetailsHTML(destinationName, destinationDescription, destinationPictures);
+  const tripEventTypeWrapperHTML = createEventTypeWrapperHTML(tripPointType);
+  const tripEventDestinationHTML = createTripEventDestinationHTML(tripPointType, destinationName);
+  const tripEventTimeHTML = createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd);
+  const tripEventPriceHTML = createTripEventPriceHTML(tripPointPrice);
+  const tripEventAvailableOffersHTML = createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint);
+  const tripEventDestinationDetailsHTML = createTripEventDestinationDetailsHTML(destinationName, destinationDescription, destinationPictures);
 
 
   return (/*html*/
     `
     <li class="trip-events__item">
-              <form class="event event--edit" action="#" method="post">
-                <header class="event__header">
-                  ${tripEventTypeWrapperHTML}
+      <form class="event event--edit" action="#" method="post">
+        <header class="event__header">
+          ${tripEventTypeWrapperHTML}
 
-                  ${tripEventDestinationHTML}
+          ${tripEventDestinationHTML}
 
-                  ${tripEventTimeHTML}
+          ${tripEventTimeHTML}
 
-                  ${tripEventPriceHTML}
+          ${tripEventPriceHTML}
 
-                  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Cancel</button>
-                </header>
-                <section class="event__details">
+          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+          <button class="event__reset-btn" type="reset">Cancel</button>
+        </header>
+        <section class="event__details">
 
-                  ${tripEventAvailableOffersHTML}
+          ${tripEventAvailableOffersHTML}
 
-                  ${tripEventDestinationDetailsHTML}
-                </section>
-              </form>
-            </li>
+          ${tripEventDestinationDetailsHTML}
+        </section>
+      </form>
+  </li>
     `
   );
 }

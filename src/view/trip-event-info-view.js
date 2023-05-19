@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { util } from '../util.js';
+import { commonUtil } from '../utils/common-util.js';
 
 /**
  * Создает разметку перечня пунктов назначения
@@ -8,7 +8,7 @@ import { util } from '../util.js';
  */
 
 const createInfoDestinationsHTML = (destinations) => {
-  const destinationsNames = util.getDestinationNames(destinations);
+  const destinationsNames = commonUtil.getDestinationNames(destinations);
 
   return destinationsNames
     .map((destinationName, index) => {
@@ -32,8 +32,8 @@ function createInfoDateHTML(tripPoints) {
     lastTripPointEndDate = tripPoints[tripPoints.length - 1].dateTo;
 
   const
-    dateFrom = util.humanizeDateInfo(firstTripPointStartDate),
-    dateTo = util.humanizeDateInfo(lastTripPointEndDate);
+    dateFrom = commonUtil.humanizeDateInfo(firstTripPointStartDate),
+    dateTo = commonUtil.humanizeDateInfo(lastTripPointEndDate);
 
   return (/*html*/
     `${dateFrom}&nbsp;&mdash;&nbsp;${dateTo}`

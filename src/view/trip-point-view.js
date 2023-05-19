@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { util } from '../util.js';
+import { commonUtil } from '../utils/common-util.js';
 
 /**
  * Составляет разметку для DOM элемента дополнительного предложения
@@ -46,10 +46,10 @@ function createTripEventTemplate(tripPoint, destination, offers) {
     dateEndTrip = tripPoint.dateTo;
 
   const
-    dateInfoStartTrip = util.humanizeDateInfo(dateStartTrip),
-    datePointStartTrip = util.humanizeDatePoint(dateStartTrip),
-    datePointEndTrip = util.humanizeDatePoint(dateEndTrip),
-    tripExtension = util.getPeriodExtension(tripPoint);
+    dateInfoStartTrip = commonUtil.humanizeDateInfo(dateStartTrip),
+    datePointStartTrip = commonUtil.humanizeDatePoint(dateStartTrip),
+    datePointEndTrip = commonUtil.humanizeDatePoint(dateEndTrip),
+    tripExtension = commonUtil.getPeriodExtension(tripPoint);
 
 
   const
@@ -58,7 +58,7 @@ function createTripEventTemplate(tripPoint, destination, offers) {
       : [];
 
   const
-    type = tripPoint.type,
+    type = tripPoint.type.toLowerCase(),
     tripPrice = tripPoint.basePrice;
 
   const

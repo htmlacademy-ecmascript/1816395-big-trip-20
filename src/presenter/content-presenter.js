@@ -1,8 +1,9 @@
 import ContentView from '../view/content-view.js';
 import SortsEventsTripView from '../view/sort-events-trip-view.js';
 import PointPresenter from './point-presenter.js';
-import AddPointPresenter from './add-point-presenter.js';
-import { render, RenderPosition, replace } from '../framework/render.js';
+// import AddPointPresenter from './add-point-presenter.js';
+import EditPointPresenter from './edit-point-presenter.js';
+import { render, replace } from '../framework/render.js';
 
 /**
  * Класс призентора управляющего созданием экземпляров AddPointPresenter и PointsPresenter
@@ -45,9 +46,9 @@ export default class ContentPresenter {
    * @param {object} contentBox Объект с контейнером для рендера ContentView и SortsEventsTripView
    */
 
-  #renderComponents(contentBox) {
+  #renderComponents() {
+    render(this.#sortComponent, this.#contentContainer);
     render(this.#contentComponent, this.#contentContainer);
-    render(this.#sortComponent, contentBox, RenderPosition.AFTERBEGIN);
   }
 
   /**
@@ -67,15 +68,15 @@ export default class ContentPresenter {
    * @param {object} contentBox Объект с компонентов в котором будет проходить рендер AddPointPresenter
    */
 
-  #renderAddPointPresenter(contentBox) {
-    const addPointPresenter = new AddPointPresenter({
-      pointContainer: contentBox,
-      tripPointsModel: this.#tripPointsModel,
-      destinationsModel: this.#destinationsModel,
-      offersModel: this.#offersModel
-    });
-    addPointPresenter.init();
-  }
+  // #renderAddPointPresenter(contentBox) {
+  //   const addPointPresenter = new AddPointPresenter({
+  //     pointContainer: contentBox,
+  //     tripPointsModel: this.#tripPointsModel,
+  //     destinationsModel: this.#destinationsModel,
+  //     offersModel: this.#offersModel
+  //   });
+  //   addPointPresenter.init();
+  // }
 
   /**
  * Метод который рендерит PointsPresenter`
@@ -107,7 +108,7 @@ export default class ContentPresenter {
       }
     };
 
-    const addPointPresenter = new AddPointPresenter({
+    const editPointPresenter = new EditPointPresenter({
       pointPresenterContainer: contentBox,
       tripPoint,
       destination,
@@ -115,17 +116,19 @@ export default class ContentPresenter {
       onFormSubmit: () => {
         replaceFormToTripPoint();
         document.removeEventListener('keydown', escKeyDownHandler);
+      },
+      onCloseEditClick: () => {
+        replaceFormToTripPoint();
       }
 
     });
 
     const pointPresenter = new PointPresenter({
       pointPresenterContainer: contentBox,
-      tripPoint,
       destination,
       offerTripPoint,
       onEditClick: () => {
-        addPointPresenter.init();
+        editPointPresenter.init(tripPoint);
         replaceTripPointToForm();
         document.addEventListener('keydown', escKeyDownHandler);
       }
@@ -133,13 +136,13 @@ export default class ContentPresenter {
 
 
     function replaceFormToTripPoint() {
-      replace(pointPresenter.tripPointComponent, addPointPresenter.addPointComponent);
+      replace(pointPresenter.component, editPointPresenter.component);
     }
 
     function replaceTripPointToForm() {
-      replace(addPointPresenter.addPointComponent, pointPresenter.tripPointComponent);
+      replace(editPointPresenter.component, pointPresenter.component);
     }
 
-    pointPresenter.init();
+    pointPresenter.init(tripPoint);
   }
 }
