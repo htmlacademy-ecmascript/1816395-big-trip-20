@@ -49,6 +49,7 @@ export default class ContentPresenter {
   #renderComponents() {
     render(this.#sortComponent, this.#contentContainer);
     render(this.#contentComponent, this.#contentContainer);
+
   }
 
   /**
@@ -63,20 +64,7 @@ export default class ContentPresenter {
     this.#renderComponents(contentBox);
   }
 
-  /**
-   * Метод который рендерит AddPointPresenter
-   * @param {object} contentBox Объект с компонентов в котором будет проходить рендер AddPointPresenter
-   */
 
-  // #renderAddPointPresenter(contentBox) {
-  //   const addPointPresenter = new AddPointPresenter({
-  //     pointContainer: contentBox,
-  //     tripPointsModel: this.#tripPointsModel,
-  //     destinationsModel: this.#destinationsModel,
-  //     offersModel: this.#offersModel
-  //   });
-  //   addPointPresenter.init();
-  // }
 
   /**
  * Метод который рендерит PointsPresenter`
