@@ -129,6 +129,7 @@ function createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd) {
 
 function createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint) {
 
+  const tripPointsOffersIds = tripPoint.offers;
   /**
    * Создает разметку с дополнительного предложения
    * @param {object} offer Объект с дополнительным предложением
@@ -155,14 +156,14 @@ function createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint)
 
   /**
    * Создает разметку всего списка дополнительных предложений для точки путешествия
-   * @param {Array} tripPointOffers Массив с идентификаторами дополнительных предложений выбранных в точке путешествия
+   * @param {Array} tripPointOffersIds Массив с идентификаторами дополнительных предложений выбранных в точке путешествия
    * @param {object} availableOffers Объект всех дополнительных предложений для типа точки путешествия
    * @returns Строку с разметкой всех дополнительных предложений для тоски путешествия
    */
 
-  function createAvailableOffersListHtml(tripPointOffers, availableOffers) {
+  function createAvailableOffersListHtml(tripPointOffersIds, availableOffers) {
     return availableOffers.offers.map((offer) =>
-      tripPointOffers.find((id) => offer.id === id) ?
+      tripPointOffersIds.find((id) => offer.id === id) ?
         createAvailableOfferHtml(offer, 'checked')
         : createAvailableOfferHtml(offer, '')
     ).join('');
@@ -174,7 +175,7 @@ function createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint)
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
     <div class="event__available-offers">
-      ${createAvailableOffersListHtml(tripPoint.offers, availableOffersTripPoint)}
+      ${createAvailableOffersListHtml(tripPointsOffersIds, availableOffersTripPoint)}
     </div>
   </section>
   `);
@@ -314,7 +315,6 @@ export default class EditPointView extends AbstractView {
     this.#availableOffersTripPoint = availableOffersTripPoint;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleCloseEditClick = onCloseEditClick;
-
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
 
