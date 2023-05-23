@@ -58,16 +58,14 @@ function createTripEventInfoTemplate(destinationsList, tripPoints) {
   return (/*html*/
     `
     <section class="trip-main__trip-info  trip-info">
-    <div class="trip-info__main">
-      <h1 class="trip-info__title">${infoDestinationsHTML}</h1>
+      <div class="trip-info__main">
+        <h1 class="trip-info__title">${infoDestinationsHTML}</h1>
 
-      <p class="trip-info__dates">${infoDateHTML}</p>
-    </div>
+        <p class="trip-info__dates">${infoDateHTML}</p>
+      </div>
 
-    <p class="trip-info__cost">
-      Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-    </p>
-  </section>
+
+    </section>
   `
   );
 }

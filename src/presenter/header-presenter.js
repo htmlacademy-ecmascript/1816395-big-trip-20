@@ -2,6 +2,7 @@ import TripEventsInfoView from '../view/trip-event-info-view.js';
 
 import { render, RenderPosition } from '../framework/render.js';
 import FilterPresenter from './filter-presenter.js';
+import { TripPointCoastView } from '../view/trip-point-coast-view.js';
 
 /**
  * Класс для управления призентора HeaderPresenter
@@ -14,6 +15,8 @@ export default class HeaderPresenter {
   #destinationsModel = null;
   #offersModel = null;
   #filters = null;
+  #component = null;
+  #tripPointsCostComponent = null;
 
   /**
    * Инициализация получения сущностей от MainPresenter
@@ -38,6 +41,7 @@ export default class HeaderPresenter {
    */
 
   init() {
+    this.#setComponent();
     this.#render();
 
   }
@@ -48,7 +52,8 @@ export default class HeaderPresenter {
 
   #render() {
     this.#renderFilterPresenter();
-    this.#renderTripInfoPresenter();
+    this.#renderTripInfoComponent();
+    this.#renderTripPointsCostComponent();
 
   }
 
@@ -61,16 +66,35 @@ export default class HeaderPresenter {
     filterPresenter.init(this.#filters);
   }
 
-  #renderTripInfoPresenter() {
+  #renderTripInfoComponent() {
+    render(this.#component, this.#infoContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderTripPointsCostComponent() {
+    const tripPoints = this.#tripPointsModel.tripPoints;
+    const tripPointCoastComponentContainer = this.#component.element;
+
+    render(new TripPointCoastView({
+      tripPoints: tripPoints,
+      offersModel: this.#offersModel
+    }), tripPointCoastComponentContainer);
+  }
+
+  #setComponent() {
     const tripPoints = this.#tripPointsModel.tripPoints;
     const destinationsList = this.#destinationsModel.destinations;
     const offersList = this.#offersModel.offers;
 
-
-    render(new TripEventsInfoView({
+    this.#component = new TripEventsInfoView({
       destinationsList: destinationsList,
       offersList: offersList,
       tripPoints: tripPoints
-    }), this.#infoContainer, RenderPosition.AFTERBEGIN);
+    });
   }
+
+  get component() {
+    return this.#component;
+  }
+
+
 }

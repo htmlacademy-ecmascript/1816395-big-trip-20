@@ -127,6 +127,7 @@ export default class ContentPresenter {
       pointPresenterContainer: contentBox,
       destination,
       offerTripPoint,
+      offerModel: this.#offersModel,
       onEditClick: () => {
         editPointPresenter.init(tripPoint);
         replaceTripPointToForm();
