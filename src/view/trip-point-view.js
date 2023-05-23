@@ -8,12 +8,16 @@ import { commonUtil } from '../utils/common-util.js';
  */
 
 function createOfferHTML(offer) {
+
+  const offerTitle = offer.title;
+  const offerPrice = offer.price;
+
   return (/*html*/
     `
   <li class="event__offer">
-    <span class="event__offer-title">${offer.title}</span>
+    <span class="event__offer-title">${offerTitle}</span>
     &plus;&euro;&nbsp;
-    <span class="event__offer-price">${offer.price}</span>
+    <span class="event__offer-price">${offerPrice}</span>
   </li>
 `
   );
@@ -21,13 +25,17 @@ function createOfferHTML(offer) {
 
 /**
  * Составляет разметку для DOM элемента со списком дополнительные предложений
+ * @param {Array} tripPointOffersIds массив с идентификаторами выбранными в точке путешествия
  * @param {Array} offers массив дополнительных предложений
  * @returns строку с HTML разметкой для списка дополнительных предложений
  */
 
-function createOffersHtml(offers) {
+function createOffersHtml(tripPointOffersIds, offers) {
   return offers
-    .map((offer) => createOfferHTML(offer))
+    .map((offer) =>
+      tripPointOffersIds.find((id) => offer.id === id) ?
+        createOfferHTML(offer)
+        : '')
     .join('');
 }
 
@@ -41,31 +49,28 @@ function createOffersHtml(offers) {
 
 function createTripEventTemplate(tripPoint, destination, offers) {
 
-  const
-    dateStartTrip = tripPoint.dateFrom,
-    dateEndTrip = tripPoint.dateTo;
+  const dateStartTrip = tripPoint.dateFrom;
+  const dateEndTrip = tripPoint.dateTo;
 
-  const
-    dateInfoStartTrip = commonUtil.humanizeDateInfo(dateStartTrip),
-    datePointStartTrip = commonUtil.humanizeDatePoint(dateStartTrip),
-    datePointEndTrip = commonUtil.humanizeDatePoint(dateEndTrip),
-    tripExtension = commonUtil.getPeriodExtension(tripPoint);
+  const dateInfoStartTrip = commonUtil.humanizeDateInfo(dateStartTrip);
+  const datePointStartTrip = commonUtil.humanizeDatePoint(dateStartTrip);
+  const datePointEndTrip = commonUtil.humanizeDatePoint(dateEndTrip);
+  const tripExtension = commonUtil.getPeriodExtension(tripPoint);
 
 
-  const
-    favoriteClassName = tripPoint.isFavorite
-      ? 'event__favorite-btn--active'
-      : [];
+  const favoriteClassName = tripPoint.isFavorite
+    ? 'event__favorite-btn--active'
+    : [];
 
-  const
-    type = tripPoint.type.toLowerCase(),
-    tripPrice = tripPoint.basePrice;
+  const type = tripPoint.type.toLowerCase();
+  const tripPrice = tripPoint.basePrice;
 
-  const
-    destinationName = destination.name,
-    offersById = offers,
+  const destinationName = destination.name;
+  const offersById = offers;
+  const tripPointOffersIds = tripPoint.offers;
 
-    offersHtml = createOffersHtml(offersById);
+
+  const offersHtml = createOffersHtml(tripPointOffersIds, offersById);
   return (/*html*/
     `
     <li class="trip-events__item">
