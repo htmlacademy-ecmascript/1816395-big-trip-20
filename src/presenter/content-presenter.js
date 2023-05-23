@@ -123,6 +123,7 @@ export default class ContentPresenter {
 
     });
 
+
     const pointPresenter = new PointPresenter({
       pointPresenterContainer: contentBox,
       destination,
