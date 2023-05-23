@@ -55,6 +55,11 @@ const commonUtil = {
     return destinationNames;
   },
 
+  getSumOfValues(values) {
+    return values.reduce((acc, number) => acc + number, 0);
+  },
+
+
 };
 
 export { commonUtil };
