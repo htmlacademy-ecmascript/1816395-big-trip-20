@@ -10,6 +10,7 @@ export default class PointPresenter {
   #pointPresenterContainer = null;
   #destination = null;
   #offerTripPoint = null;
+  #offersModel = null;
   #onEditClick = null;
   #component = null;
 
@@ -25,11 +26,13 @@ export default class PointPresenter {
     pointPresenterContainer,
     destination,
     offerTripPoint,
+    offersModel,
     onEditClick
   }) {
     this.#pointPresenterContainer = pointPresenterContainer;
     this.#destination = destination;
     this.#offerTripPoint = offerTripPoint;
+    this.#offersModel = offersModel;
     this.#onEditClick = onEditClick;
   }
 
@@ -62,6 +65,7 @@ export default class PointPresenter {
       tripPoint: tripPoint,
       destination: this.#destination,
       offer: this.#offerTripPoint,
+      offersModel: this.offersModel,
       onEditClick: this.#onEditClick
     });
   }
