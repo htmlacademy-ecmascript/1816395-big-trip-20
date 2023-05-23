@@ -37,7 +37,7 @@ export default class OffersModel {
 
   /**
    * Метод для поиска дополнительных предложений по идентификаторам  дополнительных предложений  точки путешествия
-   * @param {object} offersTripPoint Объект с идентификаторами дополнительных предложений точки путешествия
+   * @param {object} offersTripPoint Объект с точкой путешествия
    * @returns объект с дополнительным предложением
    */
 
@@ -54,9 +54,9 @@ export default class OffersModel {
         .map((id) => offersOfType.offers
           .find((offer) => offer.id === id)
         );
-    } else {
-      return [];
     }
+    return [];
+
   }
 
 }
