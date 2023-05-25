@@ -21,28 +21,31 @@ export default class EditPointPresenter {
    * @param {object} pointPresenterContainer Объект с контейнером для отрисовки призентора
    * @param {object} destination Объект с сущностью модели пунктов назначения
    * @param {object} offersModel Объект с сущностью модели дополнительных предложений
-   * @param {object} onFormSubmit Объект функцией которая будет срабатывать при подтверждении формы
    */
 
-  constructor({ pointPresenterContainer, destination, offerTripPoint, onFormSubmit, onCloseEditClick }) {
+  constructor({ pointPresenterContainer, destination, offerTripPoint }) {
     this.#pointPresenterContainer = pointPresenterContainer;
     this.#destination = destination;
     this.#offerTripPoint = offerTripPoint;
-    this.#onFormSubmit = onFormSubmit;
-    this.#onCloseEditClick = onCloseEditClick;
   }
 
   /**
    * Метод инициализации призентора
    */
 
-  init(tripPoint) {
+  init(
+    tripPoint,
+    onFormSubmit,
+    onCloseEditClick
+  ) {
+    this.#onFormSubmit = onFormSubmit;
+    this.#onCloseEditClick = onCloseEditClick;
     this.#setComponent(tripPoint);
     this.#renderEditPointView();
   }
 
   /**
-   * Метод рендерит компонент AddNewPointView
+   * Метод рендерит компонент renderEditPointView
    */
 
   #renderEditPointView() {
@@ -52,9 +55,12 @@ export default class EditPointPresenter {
 
   /**
    * Метод создает экземпляр компонента AddNewPointView
-   * @param {object} tripPoint сущность точки путешествия
-   * @param {object} destination сущность пункта назначения точки путешествия
-   * @param {object} availableOffersTripPoint сущность дополнительных предложения точки путешествия
+   * @param {object} tripPoint Сущность точки путешествия
+   * @param {object} destination Сущность пункта назначения точки путешествия
+   * @param {object} availableOffersTripPoint Сущность дополнительных предложения точки путешествия
+   * @param {object} onFormSubmit Функция которая будет выполняться при подтверждении формы
+   * @param {object} onCloseEditClick Функция которая будет выполняться при нажатии на кнопку закрытия формы
+
    */
 
   #setComponent(tripPoint) {

@@ -16,6 +16,8 @@ export default class MainPresenter {
   #destinationsModel = null;
   #offersModel = null;
   #filters = null;
+  #headerPresenter = null;
+  #contentPresenter = null;
 
   /**
    * Инициализация получений сущностей из точки входа
@@ -41,7 +43,7 @@ export default class MainPresenter {
     this.destinationsList = this.#destinationsModel.destinations;
     this.offersList = this.#offersModel.offers;
 
-    const headerPresenter = new HeaderPresenter({
+    this.#headerPresenter = new HeaderPresenter({
       filterContainer: filterContainerElement,
       infoContainer: infoContainerElement,
       tripPointsModel: this.#tripPointsModel,
@@ -49,7 +51,8 @@ export default class MainPresenter {
       offersModel: this.#offersModel,
       filters: this.#filters
     });
-    const contentPresenter = new ContentPresenter({
+
+    this.#contentPresenter = new ContentPresenter({
       contentContainer: tripEventsElement,
       tripPointsModel: this.#tripPointsModel,
       destinationsModel: this.#destinationsModel,
@@ -57,7 +60,7 @@ export default class MainPresenter {
       filters: this.#filters
     });
 
-    headerPresenter.init();
-    contentPresenter.init();
+    this.#headerPresenter.init();
+    this.#contentPresenter.init();
   }
 }

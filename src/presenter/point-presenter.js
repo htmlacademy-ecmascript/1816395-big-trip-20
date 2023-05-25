@@ -1,5 +1,5 @@
 import TripPointView from '../view/trip-point-view.js';
-import { render } from '../framework/render.js';
+import { render, replace, remove } from '../framework/render.js';
 
 
 /**
@@ -8,32 +8,32 @@ import { render } from '../framework/render.js';
 
 export default class PointPresenter {
   #pointPresenterContainer = null;
+  #editPointPresenter = null;
+
   #destination = null;
   #offerTripPoint = null;
-  #offersModel = null;
-  #onEditClick = null;
+
   #component = null;
+  #tripPoint = null;
+
 
   /**
    * Инициализация получения сущностей от ContentPresenter
    * @param {object} pointPresenterContainer Объект с контейнером для отрисовки призентора
    * @param {object} destination Объект с сущностью модели пунктов назначения
    * @param {object} offerTripPoint Объект с сущностью модели дополнительных предложений
-   * @param {object} onEditClick Объект функцией которая будет срабатывать при событии клика
    */
 
   constructor({
     pointPresenterContainer,
     destination,
     offerTripPoint,
-    offersModel,
-    onEditClick
+    editPointPresenter,
   }) {
     this.#pointPresenterContainer = pointPresenterContainer;
     this.#destination = destination;
     this.#offerTripPoint = offerTripPoint;
-    this.#offersModel = offersModel;
-    this.#onEditClick = onEditClick;
+    this.#editPointPresenter = editPointPresenter;
   }
 
   /**
@@ -41,8 +41,36 @@ export default class PointPresenter {
    */
 
   init(tripPoint) {
-    this.#setComponent(tripPoint);
-    this.#renderTripPoint();
+    this.#tripPoint = tripPoint;
+
+
+
+    const prevTripPointComponent = this.#component;
+    const prevEditTripPointComponent = this.#editPointPresenter.component;
+
+    this.#setComponent(this.#tripPoint);
+
+    if (prevTripPointComponent === null || prevEditTripPointComponent === null) {
+      this.#renderTripPoint();
+    }
+
+    // if (this.#pointPresenterContainer.contains(prevTripPointComponent.element)) {
+    //   replace(this.#component, prevTripPointComponent);
+    // }
+
+    // if (this.#pointPresenterContainer.contains(prevEditTripPointComponent.element)) {
+    //   replace(this.#editPointPresenter, prevEditTripPointComponent);
+    // }
+
+    remove(prevTripPointComponent);
+    remove(prevEditTripPointComponent);
+
+
+  }
+
+  #destroy() {
+    remove(this.#component);
+    remove(this.#editPointPresenter.component);
   }
 
   /**
@@ -52,6 +80,63 @@ export default class PointPresenter {
   #renderTripPoint() {
     render(this.#component, this.#pointPresenterContainer);
   }
+  /**
+   * Метод который заменяет точку путешествия на форму редактирования и добавляет прослушивание нажатия ESC
+   */
+
+  #replaceTripPointToForm() {
+    replace(this.#editPointPresenter.component, this.component);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
+  }
+
+  /**
+ * Метод который заменяет форму редактирования на точку путешествия и удаляет прослушивание нажатия ESC
+ */
+
+  #replaceFormToTripPoint() {
+    replace(this.component, this.#editPointPresenter.component);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+  }
+
+
+  #escKeyDownHandler = (evt) => {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      this.#replaceFormToTripPoint();
+    }
+  };
+
+  /**
+   * Метод который инициализирует форму редактирования точки путешествия и обрабатывает нажатие кнопку открытия точки путешествия
+   */
+
+  #handleEditClick = () => {
+
+    this.#editPointPresenter.init(
+      this.#tripPoint,
+      this.component,
+      this.#handleFormSubmit,
+      this.#handleCloseClick
+    );
+
+    this.#replaceTripPointToForm();
+  };
+
+  /**
+   * Метод который обрабатывает подтверждение формы редактирования
+   */
+
+  #handleFormSubmit = () => {
+    this.#replaceFormToTripPoint();
+  };
+
+  /**
+   * Метод который обрабатывает закрытие формы редактирование по клику на кнопку
+   */
+
+  #handleCloseClick = () => {
+    this.#replaceFormToTripPoint();
+  };
 
   /**
    * Метод создает экземпляр компонента TripPointView
@@ -62,11 +147,10 @@ export default class PointPresenter {
 
   #setComponent(tripPoint) {
     this.#component = new TripPointView({
-      tripPoint: tripPoint,
+      tripPoint,
       destination: this.#destination,
       offer: this.#offerTripPoint,
-      offersModel: this.offersModel,
-      onEditClick: this.#onEditClick
+      onEditClick: this.#handleEditClick
     });
   }
 

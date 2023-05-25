@@ -160,7 +160,7 @@ export default class TripPointView extends AbstractView {
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditClick();
+    this.#handleEditClick(this.#tripPoint);
   };
 
 }

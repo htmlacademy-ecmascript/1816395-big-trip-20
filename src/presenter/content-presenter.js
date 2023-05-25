@@ -14,11 +14,15 @@ export default class ContentPresenter {
   #contentComponent = new ContentView();
   #sortComponent = new SortsEventsTripView();
 
+  #pointPresenter = null;
+  #editPointPresenter = null;
 
   #contentContainer = null;
   #tripPointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
+
+
 
   constructor({
     contentContainer,
@@ -42,6 +46,18 @@ export default class ContentPresenter {
   }
 
   /**
+ * Метод который создает экземпляры AddPointPresenter и PointsPresenter
+ * и рендерит ContentView и SortsEventsTripView
+ */
+
+  #renderContent() {
+    const contentBox = this.#contentComponent.element;
+
+    this.#renderTripPoints(contentBox);
+    this.#renderComponents(contentBox);
+  }
+
+  /**
    * Метод отвечает за рендеринг ContentView и SortsEventsTripView
    * @param {object} contentBox Объект с контейнером для рендера ContentView и SortsEventsTripView
    */
@@ -51,17 +67,6 @@ export default class ContentPresenter {
     render(this.#contentComponent, this.#contentContainer);
   }
 
-  /**
-   * Метод который создает экземпляры AddPointPresenter и PointsPresenter
-   * и рендерит ContentView и SortsEventsTripView
-   */
-
-  #renderContent() {
-    const contentBox = this.#contentComponent.element;
-
-    this.#renderTripPoints(contentBox);
-    this.#renderComponents(contentBox);
-  }
 
   /**
    * Метод который рендерит AddPointPresenter
@@ -100,27 +105,11 @@ export default class ContentPresenter {
 
   #renderTripPoint(contentBox, tripPoint, destination, offerTripPoint,) {
 
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceFormToTripPoint();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
 
     const editPointPresenter = new EditPointPresenter({
       pointPresenterContainer: contentBox,
-      tripPoint,
       destination,
       offerTripPoint,
-      onFormSubmit: () => {
-        replaceFormToTripPoint();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      },
-      onCloseEditClick: () => {
-        replaceFormToTripPoint();
-      }
-
     });
 
 
@@ -128,23 +117,12 @@ export default class ContentPresenter {
       pointPresenterContainer: contentBox,
       destination,
       offerTripPoint,
-      offerModel: this.#offersModel,
-      onEditClick: () => {
-        editPointPresenter.init(tripPoint);
-        replaceTripPointToForm();
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
+      editPointPresenter
     });
 
 
-    function replaceFormToTripPoint() {
-      replace(pointPresenter.component, editPointPresenter.component);
-    }
-
-    function replaceTripPointToForm() {
-      replace(editPointPresenter.component, pointPresenter.component);
-    }
-
     pointPresenter.init(tripPoint);
+
   }
+
 }
