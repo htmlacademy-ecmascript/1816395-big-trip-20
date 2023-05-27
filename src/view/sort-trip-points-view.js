@@ -36,7 +36,7 @@ function createTripSortItemsHTML(sortItems) {
  */
 
 function createTripSortTemplate() {
-  const sortItems = CONST_COMMON_DATA.sortItems;
+  const sortItems = Object.values(CONST_COMMON_DATA.sortTypes);
 
   const tripSortItemsHTML = createTripSortItemsHTML(sortItems);
 
@@ -54,7 +54,7 @@ function createTripSortTemplate() {
 * Класс для управления компонентом для отрисовки SortsEventsTripView
 */
 
-export default class SortsEventsTripView extends AbstractView {
+export default class SortsTripPointsView extends AbstractView {
   constructor() {
     super();
   }

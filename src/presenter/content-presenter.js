@@ -1,5 +1,5 @@
 import ContentView from '../view/content-view.js';
-import SortsEventsTripView from '../view/sort-events-trip-view.js';
+import SortsTripPintsView from '../view/sort-trip-points-view.js';
 import PointPresenter from './point-presenter.js';
 // import AddPointPresenter from './add-point-presenter.js';
 import EditPointPresenter from './edit-point-presenter.js';
@@ -8,12 +8,12 @@ import { commonUtil } from '../utils/common-util.js';
 
 /**
  * Класс призентора управляющего созданием экземпляров AddPointPresenter и PointsPresenter
- * и рендером ContentView и SortsEventsTripView
+ * и рендером ContentView и SortsTripPintsView
  */
 
 export default class ContentPresenter {
   #contentComponent = new ContentView();
-  #sortComponent = new SortsEventsTripView();
+  #sortComponent = new SortsTripPintsView();
 
 
   #contentContainer = null;
@@ -48,7 +48,7 @@ export default class ContentPresenter {
 
   /**
  * Метод который создает экземпляры AddPointPresenter и PointsPresenter
- * и рендерит ContentView и SortsEventsTripView
+ * и рендерит ContentView и SortsTripPintsView
  */
 
   #renderContent() {
@@ -59,8 +59,8 @@ export default class ContentPresenter {
   }
 
   /**
-   * Метод отвечает за рендеринг ContentView и SortsEventsTripView
-   * @param {object} contentBox Объект с контейнером для рендера ContentView и SortsEventsTripView
+   * Метод отвечает за рендеринг ContentView и SortsTripPintsView
+   * @param {object} contentBox Объект с контейнером для рендера ContentView и SortsTripPintsView
    */
 
   #renderComponents() {
