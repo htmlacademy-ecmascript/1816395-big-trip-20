@@ -84,6 +84,7 @@ export default class ContentPresenter {
   //   addPointPresenter.init();
   // }
 
+
   /**
    * Метод который обновляет данные в точке путешествия
    * @param {object} updatedTripPoint Объект с обновленными данными тоски путешествия
