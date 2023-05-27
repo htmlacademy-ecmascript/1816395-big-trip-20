@@ -3,7 +3,7 @@ import SortsEventsTripView from '../view/sort-events-trip-view.js';
 import PointPresenter from './point-presenter.js';
 // import AddPointPresenter from './add-point-presenter.js';
 import EditPointPresenter from './edit-point-presenter.js';
-import { render, replace } from '../framework/render.js';
+import { render } from '../framework/render.js';
 import { commonUtil } from '../utils/common-util.js';
 
 /**
@@ -84,16 +84,29 @@ export default class ContentPresenter {
   //   addPointPresenter.init();
   // }
 
+  /**
+   * Метод который обновляет данные в точке путешествия
+   * @param {object} updatedTripPoint Объект с обновленными данными тоски путешествия
+   */
+
   #handleTripPointUpdate = (updatedTripPoint) => {
     this.#tripPoints = commonUtil.updateTripPoint(this.#tripPoints, updatedTripPoint);
     this.#tripPointPresenters.get(updatedTripPoint.id).init(updatedTripPoint);
   };
 
   /**
+ * Метод который следит что бы только одна точка путешествия была открыта в режиме редактирования
+ */
+
+  #handleViewChange = () => {
+    this.#tripPointPresenters.forEach((tripPointPresenter) => tripPointPresenter.resetView());
+  };
+
+
+  /**
  * Метод который рендерит PointsPresenter`
  * @param {object} contentBox Объект с компонентов в котором будет проходить рендер PointsPresenter
  */
-
 
   #renderTripPoints(contentBox) {
     const tripPoints = this.#tripPointsModel.tripPoints;
@@ -114,7 +127,6 @@ export default class ContentPresenter {
 
     const editPointPresenter = new EditPointPresenter({
       pointPresenterContainer: contentBox,
-      tripPoint,
       destination,
       offerTripPoint,
     });
@@ -125,13 +137,18 @@ export default class ContentPresenter {
       destination,
       offerTripPoint,
       editPointPresenter,
-      onTripPointUpdate: this.#handleTripPointUpdate
+      onTripPointUpdate: this.#handleTripPointUpdate,
+      onViewChange: this.#handleViewChange
     });
 
 
     pointPresenter.init(tripPoint);
     this.#tripPointPresenters.set(tripPoint.id, pointPresenter);
   }
+
+  /**
+   * Метод который удаляет  ненужные призенторы
+   */
 
   #clearTripPoints() {
     this.#tripPointPresenters.forEach((presenter) => presenter.destroy());

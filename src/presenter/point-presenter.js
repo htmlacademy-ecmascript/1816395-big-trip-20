@@ -1,5 +1,6 @@
 import TripPointView from '../view/trip-point-view.js';
 import { render, replace, remove } from '../framework/render.js';
+import { CONST_COMMON_DATA } from '../const/common-const.js';
 
 
 /**
@@ -15,14 +16,20 @@ export default class PointPresenter {
 
   #component = null;
   #tripPoint = null;
+  #view = CONST_COMMON_DATA.modeViewTripPoint.DEFAULT;
 
   #handleTripPointUpdate = null;
+
+  #handleViewChange = null;
 
   /**
    * Инициализация получения сущностей от ContentPresenter
    * @param {object} pointPresenterContainer Объект с контейнером для отрисовки призентора
    * @param {object} destination Объект с сущностью модели пунктов назначения
    * @param {object} offerTripPoint Объект с сущностью модели дополнительных предложений
+   * @param {object} editPointPresenter Объект с сущностью призентора который отвечает за редактирование текущей точки путешествия
+   * @param {object} onTripPointUpdate Объект с функцией обработчика события обновления данных в точке путешествия
+   * @param {object} onViewChange Объект с функцией обработчика события открытия редактирования второй точки путешествия
    */
 
   constructor({
@@ -30,17 +37,20 @@ export default class PointPresenter {
     destination,
     offerTripPoint,
     editPointPresenter,
-    onTripPointUpdate
+    onTripPointUpdate,
+    onViewChange
   }) {
     this.#pointPresenterContainer = pointPresenterContainer;
     this.#destination = destination;
     this.#offerTripPoint = offerTripPoint;
     this.#editPointPresenter = editPointPresenter;
     this.#handleTripPointUpdate = onTripPointUpdate;
+    this.#handleViewChange = onViewChange;
   }
 
   /**
    * Метод инициализации призентора
+   * @param {object} tripPoint Объект с сущностью текущей точки путешествия
    */
 
   init(tripPoint) {
@@ -52,30 +62,20 @@ export default class PointPresenter {
 
     this.#setComponent(this.#tripPoint);
 
-    // || prevEditTripPointComponent === null
     if (prevTripPointComponent === null) {
-
       this.#renderTripPoint();
     } else {
-      if (this.#pointPresenterContainer.contains(prevTripPointComponent.element)) {
+      if (this.#view === CONST_COMMON_DATA.modeViewTripPoint.DEFAULT) {
         replace(this.#component, prevTripPointComponent);
+      }
+
+      if (this.#view === CONST_COMMON_DATA.modeViewTripPoint.EDITING) {
+        replace(this.#editPointPresenter.component, prevEditTripPointComponent);
       }
     }
 
-
-    // if (this.#pointPresenterContainer.contains(prevEditTripPointComponent.element)) {
-    //   replace(this.#editPointPresenter, prevEditTripPointComponent);
-    // }
-
     remove(prevTripPointComponent);
     remove(prevEditTripPointComponent);
-
-
-  }
-
-  #destroy() {
-    remove(this.#component);
-    remove(this.#editPointPresenter.component);
   }
 
   /**
@@ -92,6 +92,8 @@ export default class PointPresenter {
   #replaceTripPointToForm() {
     replace(this.#editPointPresenter.component, this.component);
     document.addEventListener('keydown', this.#escKeyDownHandler);
+    this.#handleViewChange();
+    this.#view = CONST_COMMON_DATA.modeViewTripPoint.EDITING;
   }
 
   /**
@@ -101,8 +103,13 @@ export default class PointPresenter {
   #replaceFormToTripPoint() {
     replace(this.component, this.#editPointPresenter.component);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
+    this.#view = CONST_COMMON_DATA.modeViewTripPoint.DEFAULT;
   }
 
+  /**
+   * Метод который обрабатывает событие нажатия клавиши ESC
+   * @param {object} evt Объект с событием нажатия на клавишу
+   */
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
@@ -110,7 +117,6 @@ export default class PointPresenter {
       this.#replaceFormToTripPoint();
     }
   };
-
 
   /**
    * Метод который инициализирует форму редактирования точки путешествия и обрабатывает нажатие кнопку открытия точки путешествия
@@ -129,6 +135,14 @@ export default class PointPresenter {
   };
 
   /**
+   * Метод который обрабатывает добавление точке путешествия избранного статуса
+   */
+
+  #handleFavoriteClick = () => {
+    this.#handleTripPointUpdate({ ...this.#tripPoint, isFavorite: !this.#tripPoint.isFavorite });
+  };
+
+  /**
    * Метод который обрабатывает подтверждение формы редактирования
    */
 
@@ -142,10 +156,6 @@ export default class PointPresenter {
 
   #handleCloseClick = () => {
     this.#replaceFormToTripPoint();
-  };
-
-  #handleFavoriteClick = () => {
-    this.#handleTripPointUpdate({ ...this.#tripPoint, isFavorite: !this.#tripPoint.isFavorite });
   };
 
   /**
@@ -171,6 +181,25 @@ export default class PointPresenter {
 
   get component() {
     return this.#component;
+  }
+
+  /**
+   * Метод закрывает открытую форму редактирования точки путешествия
+   */
+
+  resetView() {
+    if (this.#view !== CONST_COMMON_DATA.modeViewTripPoint.DEFAULT) {
+      this.#replaceFormToTripPoint();
+    }
+  }
+
+  /**
+   * Метод стирает компоненты призентора
+   */
+
+  destroy() {
+    remove(this.#component);
+    remove(this.#editPointPresenter.component);
   }
 
 }

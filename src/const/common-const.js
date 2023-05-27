@@ -1,4 +1,8 @@
 const CONST_COMMON_DATA = {
+  modeViewTripPoint: {
+    DEFAULT: 'DEFAULT',
+    EDITING: 'EDITING',
+  },
   secondsInDay: 86400000,
   secondsInHour: 3600000,
   formatDateOneDay: 'YYYY-MM-DD',

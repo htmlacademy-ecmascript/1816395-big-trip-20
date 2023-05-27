@@ -8,6 +8,7 @@ import { render } from '../framework/render.js';
 
 export default class EditPointPresenter {
   #pointPresenterContainer = null;
+
   #destination = null;
   #offerTripPoint = null;
 
@@ -31,6 +32,9 @@ export default class EditPointPresenter {
 
   /**
    * Метод инициализации призентора
+   * @param {object} tripPoint Объект с сущностью точки путешествия
+   * @param {object} onFormSubmit Объект с функцией обработчика подтверждения формы редактирования
+   * @param {object} onCloseEditClick Объект с функцией обработчика закрытия формы редактирования
    */
 
   init(
@@ -41,6 +45,7 @@ export default class EditPointPresenter {
     this.#onFormSubmit = onFormSubmit;
     this.#onCloseEditClick = onCloseEditClick;
     this.#setComponent(tripPoint);
+
     this.#renderEditPointView();
   }
 
