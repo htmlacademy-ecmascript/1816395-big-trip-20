@@ -4,6 +4,7 @@ import PointPresenter from './point-presenter.js';
 // import AddPointPresenter from './add-point-presenter.js';
 import EditPointPresenter from './edit-point-presenter.js';
 import { render, replace } from '../framework/render.js';
+import { commonUtil } from '../utils/common-util.js';
 
 /**
  * Класс призентора управляющего созданием экземпляров AddPointPresenter и PointsPresenter
@@ -14,15 +15,14 @@ export default class ContentPresenter {
   #contentComponent = new ContentView();
   #sortComponent = new SortsEventsTripView();
 
-  #pointPresenter = null;
-  #editPointPresenter = null;
 
   #contentContainer = null;
   #tripPointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
 
-
+  #tripPointPresenters = new Map();
+  #tripPoints = [];
 
   constructor({
     contentContainer,
@@ -34,6 +34,7 @@ export default class ContentPresenter {
     this.#tripPointsModel = tripPointsModel;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
+    this.#tripPoints = tripPointsModel.tripPoints;
 
   }
 
@@ -83,6 +84,11 @@ export default class ContentPresenter {
   //   addPointPresenter.init();
   // }
 
+  #handleTripPointUpdate = (updatedTripPoint) => {
+    this.#tripPoints = commonUtil.updateTripPoint(this.#tripPoints, updatedTripPoint);
+    this.#tripPointPresenters.get(updatedTripPoint.id).init(updatedTripPoint);
+  };
+
   /**
  * Метод который рендерит PointsPresenter`
  * @param {object} contentBox Объект с компонентов в котором будет проходить рендер PointsPresenter
@@ -103,11 +109,12 @@ export default class ContentPresenter {
 
   }
 
-  #renderTripPoint(contentBox, tripPoint, destination, offerTripPoint,) {
 
+  #renderTripPoint(contentBox, tripPoint, destination, offerTripPoint,) {
 
     const editPointPresenter = new EditPointPresenter({
       pointPresenterContainer: contentBox,
+      tripPoint,
       destination,
       offerTripPoint,
     });
@@ -117,12 +124,19 @@ export default class ContentPresenter {
       pointPresenterContainer: contentBox,
       destination,
       offerTripPoint,
-      editPointPresenter
+      editPointPresenter,
+      onTripPointUpdate: this.#handleTripPointUpdate
     });
 
 
     pointPresenter.init(tripPoint);
-
+    this.#tripPointPresenters.set(tripPoint.id, pointPresenter);
   }
+
+  #clearTripPoints() {
+    this.#tripPointPresenters.forEach((presenter) => presenter.destroy());
+    this.#tripPointPresenters.clear();
+  }
+
 
 }

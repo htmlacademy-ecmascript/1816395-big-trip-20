@@ -119,6 +119,7 @@ export default class TripPointView extends AbstractView {
   #destination = null;
   #offers = null;
   #handleEditClick = null;
+  #handleFavoriteClick = null;
 
   /**
    * Инициализация данных из Points-presenter
@@ -129,15 +130,18 @@ export default class TripPointView extends AbstractView {
 
    */
 
-  constructor({ tripPoint, destination, offer, onEditClick }) {
+  constructor({ tripPoint, destination, offer, onEditClick, onFavoriteClick }) {
     super();
     this.#tripPoint = tripPoint;
     this.#destination = destination;
     this.#offers = offer.offers;
     this.#handleEditClick = onEditClick;
+    this.#handleFavoriteClick = onFavoriteClick;
 
     this.element.querySelector('.event__rollup-btn')
       .addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn')
+      .addEventListener('click', this.#handleFavoriteClick);
   }
 
   /**
@@ -162,5 +166,11 @@ export default class TripPointView extends AbstractView {
     evt.preventDefault();
     this.#handleEditClick(this.#tripPoint);
   };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick(this.#tripPoint);
+  };
+
 
 }

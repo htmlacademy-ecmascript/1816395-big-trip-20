@@ -59,6 +59,9 @@ const commonUtil = {
     return values.reduce((acc, number) => acc + number, 0);
   },
 
+  updateTripPoint(tripPoints, pointUpdate) {
+    return tripPoints.map((tripPoint) => tripPoint.id === pointUpdate.id ? pointUpdate : tripPoint);
+  }
 
 };
 

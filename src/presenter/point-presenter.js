@@ -16,6 +16,7 @@ export default class PointPresenter {
   #component = null;
   #tripPoint = null;
 
+  #handleTripPointUpdate = null;
 
   /**
    * Инициализация получения сущностей от ContentPresenter
@@ -29,11 +30,13 @@ export default class PointPresenter {
     destination,
     offerTripPoint,
     editPointPresenter,
+    onTripPointUpdate
   }) {
     this.#pointPresenterContainer = pointPresenterContainer;
     this.#destination = destination;
     this.#offerTripPoint = offerTripPoint;
     this.#editPointPresenter = editPointPresenter;
+    this.#handleTripPointUpdate = onTripPointUpdate;
   }
 
   /**
@@ -44,19 +47,21 @@ export default class PointPresenter {
     this.#tripPoint = tripPoint;
 
 
-
     const prevTripPointComponent = this.#component;
     const prevEditTripPointComponent = this.#editPointPresenter.component;
 
     this.#setComponent(this.#tripPoint);
 
-    if (prevTripPointComponent === null || prevEditTripPointComponent === null) {
+    // || prevEditTripPointComponent === null
+    if (prevTripPointComponent === null) {
+
       this.#renderTripPoint();
+    } else {
+      if (this.#pointPresenterContainer.contains(prevTripPointComponent.element)) {
+        replace(this.#component, prevTripPointComponent);
+      }
     }
 
-    // if (this.#pointPresenterContainer.contains(prevTripPointComponent.element)) {
-    //   replace(this.#component, prevTripPointComponent);
-    // }
 
     // if (this.#pointPresenterContainer.contains(prevEditTripPointComponent.element)) {
     //   replace(this.#editPointPresenter, prevEditTripPointComponent);
@@ -106,6 +111,7 @@ export default class PointPresenter {
     }
   };
 
+
   /**
    * Метод который инициализирует форму редактирования точки путешествия и обрабатывает нажатие кнопку открытия точки путешествия
    */
@@ -114,9 +120,9 @@ export default class PointPresenter {
 
     this.#editPointPresenter.init(
       this.#tripPoint,
-      this.component,
       this.#handleFormSubmit,
-      this.#handleCloseClick
+      this.#handleCloseClick,
+
     );
 
     this.#replaceTripPointToForm();
@@ -138,6 +144,10 @@ export default class PointPresenter {
     this.#replaceFormToTripPoint();
   };
 
+  #handleFavoriteClick = () => {
+    this.#handleTripPointUpdate({ ...this.#tripPoint, isFavorite: !this.#tripPoint.isFavorite });
+  };
+
   /**
    * Метод создает экземпляр компонента TripPointView
    * @param {object} tripPoint сущность точки путешествия
@@ -150,7 +160,8 @@ export default class PointPresenter {
       tripPoint,
       destination: this.#destination,
       offer: this.#offerTripPoint,
-      onEditClick: this.#handleEditClick
+      onEditClick: this.#handleEditClick,
+      onFavoriteClick: this.#handleFavoriteClick
     });
   }
 
