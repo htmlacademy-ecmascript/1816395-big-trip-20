@@ -1,6 +1,6 @@
 import { getDestinationList } from '../mock/destination-data';
 import { getOffersList } from '../mock/offers-data.js';
-import { getTripPoints as getTripPointsList } from '../mock/point-data.js';
+import { generateTripPointsList } from '../mock/point-data.js';
 
 export default class MockDataService {
   destinations = [];
@@ -34,7 +34,7 @@ export default class MockDataService {
   }
 
   generateTripPoints() {
-    return getTripPointsList();
+    return generateTripPointsList();
   }
 
 }

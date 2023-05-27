@@ -1,39 +1,39 @@
-import { util } from '../util.js';
-import { CONST_DATA } from './const-data.js';
+import {mockUtil} from '../utils/mock-util.js';
+import { CONST_MOCK_DATA } from '../const/mock-const.js';
 
-const getPictures = (city) => Array.from({ length: util.getRandomCount(CONST_DATA.countLimit) }, (picture = {
-  'src': `${CONST_DATA.pictureURL}${util.getRandomPrice()}`,
-  'description': `${city}, ${util.getRandomArrayElement(CONST_DATA.descriptionPlaces)}`
+const generatePictures = (city) => Array.from({ length: mockUtil.getRandomCount(CONST_MOCK_DATA.countLimit) }, (picture = {
+  'src': `${CONST_MOCK_DATA.pictureURL}${mockUtil.getRandomPrice()}`,
+  'description': `${city}, ${mockUtil.getRandomValue(CONST_MOCK_DATA.descriptionPlaces)}`
 }) => picture);
 
 const getDestination = () => {
-  const city = util.getRandomArrayElement(CONST_DATA.cities);
+  const city = mockUtil.getRandomValue(CONST_MOCK_DATA.cities);
   const newDestination = {
-    id: util.getUniqId(),
-    description: `${city}${CONST_DATA.descriptionCity}`,
+    id: mockUtil.getUniqId(),
+    description: `${city}${CONST_MOCK_DATA.descriptionCity}`,
     name: city,
-    pictures: getPictures(city)
+    pictures: generatePictures(city)
   };
   return newDestination;
 };
 
-const getAllDestinations = () => {
+const generateAllDestinations = () => {
   const allDestinations = [];
-  for (let i = 0; i < util.getRandomCount(CONST_DATA.countLimit); i++) {
+  for (let i = 0; i < mockUtil.getRandomCount(CONST_MOCK_DATA.countLimit); i++) {
     allDestinations[i] = getDestination();
   }
   return allDestinations;
 };
 
-const destinationList = getAllDestinations();
+const destinationList = generateAllDestinations();
 
 
-const getDestinationId = (city) => {
+const getDestinationById = (city) => {
   const findDestination = destinationList.find((destination) => destination.name === city);
   return findDestination.id;
 };
 
 const getDestinationList = () => destinationList;
 
-export { destinationList, getDestinationId, getDestinationList };
+export { destinationList, getDestinationById, getDestinationList };
 

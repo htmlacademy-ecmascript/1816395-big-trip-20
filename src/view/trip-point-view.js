@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { util } from '../util.js';
+import { commonUtil } from '../utils/common-util.js';
 
 /**
  * Составляет разметку для DOM элемента дополнительного предложения
@@ -8,12 +8,16 @@ import { util } from '../util.js';
  */
 
 function createOfferHTML(offer) {
+
+  const offerTitle = offer.title;
+  const offerPrice = offer.price;
+
   return (/*html*/
     `
   <li class="event__offer">
-    <span class="event__offer-title">${offer.title}</span>
+    <span class="event__offer-title">${offerTitle}</span>
     &plus;&euro;&nbsp;
-    <span class="event__offer-price">${offer.price}</span>
+    <span class="event__offer-price">${offerPrice}</span>
   </li>
 `
   );
@@ -21,13 +25,17 @@ function createOfferHTML(offer) {
 
 /**
  * Составляет разметку для DOM элемента со списком дополнительные предложений
+ * @param {Array} tripPointOffersIds массив с идентификаторами выбранными в точке путешествия
  * @param {Array} offers массив дополнительных предложений
  * @returns строку с HTML разметкой для списка дополнительных предложений
  */
 
-function createOffersHtml(offers) {
+function createOffersHtml(tripPointOffersIds, offers) {
   return offers
-    .map((offer) => createOfferHTML(offer))
+    .map((offer) =>
+      tripPointOffersIds.find((id) => offer.id === id) ?
+        createOfferHTML(offer)
+        : '')
     .join('');
 }
 
@@ -41,31 +49,28 @@ function createOffersHtml(offers) {
 
 function createTripEventTemplate(tripPoint, destination, offers) {
 
-  const
-    dateStartTrip = tripPoint.dateFrom,
-    dateEndTrip = tripPoint.dateTo;
+  const dateStartTrip = tripPoint.dateFrom;
+  const dateEndTrip = tripPoint.dateTo;
 
-  const
-    dateInfoStartTrip = util.humanizeDateInfo(dateStartTrip),
-    datePointStartTrip = util.humanizeDatePoint(dateStartTrip),
-    datePointEndTrip = util.humanizeDatePoint(dateEndTrip),
-    tripExtension = util.getPeriodExtension(tripPoint);
+  const dateInfoStartTrip = commonUtil.humanizeDateInfo(dateStartTrip);
+  const datePointStartTrip = commonUtil.humanizeDatePoint(dateStartTrip);
+  const datePointEndTrip = commonUtil.humanizeDatePoint(dateEndTrip);
+  const tripExtension = commonUtil.getPeriodExtension(tripPoint);
 
 
-  const
-    favoriteClassName = tripPoint.isFavorite
-      ? 'event__favorite-btn--active'
-      : [];
+  const favoriteClassName = tripPoint.isFavorite
+    ? 'event__favorite-btn--active'
+    : [];
 
-  const
-    type = tripPoint.type,
-    tripPrice = tripPoint.basePrice;
+  const type = tripPoint.type.toLowerCase();
+  const tripPrice = tripPoint.basePrice;
 
-  const
-    destinationName = destination.name,
-    offersById = offers,
+  const destinationName = destination.name;
+  const offersById = offers;
+  const tripPointOffersIds = tripPoint.offers;
 
-    offersHtml = createOffersHtml(offersById);
+
+  const offersHtml = createOffersHtml(tripPointOffersIds, offersById);
   return (/*html*/
     `
     <li class="trip-events__item">
@@ -114,6 +119,7 @@ export default class TripPointView extends AbstractView {
   #destination = null;
   #offers = null;
   #handleEditClick = null;
+  #handleFavoriteClick = null;
 
   /**
    * Инициализация данных из Points-presenter
@@ -124,15 +130,18 @@ export default class TripPointView extends AbstractView {
 
    */
 
-  constructor({ tripPoint, destination, offer, onEditClick }) {
+  constructor({ tripPoint, destination, offer, onEditClick, onFavoriteClick }) {
     super();
     this.#tripPoint = tripPoint;
     this.#destination = destination;
     this.#offers = offer.offers;
     this.#handleEditClick = onEditClick;
+    this.#handleFavoriteClick = onFavoriteClick;
 
     this.element.querySelector('.event__rollup-btn')
       .addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn')
+      .addEventListener('click', this.#handleFavoriteClick);
   }
 
   /**
@@ -155,7 +164,13 @@ export default class TripPointView extends AbstractView {
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditClick();
+    this.#handleEditClick(this.#tripPoint);
   };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick(this.#tripPoint);
+  };
+
 
 }

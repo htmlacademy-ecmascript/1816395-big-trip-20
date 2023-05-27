@@ -20,7 +20,8 @@ const util = {
     return dayjs(
       new Date(start.getTime()
         + Math.random() * (end.getTime() - start.getTime()))
-    ).format(CONST_DATA.formatDate);
+    )
+      .format(CONST_DATA.formatDate);
   },
 
   getRandomBooleanValue: function () {
@@ -52,33 +53,10 @@ const util = {
     return date ? dayjs(date).format(CONST_DATA.formatDatePoint) : '';
   },
 
-  humanizeDateEditPoint: function (date){
+  humanizeDateEditPoint: function (date) {
     return dayjs(date).format(CONST_DATA.formatDateAddPoint);
   },
 
-
-  getDestinationById: function (destinationId, destinationList) {
-    const findDestination = destinationList.find((element) => element.id === destinationId);
-    return findDestination;
-  },
-
-  getOffersByType: function (typeTripPoint, offersList) {
-    return offersList.find((offers) => offers.type === typeTripPoint).offers;
-  },
-
-  getOffersById: function (typeTripPoint, tripPointOffers, offersList) {
-    const currentOffers = this.getOffersByType(typeTripPoint, offersList);
-    const offersById = [];
-    for (const offers of currentOffers) {
-      tripPointOffers[0].forEach((offer) => {
-        if (offer === offers.id) {
-          offersById.push(offers);
-        }
-      });
-    }
-
-    return offersById;
-  },
 
   getPeriodExtension: function (tripPoint) {
     if (tripPoint) {
