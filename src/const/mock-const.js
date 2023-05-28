@@ -1,6 +1,6 @@
 const CONST_MOCK_DATA = {
   pictureURL: 'https://loremflickr.com/248/152?random=',
-  years: [2022, 2024],
+  years: [2022, 2023],
   booleanValue: [true, false],
   countLimit: 10,
   descriptionCity: ', is a beautiful city, a true pearl, with crowded streets.',

@@ -5,6 +5,8 @@ import PointPresenter from './point-presenter.js';
 import EditPointPresenter from './edit-point-presenter.js';
 import { render } from '../framework/render.js';
 import { commonUtil } from '../utils/common-util.js';
+import { CONST_COMMON_DATA } from '../const/common-const.js';
+import { sortUtil } from '../utils/sort-utils.js';
 
 /**
  * Класс призентора управляющего созданием экземпляров AddPointPresenter и PointsPresenter
@@ -13,16 +15,20 @@ import { commonUtil } from '../utils/common-util.js';
 
 export default class ContentPresenter {
   #contentComponent = new ContentView();
-  #sortComponent = new SortsTripPintsView();
+  #sortComponent = null;
+  #SortTypes = CONST_COMMON_DATA.sortTypes;
 
 
   #contentContainer = null;
+  #contentBox = null;
   #tripPointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
 
   #tripPointPresenters = new Map();
   #tripPoints = [];
+  #currentSortType = null;
+  #sortedTripPoints = [];
 
   constructor({
     contentContainer,
@@ -34,8 +40,10 @@ export default class ContentPresenter {
     this.#tripPointsModel = tripPointsModel;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
-    this.#tripPoints = tripPointsModel.tripPoints;
+    this.#tripPoints = sortUtil[this.#SortTypes.DAY]([...this.#tripPointsModel.tripPoints]);
 
+    this.#contentBox = this.#contentComponent.element;
+    this.#currentSortType = this.#SortTypes.DAY;
   }
 
   /**
@@ -47,74 +55,38 @@ export default class ContentPresenter {
   }
 
   /**
- * Метод который создает экземпляры AddPointPresenter и PointsPresenter
- * и рендерит ContentView и SortsTripPintsView
- */
+* Метод который создает экземпляры AddPointPresenter и PointsPresenter
+* и рендерит ContentView и SortsTripPintsView
+*/
 
   #renderContent() {
-    const contentBox = this.#contentComponent.element;
-
-    this.#renderTripPoints(contentBox);
-    this.#renderComponents(contentBox);
+    this.#renderTripPoints();
+    this.#renderComponents();
   }
 
   /**
-   * Метод отвечает за рендеринг ContentView и SortsTripPintsView
-   * @param {object} contentBox Объект с контейнером для рендера ContentView и SortsTripPintsView
-   */
+* Метод отвечает за рендеринг ContentView и SortsTripPintsView
+*/
 
   #renderComponents() {
+    this.#sortComponent = new SortsTripPintsView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+
     render(this.#sortComponent, this.#contentContainer);
     render(this.#contentComponent, this.#contentContainer);
   }
 
-
   /**
-   * Метод который рендерит AddPointPresenter
-   * @param {object} contentBox Объект с компонентов в котором будет проходить рендер AddPointPresenter
-   */
+* Метод который рендерит PointsPresenter
+*/
 
-  // #renderAddPointPresenter(contentBox) {
-  //   const addPointPresenter = new AddPointPresenter({
-  //     pointContainer: contentBox,
-  //     tripPointsModel: this.#tripPointsModel,
-  //     destinationsModel: this.#destinationsModel,
-  //     offersModel: this.#offersModel
-  //   });
-  //   addPointPresenter.init();
-  // }
-
-
-  /**
-   * Метод который обновляет данные в точке путешествия
-   * @param {object} updatedTripPoint Объект с обновленными данными тоски путешествия
-   */
-
-  #handleTripPointUpdate = (updatedTripPoint) => {
-    this.#tripPoints = commonUtil.updateTripPoint(this.#tripPoints, updatedTripPoint);
-    this.#tripPointPresenters.get(updatedTripPoint.id).init(updatedTripPoint);
-  };
-
-  /**
- * Метод который следит что бы только одна точка путешествия была открыта в режиме редактирования
- */
-
-  #handleViewChange = () => {
-    this.#tripPointPresenters.forEach((tripPointPresenter) => tripPointPresenter.resetView());
-  };
-
-
-  /**
- * Метод который рендерит PointsPresenter`
- * @param {object} contentBox Объект с компонентов в котором будет проходить рендер PointsPresenter
- */
-
-  #renderTripPoints(contentBox) {
-    const tripPoints = this.#tripPointsModel.tripPoints;
+  #renderTripPoints() {
+    const tripPoints = this.#tripPoints;
 
     for (let i = 0; i < tripPoints.length; i++) {
       this.#renderTripPoint(
-        contentBox,
+        this.#contentBox,
         tripPoints[i],
         this.#destinationsModel.getById(tripPoints[i].destination),
         this.#offersModel.getByType(tripPoints[i].type)
@@ -147,6 +119,40 @@ export default class ContentPresenter {
     this.#tripPointPresenters.set(tripPoint.id, pointPresenter);
   }
 
+
+  #sortTripPoints = (sortType) => {
+    this.#currentSortType = this.#SortTypes[sortType];
+    this.#tripPoints = sortUtil[this.#currentSortType](this.#tripPoints);
+  };
+
+
+  /**
+   * Метод который обновляет данные в точке путешествия
+   * @param {object} updatedTripPoint Объект с обновленными данными тоски путешествия
+   */
+
+  #handleTripPointUpdate = (updatedTripPoint) => {
+    this.#tripPoints = commonUtil.updateTripPoint(this.#tripPoints, updatedTripPoint);
+    this.#sortedTripPoints = commonUtil.updateTripPoint(this.#sortedTripPoints, updatedTripPoint);
+    this.#tripPointPresenters.get(updatedTripPoint.id).init(updatedTripPoint);
+  };
+
+  #handleSortTypeChange = (sortType) => {
+    this.#sortTripPoints(sortType);
+    this.#clearTripPoints();
+    this.#renderTripPoints(this.#contentComponent.element);
+  };
+
+
+  /**
+ * Метод который следит что бы только одна точка путешествия была открыта в режиме редактирования
+ */
+
+  #handleViewChange = () => {
+    this.#tripPointPresenters.forEach((tripPointPresenter) => tripPointPresenter.resetView());
+  };
+
+
   /**
    * Метод который удаляет  ненужные призенторы
    */
@@ -156,5 +162,18 @@ export default class ContentPresenter {
     this.#tripPointPresenters.clear();
   }
 
+  /**
+ * Метод который рендерит AddPointPresenter
+ * @param {object} contentBox Объект с компонентов в котором будет проходить рендер AddPointPresenter
+ */
 
+  // #renderAddPointPresenter(contentBox) {
+  //   const addPointPresenter = new AddPointPresenter({
+  //     pointContainer: contentBox,
+  //     tripPointsModel: this.#tripPointsModel,
+  //     destinationsModel: this.#destinationsModel,
+  //     offersModel: this.#offersModel
+  //   });
+  //   addPointPresenter.init();
+  // }
 }

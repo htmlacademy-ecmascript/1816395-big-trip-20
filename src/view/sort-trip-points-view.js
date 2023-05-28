@@ -10,9 +10,9 @@ import { CONST_COMMON_DATA } from '../const/common-const.js';
 function createTripSortItemHTML(sortItem) {
   return (/*html*/`
 
-    <div class="trip-sort__item  trip-sort__item--${sortItem.toLowerCase()}">
-      <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day">
-      <label class="trip-sort__btn" for="sort-day">${sortItem}</label>
+    <div class="trip-sort__item  trip-sort__item--${sortItem}">
+      <input id="sort-${sortItem}" class="trip-sort__input  visually-hidden" data-sort-type="${sortItem.toLocaleUpperCase()}" type="radio" name="sort-${sortItem}" value="sort-${sortItem}">
+      <label class="trip-sort__btn" for="sort-${sortItem}">${sortItem}</label>
     </div>
 
 `);
@@ -55,9 +55,24 @@ function createTripSortTemplate() {
 */
 
 export default class SortsTripPointsView extends AbstractView {
-  constructor() {
+  #handleSortTypeChange = null;
+
+  constructor({onSortTypeChange}) {
     super();
+    this.#handleSortTypeChange = onSortTypeChange;
+
+    this.element.addEventListener('click', this.#sortTypeChangeHandler);
+
   }
+
+  #sortTypeChangeHandler = (evt) => {
+    if (evt.target.tagName === 'INPUT') {
+      evt.preventDefault();
+      this.#handleSortTypeChange(evt.target.dataset.sortType);
+    }
+
+
+  };
 
   /**
    * Метод для получения шаблона разметки критериев сортировки точек путешествия

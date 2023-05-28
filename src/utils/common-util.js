@@ -31,22 +31,26 @@ const commonUtil = {
 
   getPeriodExtension: function (tripPoint) {
     if (tripPoint) {
-      const
-        start = tripPoint.dateFrom,
-        end = tripPoint.dateTo;
+      const start = tripPoint.dateFrom;
+      const end = tripPoint.dateTo;
 
-      const periodExtension = dayjs.duration(dayjs(end) - dayjs(start), 'millisecond');
 
-      if (periodExtension.asMilliseconds() >= CONST_COMMON_DATA.secondsInDay) {
-        return periodExtension.format(CONST_COMMON_DATA.formatDateDaysHoursMinutes);
-      } else {
-        if (periodExtension.asMilliseconds() >= CONST_COMMON_DATA.secondsInHour) {
-          return periodExtension.format(CONST_COMMON_DATA.formatDateHoursMinutes);
-        } else {
-          return periodExtension.format(CONST_COMMON_DATA.formatDateMinutes);
-        }
+      const periodExtension = dayjs(end).diff(dayjs(start));
+      let pointDuration = 0;
+
+      switch (true) {
+        case (periodExtension >= CONST_COMMON_DATA.secondsInDay):
+          pointDuration = dayjs.duration(periodExtension).format(CONST_COMMON_DATA.formatDateDaysHoursMinutes);
+          break;
+        case (periodExtension >= CONST_COMMON_DATA.secondsInHour):
+          pointDuration = dayjs.duration(periodExtension).format(CONST_COMMON_DATA.formatDateHoursMinutes);
+          break;
+        case (periodExtension < CONST_COMMON_DATA.secondsInHour):
+          pointDuration = dayjs.duration(periodExtension).format(CONST_COMMON_DATA.formatDateMinutes);
+          break;
       }
 
+      return pointDuration;
     }
   },
 
@@ -55,12 +59,27 @@ const commonUtil = {
     return destinationNames;
   },
 
-  getSumOfValues(values) {
+  getSumOfValues: function (values) {
     return values.reduce((acc, number) => acc + number, 0);
   },
 
-  updateTripPoint(tripPoints, pointUpdate) {
+  updateTripPoint: function (tripPoints, pointUpdate) {
     return tripPoints.map((tripPoint) => tripPoint.id === pointUpdate.id ? pointUpdate : tripPoint);
+  },
+
+  getPointsDateDifference: function (firstPoint, secondPoint) {
+    return new Date(firstPoint.dateFrom) - new Date(secondPoint.dateFrom);
+  },
+
+  getPointsDurationDifference: function (firstPoint, secondPoint) {
+    const firstDuration = new Date(firstPoint.dateTo) - new Date(firstPoint.dateFrom);
+    const secondDuration = new Date(secondPoint.dateTo) - new Date(secondPoint.dateFrom);
+
+    return secondDuration - firstDuration;
+  },
+
+  getPointsPriceDifference: function (firstPoint, secondPoint) {
+    return secondPoint.basePrice - firstPoint.basePrice;
   }
 
 };
