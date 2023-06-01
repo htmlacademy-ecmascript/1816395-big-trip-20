@@ -28,7 +28,6 @@ const commonUtil = {
     return dayjs(date).format(CONST_COMMON_DATA.formatDateAddPoint);
   },
 
-
   getPeriodExtension: function (tripPoint) {
     if (tripPoint) {
       const start = tripPoint.dateFrom;

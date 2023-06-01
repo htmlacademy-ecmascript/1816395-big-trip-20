@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { CONST_COMMON_DATA } from '../const/common-const.js';
+import { sortUtil } from '../utils/sort-utils.js';
 
 /**
  * Возвращает разметку критерия сортировки точек путешествия
@@ -57,7 +58,7 @@ function createTripSortTemplate() {
 export default class SortsTripPointsView extends AbstractView {
   #handleSortTypeChange = null;
 
-  constructor({onSortTypeChange}) {
+  constructor({ onSortTypeChange }) {
     super();
     this.#handleSortTypeChange = onSortTypeChange;
 

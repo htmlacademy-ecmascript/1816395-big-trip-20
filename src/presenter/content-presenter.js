@@ -96,16 +96,16 @@ export default class ContentPresenter {
   }
 
 
-  #renderTripPoint(contentBox, tripPoint, destination, offerTripPoint,) {
-
-    const editPointPresenter = new EditPointPresenter({
+  #createEditPointPresenter(contentBox, destination, offerTripPoint) {
+    return new EditPointPresenter({
       pointPresenterContainer: contentBox,
       destination,
       offerTripPoint,
     });
+  }
 
-
-    const pointPresenter = new PointPresenter({
+  #createPointPresenter(contentBox, destination, offerTripPoint, editPointPresenter) {
+    return new PointPresenter({
       pointPresenterContainer: contentBox,
       destination,
       offerTripPoint,
@@ -113,12 +113,40 @@ export default class ContentPresenter {
       onTripPointUpdate: this.#handleTripPointUpdate,
       onViewChange: this.#handleViewChange
     });
+  }
 
+  /**
+   * Метод рендера pointPresenter
+   * @param {object} contentBox Объект с элементом контейнера отрисовки pointPresenter
+   * @param {object} tripPoint Объект с сущностью точки путешествия
+   * @param {object} destination Объект с сущностью точки путешествия
+   * @param {object} offerTripPoint Объект с выбранными дополнительными предложениями точки путешествия
+   */
+
+
+  #renderTripPoint(contentBox, tripPoint, destination, offerTripPoint) {
+
+    const editPointPresenter = this.#createEditPointPresenter(
+      contentBox,
+      destination,
+      offerTripPoint);
+
+
+    const pointPresenter = this.#createPointPresenter(
+      contentBox,
+      destination,
+      offerTripPoint,
+      editPointPresenter,
+    );
 
     pointPresenter.init(tripPoint);
     this.#tripPointPresenters.set(tripPoint.id, pointPresenter);
   }
 
+  /**
+   * Метод который сортирует точки путешествий по типу
+   * @param {string} sortType Строка с типом сортировки
+   */
 
   #sortTripPoints = (sortType) => {
     this.#currentSortType = this.#SortTypes[sortType];
@@ -136,6 +164,11 @@ export default class ContentPresenter {
     this.#sortedTripPoints = commonUtil.updateTripPoint(this.#sortedTripPoints, updatedTripPoint);
     this.#tripPointPresenters.get(updatedTripPoint.id).init(updatedTripPoint);
   };
+
+  /**
+   * Метод который обрабатывает события смены типа сортировки
+   * @param {string} sortType Строка с типом сортировки
+   */
 
   #handleSortTypeChange = (sortType) => {
     this.#sortTripPoints(sortType);
