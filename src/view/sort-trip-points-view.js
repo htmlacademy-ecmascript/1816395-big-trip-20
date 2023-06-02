@@ -14,10 +14,9 @@ function createTripSortItemHTML(sortItem) {
       <input id="sort-${sortItem}"
           class="trip-sort__input  visually-hidden"
           data-sort-type="${sortItem.toLocaleUpperCase()}"
-          type="radio" name="sort-${sortItem}"
+          type="radio" name="trip-sort"
           value="sort-${sortItem}"
           ${sortItem === 'event' || sortItem === 'offers' ? 'disabled' : ''}
-          checked
           >
       <label class="trip-sort__btn" for="sort-${sortItem}">${sortItem}</label>
     </div>
@@ -74,15 +73,9 @@ export default class SortsTripPointsView extends AbstractView {
 
   }
 
-  #addChecked(sortInput) {
-    this.#sortInputs.forEach((input) => input.removeAttribute('checked'));
-    sortInput.setAttribute('checked', '');
-  }
 
   #sortTypeChangeHandler = (evt) => {
     if (evt.target.tagName === 'INPUT') {
-      evt.preventDefault();
-      this.#addChecked(evt.target);
       this.#handleSortTypeChange(evt.target.dataset.sortType);
     }
   };
