@@ -89,26 +89,36 @@ export default class ContentPresenter {
         this.#contentBox,
         tripPoints[i],
         this.#destinationsModel.getById(tripPoints[i].destination),
-        this.#offersModel.getByType(tripPoints[i].type)
+        this.#offersModel.getByType(tripPoints[i].type),
+        this.#destinationsModel,
+        this.#offersModel
       );
     }
 
   }
 
 
-  #createEditPointPresenter(contentBox, destination, offerTripPoint) {
+  #createEditPointPresenter(
+    contentBox,
+    destination,
+    availableOfferTripPoint
+  ) {
     return new EditPointPresenter({
       pointPresenterContainer: contentBox,
       destination,
-      offerTripPoint,
+      availableOfferTripPoint,
     });
   }
 
-  #createPointPresenter(contentBox, destination, offerTripPoint, editPointPresenter) {
+  #createPointPresenter(
+    contentBox,
+    destination,
+    availableOfferTripPoint,
+    editPointPresenter) {
     return new PointPresenter({
       pointPresenterContainer: contentBox,
       destination,
-      offerTripPoint,
+      availableOfferTripPoint,
       editPointPresenter,
       onTripPointUpdate: this.#handleTripPointUpdate,
       onViewChange: this.#handleViewChange
@@ -120,22 +130,32 @@ export default class ContentPresenter {
    * @param {object} contentBox Объект с элементом контейнера отрисовки pointPresenter
    * @param {object} tripPoint Объект с сущностью точки путешествия
    * @param {object} destination Объект с сущностью точки путешествия
-   * @param {object} offerTripPoint Объект с выбранными дополнительными предложениями точки путешествия
+   * @param {object} availableOfferTripPoint Объект с выбранными дополнительными предложениями точки путешествия
    */
 
 
-  #renderTripPoint(contentBox, tripPoint, destination, offerTripPoint) {
+  #renderTripPoint(
+    contentBox,
+    tripPoint,
+    destination,
+    availableOfferTripPoint,
+    destinationsModel,
+    offersModel
+  ) {
 
     const editPointPresenter = this.#createEditPointPresenter(
       contentBox,
       destination,
-      offerTripPoint);
+      availableOfferTripPoint,
+      destinationsModel,
+      offersModel
+    );
 
 
     const pointPresenter = this.#createPointPresenter(
       contentBox,
       destination,
-      offerTripPoint,
+      availableOfferTripPoint,
       editPointPresenter,
     );
 

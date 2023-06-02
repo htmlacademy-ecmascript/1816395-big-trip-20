@@ -10,7 +10,7 @@ export default class EditPointPresenter {
   #pointPresenterContainer = null;
 
   #destination = null;
-  #offerTripPoint = null;
+  #availableOfferTripPoint = null;
 
   #onFormSubmit = null;
   #onCloseEditClick = null;
@@ -21,13 +21,13 @@ export default class EditPointPresenter {
    * Инициализация получения сущностей от ContentPresenter
    * @param {object} pointPresenterContainer Объект с контейнером для отрисовки призентора
    * @param {object} destination Объект с сущностью модели пунктов назначения
-   * @param {object} offersModel Объект с сущностью модели дополнительных предложений
+   * @param {object} availableOfferTripPoint Объект с сущностью модели дополнительных предложений
    */
 
-  constructor({ pointPresenterContainer, destination, offerTripPoint }) {
+  constructor({ pointPresenterContainer, destination, availableOfferTripPoint }) {
     this.#pointPresenterContainer = pointPresenterContainer;
     this.#destination = destination;
-    this.#offerTripPoint = offerTripPoint;
+    this.#availableOfferTripPoint = availableOfferTripPoint;
   }
 
   /**
@@ -72,7 +72,7 @@ export default class EditPointPresenter {
     this.#component = new EditPointView({
       tripPoint,
       destination: this.#destination,
-      availableOffersTripPoint: this.#offerTripPoint,
+      availableOffersTripPoint: this.#availableOfferTripPoint,
       onFormSubmit: this.#onFormSubmit,
       onCloseEditClick: this.#onCloseEditClick
     });
