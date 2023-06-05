@@ -79,6 +79,10 @@ const commonUtil = {
 
   getPointsPriceDifference: function (firstPoint, secondPoint) {
     return secondPoint.basePrice - firstPoint.basePrice;
+  },
+
+  getCapitalize: function (str) {
+    return str[0].toUpperCase() + str.slice(1);
   }
 
 };

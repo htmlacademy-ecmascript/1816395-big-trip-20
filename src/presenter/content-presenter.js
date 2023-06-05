@@ -101,27 +101,37 @@ export default class ContentPresenter {
   #createEditPointPresenter(
     contentBox,
     destination,
-    availableOfferTripPoint
+    availableOfferTripPoint,
+    destinationsModel,
+    offersModel
   ) {
     return new EditPointPresenter({
       pointPresenterContainer: contentBox,
       destination,
       availableOfferTripPoint,
+      destinationsModel,
+      offersModel
     });
   }
 
   #createPointPresenter(
     contentBox,
-    destination,
-    availableOfferTripPoint,
-    editPointPresenter) {
+    editPointPresenter,
+    destinationsModel,
+    offersModel,
+
+    onTripPointUpdate,
+    onViewChange,
+  ) {
     return new PointPresenter({
       pointPresenterContainer: contentBox,
-      destination,
-      availableOfferTripPoint,
       editPointPresenter,
-      onTripPointUpdate: this.#handleTripPointUpdate,
-      onViewChange: this.#handleViewChange
+      destinationsModel,
+      offersModel,
+
+      onTripPointUpdate,
+      onViewChange,
+
     });
   }
 
@@ -154,9 +164,12 @@ export default class ContentPresenter {
 
     const pointPresenter = this.#createPointPresenter(
       contentBox,
-      destination,
-      availableOfferTripPoint,
       editPointPresenter,
+      this.#destinationsModel,
+      this.#offersModel,
+
+      this.#handleTripPointUpdate,
+      this.#handleViewChange,
     );
 
     pointPresenter.init(tripPoint);
@@ -183,6 +196,8 @@ export default class ContentPresenter {
     this.#tripPoints = commonUtil.updateTripPoint(this.#tripPoints, updatedTripPoint);
     this.#sortedTripPoints = commonUtil.updateTripPoint(this.#sortedTripPoints, updatedTripPoint);
     this.#tripPointPresenters.get(updatedTripPoint.id).init(updatedTripPoint);
+    this.#clearTripPoints();
+    this.#renderTripPoints(this.#contentComponent.element);
   };
 
   /**

@@ -12,6 +12,9 @@ export default class EditPointPresenter {
   #destination = null;
   #availableOfferTripPoint = null;
 
+  #destinationsModel = null;
+  #offersModel = null;
+
   #onFormSubmit = null;
   #onCloseEditClick = null;
 
@@ -24,10 +27,18 @@ export default class EditPointPresenter {
    * @param {object} availableOfferTripPoint Объект с сущностью модели дополнительных предложений
    */
 
-  constructor({ pointPresenterContainer, destination, availableOfferTripPoint }) {
+  constructor({
+    pointPresenterContainer,
+    destination,
+    availableOfferTripPoint,
+    destinationsModel,
+    offersModel
+  }) {
     this.#pointPresenterContainer = pointPresenterContainer;
     this.#destination = destination;
     this.#availableOfferTripPoint = availableOfferTripPoint;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
   }
 
   /**
@@ -73,6 +84,8 @@ export default class EditPointPresenter {
       tripPoint,
       destination: this.#destination,
       availableOffersTripPoint: this.#availableOfferTripPoint,
+      destinationsModel: this.#destinationsModel,
+      offersModel: this.#offersModel,
       onFormSubmit: this.#onFormSubmit,
       onCloseEditClick: this.#onCloseEditClick
     });

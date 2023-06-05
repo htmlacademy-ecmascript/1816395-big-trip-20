@@ -31,6 +31,7 @@ function createOfferHTML(offer) {
  */
 
 function createOffersHtml(tripPointOffersIds, offers) {
+
   return offers
     .map((offer) =>
       tripPointOffersIds.find((id) => offer.id === id) ?
@@ -117,7 +118,7 @@ function createTripEventTemplate(tripPoint, destination, offers) {
 export default class TripPointView extends AbstractView {
   #tripPoint = null;
   #destination = null;
-  #offers = null;
+  #availableOffersTripPoint = null;
   #handleEditClick = null;
   #handleFavoriteClick = null;
 
@@ -130,18 +131,21 @@ export default class TripPointView extends AbstractView {
 
    */
 
-  constructor({ tripPoint, destination, offer, onEditClick, onFavoriteClick }) {
+  constructor({
+    tripPoint,
+    destination,
+    availableOffersTripPoint,
+    onEditClick,
+    onFavoriteClick
+  }) {
     super();
     this.#tripPoint = tripPoint;
     this.#destination = destination;
-    this.#offers = offer.offers;
+    this.#availableOffersTripPoint = availableOffersTripPoint.offers;
     this.#handleEditClick = onEditClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#editClickHandler);
-    this.element.querySelector('.event__favorite-btn')
-      .addEventListener('click', this.#handleFavoriteClick);
+    this.#handleEvents();
   }
 
   /**
@@ -152,25 +156,18 @@ export default class TripPointView extends AbstractView {
     return createTripEventTemplate(
       this.#tripPoint,
       this.#destination,
-      this.#offers
+      this.#availableOffersTripPoint
     );
   }
 
   /**
-   * Метод описывает приватный обработчик события и используется стрелочная функция, что бы this
-   * у функции был по месту вызова функции
-   * @param {object} evt Объект события (Элемент, на котором сработал обработчик)
+   * Подключение обработчиков
    */
 
-  #editClickHandler = (evt) => {
-    evt.preventDefault();
-    this.#handleEditClick(this.#tripPoint);
-  };
-
-  #favoriteClickHandler = (evt) => {
-    evt.preventDefault();
-    this.#handleFavoriteClick(this.#tripPoint);
-  };
-
-
+  #handleEvents() {
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#handleEditClick);
+    this.element.querySelector('.event__favorite-btn')
+      .addEventListener('click', this.#handleFavoriteClick);
+  }
 }

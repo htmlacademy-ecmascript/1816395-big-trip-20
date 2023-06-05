@@ -7,6 +7,24 @@ const CONST_MOCK_DATA = {
   descriptionPlaces: [
     'beautiful place', 'picturesque place', 'cozy corner'
   ],
+  offersTitle: [
+    'Choose meal',
+    'Choose seats',
+    'Upgrade to comfort class',
+    'Upgrade to business class',
+    'Add luggage',
+    'Business lounge',
+    'With automatic transmission',
+    'With air conditioning',
+    'Choose live music',
+    'Choose VIP area',
+  ],
+  typeTripPoint: [
+    'taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'
+  ],
+  typeOffers: [
+    'taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'
+  ],
   cities: [
     'Abidjan',
     'Adana',

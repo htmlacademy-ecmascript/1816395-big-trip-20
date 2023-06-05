@@ -35,11 +35,12 @@ function createEventTypeWrapperHTML(tripPointType) {
    */
 
   function createTypeItemHTML(type) {
+    const capitalizeType = commonUtil.getCapitalize(type);
     return (/*html*/
       `
       <div class="event__type-item">
-        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="${type}" value="${type}">
-        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type}">${type}</label>
+        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+        <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${capitalizeType}</label>
       </div>
   `
     );
@@ -130,6 +131,21 @@ function createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd) {
 function createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint) {
 
   const tripPointsOffersIds = tripPoint.offers;
+
+  /**
+   * Метод возвращает название класса для ДОМ элемента специального предложения
+   * @param {string} offerTitle Строка с названием специального предложения
+   * @returns Строку с названием класса ДОМ элемента специального предложения
+   */
+
+  function createOfferClass(offerTitle) {
+    const wordsOfferTitle = offerTitle.split(' ');
+    if (wordsOfferTitle[wordsOfferTitle.length - 1] === 'class') {
+      return wordsOfferTitle[wordsOfferTitle.length - 2];
+    }
+    return wordsOfferTitle[wordsOfferTitle.length - 1];
+  }
+
   /**
    * Создает разметку с дополнительного предложения
    * @param {object} offer Объект с дополнительным предложением
@@ -138,13 +154,19 @@ function createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint)
    */
 
   function createAvailableOfferHtml(offer, checked) {
-    const
-      offerTitle = offer.title,
-      offerPrice = offer.price;
+    const offerTitle = offer.title;
+    const offerPrice = offer.price;
+    const offerClass = createOfferClass(offerTitle);
+
     return (/*html*/`
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${checked}>
-      <label class="event__offer-label" for="event-offer-luggage-1">
+      <input class="event__offer-checkbox  visually-hidden"
+        id="event-offer-${offerClass}-1"
+        type="checkbox"
+        name="event-offer-luggage"
+        ${checked}>
+      <label class="event__offer-label"
+        for="event-offer-${offerClass}-1">
         <span class="event__offer-title">${offerTitle}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offerPrice}</span>
@@ -293,9 +315,11 @@ function createEditTripPointTemplate(tripPoint, destination, availableOffersTrip
   );
 }
 export default class EditPointView extends AbstractStatefulView {
-  #tripPoint = null;
   #destination = null;
   #availableOffersTripPoint = null;
+
+  #destinationsModel = null;
+  #offersModel = null;
 
   #handleFormSubmit = null;
   #handleCloseEditClick = null;
@@ -308,11 +332,23 @@ export default class EditPointView extends AbstractStatefulView {
  * @param {object} handleFormSubmit Объект с функцией которая будет срабатывать при подтверждении формы
  */
 
-  constructor({ tripPoint, destination, availableOffersTripPoint, onFormSubmit, onCloseEditClick }) {
+  constructor({
+    tripPoint,
+    destination,
+    availableOffersTripPoint,
+    destinationsModel,
+    offersModel,
+
+    onFormSubmit,
+    onCloseEditClick
+  }) {
     super();
     this._setState(EditPointView.parseTripPointToState(tripPoint));
     this.#destination = destination;
     this.#availableOffersTripPoint = availableOffersTripPoint;
+    this.destinationsModel = destinationsModel;
+    this.offersModel = offersModel;
+
     this.#handleFormSubmit = onFormSubmit;
     this.#handleCloseEditClick = onCloseEditClick;
 
@@ -330,10 +366,16 @@ export default class EditPointView extends AbstractStatefulView {
       this._state,
       this.#destination,
       this.#availableOffersTripPoint,
+      this.#destinationsModel,
+      this.#offersModel,
     );
   }
 
-  _restoreHandlers(){
+  /**
+   * Метод подключает слушатели событий
+   */
+
+  _restoreHandlers() {
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
 
@@ -343,6 +385,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelectorAll('.event__type-label')
       .forEach((element) => element.addEventListener('click', this.#typeClickHandler));
   }
+
   /**
  * Метод описывает приватный обработчик события и используется стрелочная функция, что бы this
  * у функции был по месту вызова функции
