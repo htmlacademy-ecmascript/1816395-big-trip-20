@@ -1,6 +1,6 @@
 import { CONST_COMMON_DATA } from '../const/common-const.js';
 import { commonUtil } from '../utils/common-util.js';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 /**
  * Создание разметки всплывающего меню выбора типа поездки
@@ -292,7 +292,7 @@ function createEditTripPointTemplate(tripPoint, destination, availableOffersTrip
     `
   );
 }
-export default class EditPointView extends AbstractView {
+export default class EditPointView extends AbstractStatefulView {
   #tripPoint = null;
   #destination = null;
   #availableOffersTripPoint = null;
@@ -310,11 +310,30 @@ export default class EditPointView extends AbstractView {
 
   constructor({ tripPoint, destination, availableOffersTripPoint, onFormSubmit, onCloseEditClick }) {
     super();
-    this.#tripPoint = tripPoint;
+    this._setState(EditPointView.parseTripPointToState(tripPoint));
     this.#destination = destination;
     this.#availableOffersTripPoint = availableOffersTripPoint;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleCloseEditClick = onCloseEditClick;
+
+    this._restoreHandlers();
+
+  }
+
+
+  /**
+   * Получение шаблона точки путешествия
+   */
+
+  get template() {
+    return createEditTripPointTemplate(
+      this._state,
+      this.#destination,
+      this.#availableOffersTripPoint,
+    );
+  }
+
+  _restoreHandlers(){
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
 
@@ -324,19 +343,6 @@ export default class EditPointView extends AbstractView {
     this.element.querySelectorAll('.event__type-label')
       .forEach((element) => element.addEventListener('click', this.#typeClickHandler));
   }
-
-  /**
-   * Получение шаблона точки путешествия
-   */
-
-  get template() {
-    return createEditTripPointTemplate(
-      this.#tripPoint,
-      this.#destination,
-      this.#availableOffersTripPoint,
-    );
-  }
-
   /**
  * Метод описывает приватный обработчик события и используется стрелочная функция, что бы this
  * у функции был по месту вызова функции
@@ -345,7 +351,7 @@ export default class EditPointView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit();
+    this.#handleFormSubmit(EditPointView.parseStateToTripPoint(this._state));
   };
 
   #closeEditClickHandler = (evt) => {
@@ -355,9 +361,20 @@ export default class EditPointView extends AbstractView {
 
   #typeClickHandler = (evt) => {
     evt.preventDefault();
-    this.element.querySelector('.event__type-output')
-      .textContent = evt.target.textContent;
+    this._state.type = evt.target.textContent;
+    this.updateElement(this._state);
   };
 
+  static parseTripPointToState(tripPoint) {
+    return {
+      ...tripPoint,
+    };
+  }
+
+  static parseStateToTripPoint(state) {
+    return {
+      ...state
+    };
+  }
 }
 

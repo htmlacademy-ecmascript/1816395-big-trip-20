@@ -1,20 +1,14 @@
 const CONST_COMMON_DATA = {
-  modeViewTripPoint: {
-    DEFAULT: 'DEFAULT',
-    EDITING: 'EDITING',
-  },
   secondsInDay: 86400000,
   secondsInHour: 3600000,
   formatDateOneDay: 'YYYY-MM-DD',
-  formatDateMinutes: 'MM[m]',
-  formatDateHoursMinutes: 'HH[h] MM[m]',
-  formatDateDaysHoursMinutes: 'DD[d] HH[h] MM[m]',
+  formatDateMinutes: 'mm[M]',
+  formatDateHoursMinutes: 'HH[H] mm[M]',
+  formatDateDaysHoursMinutes: 'DD[D] HH[H] mm[M]',
   formatDate: 'YYYY-MM-DDTHH:mm:ss',
   formatDateInfo: 'MMM DD',
   formatDatePoint: 'HH:mm',
   formatDateAddPoint: 'DD/MM/YY mm:ss',
-  sortItems: ['Day', 'Event', 'Time', 'Price', 'Offers'],
-  filters: ['Everything', 'Future', 'Present', 'Past'],
   offersTitle: [
     'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
   ],
@@ -30,6 +24,17 @@ const CONST_COMMON_DATA = {
     PRESENT: 'Present',
     PAST: 'Past',
     ACCEPT_FILTER: 'Accept filter'
+  },
+  modeViewTripPoint: {
+    DEFAULT: 'DEFAULT',
+    EDITING: 'EDITING',
+  },
+  sortTypes: {
+    'DAY': 'day',
+    'EVENT': 'event',
+    'TIME': 'time',
+    'PRICE': 'price',
+    'OFFERS': 'offers'
   }
 };
 

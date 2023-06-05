@@ -12,7 +12,7 @@ export default class PointPresenter {
   #editPointPresenter = null;
 
   #destination = null;
-  #offerTripPoint = null;
+  #availableOfferTripPoint = null;
 
   #component = null;
   #tripPoint = null;
@@ -26,7 +26,7 @@ export default class PointPresenter {
    * Инициализация получения сущностей от ContentPresenter
    * @param {object} pointPresenterContainer Объект с контейнером для отрисовки призентора
    * @param {object} destination Объект с сущностью модели пунктов назначения
-   * @param {object} offerTripPoint Объект с сущностью модели дополнительных предложений
+   * @param {object} availableOfferTripPoint Объект с сущностью модели дополнительных предложений
    * @param {object} editPointPresenter Объект с сущностью призентора который отвечает за редактирование текущей точки путешествия
    * @param {object} onTripPointUpdate Объект с функцией обработчика события обновления данных в точке путешествия
    * @param {object} onViewChange Объект с функцией обработчика события открытия редактирования второй точки путешествия
@@ -35,14 +35,14 @@ export default class PointPresenter {
   constructor({
     pointPresenterContainer,
     destination,
-    offerTripPoint,
+    availableOfferTripPoint,
     editPointPresenter,
     onTripPointUpdate,
     onViewChange
   }) {
     this.#pointPresenterContainer = pointPresenterContainer;
     this.#destination = destination;
-    this.#offerTripPoint = offerTripPoint;
+    this.#availableOfferTripPoint = availableOfferTripPoint;
     this.#editPointPresenter = editPointPresenter;
     this.#handleTripPointUpdate = onTripPointUpdate;
     this.#handleViewChange = onViewChange;
@@ -101,6 +101,7 @@ export default class PointPresenter {
  */
 
   #replaceFormToTripPoint() {
+    // console.log(this.#component.element)
     replace(this.component, this.#editPointPresenter.component);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#view = CONST_COMMON_DATA.modeViewTripPoint.DEFAULT;
@@ -146,7 +147,8 @@ export default class PointPresenter {
    * Метод который обрабатывает подтверждение формы редактирования
    */
 
-  #handleFormSubmit = () => {
+  #handleFormSubmit = (tripPoint) => {
+    this.#handleTripPointUpdate(tripPoint);
     this.#replaceFormToTripPoint();
   };
 
@@ -169,7 +171,7 @@ export default class PointPresenter {
     this.#component = new TripPointView({
       tripPoint,
       destination: this.#destination,
-      offer: this.#offerTripPoint,
+      offer: this.#availableOfferTripPoint,
       onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick
     });

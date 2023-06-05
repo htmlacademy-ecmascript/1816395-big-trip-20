@@ -10,9 +10,15 @@ import { CONST_COMMON_DATA } from '../const/common-const.js';
 function createTripSortItemHTML(sortItem) {
   return (/*html*/`
 
-    <div class="trip-sort__item  trip-sort__item--${sortItem.toLowerCase()}">
-      <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day">
-      <label class="trip-sort__btn" for="sort-day">${sortItem}</label>
+    <div class="trip-sort__item  trip-sort__item--${sortItem}">
+      <input id="sort-${sortItem}"
+          class="trip-sort__input  visually-hidden"
+          data-sort-type="${sortItem.toLocaleUpperCase()}"
+          type="radio" name="trip-sort"
+          value="sort-${sortItem}"
+          ${sortItem === 'event' || sortItem === 'offers' ? 'disabled' : ''}
+          >
+      <label class="trip-sort__btn" for="sort-${sortItem}">${sortItem}</label>
     </div>
 
 `);
@@ -24,9 +30,9 @@ function createTripSortItemHTML(sortItem) {
  * @returns Строку с разметкой критериев сортировки точек путешествия
  */
 
-function createTripSortItemsHTML(sortItems) {
+function createTripSortItemsHTML(sortItems, tripPoints) {
   return sortItems
-    .map((sortItem) => createTripSortItemHTML(sortItem))
+    .map((sortItem) => createTripSortItemHTML(sortItem, tripPoints))
     .join('');
 }
 
@@ -35,10 +41,10 @@ function createTripSortItemsHTML(sortItems) {
  * @returns Строку с шаблоном разметки критериев сортировки
  */
 
-function createTripSortTemplate() {
-  const sortItems = CONST_COMMON_DATA.sortItems;
+function createTripSortTemplate(sortTypes, tripPoints) {
+  const sortItems = Object.values(sortTypes);
 
-  const tripSortItemsHTML = createTripSortItemsHTML(sortItems);
+  const tripSortItemsHTML = createTripSortItemsHTML(sortItems, tripPoints);
 
   return (/*html*/
     `
@@ -54,17 +60,33 @@ function createTripSortTemplate() {
 * Класс для управления компонентом для отрисовки SortsEventsTripView
 */
 
-export default class SortsEventsTripView extends AbstractView {
-  constructor() {
+export default class SortsTripPointsView extends AbstractView {
+  #handleSortTypeChange = null;
+  #sortInputs = null;
+
+  constructor({ onSortTypeChange }) {
     super();
+    this.#handleSortTypeChange = onSortTypeChange;
+    this.#sortInputs = this.element.querySelectorAll('input');
+
+    this.element.addEventListener('click', this.#sortTypeChangeHandler);
+
   }
+
+
+  #sortTypeChangeHandler = (evt) => {
+    if (evt.target.tagName === 'INPUT') {
+      this.#handleSortTypeChange(evt.target.dataset.sortType);
+    }
+  };
 
   /**
    * Метод для получения шаблона разметки критериев сортировки точек путешествия
    */
 
   get template() {
-    return createTripSortTemplate();
+    const sortTypes = CONST_COMMON_DATA.sortTypes;
+    return createTripSortTemplate(sortTypes);
   }
 
 }
