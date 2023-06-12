@@ -17,6 +17,7 @@ const commonUtil = {
   },
 
   humanizeDateInfo: function (date) {
+    console.log(date,dayjs(date))
     return date ? dayjs(date).format(CONST_COMMON_DATA.formatDateInfo) : '';
   },
 

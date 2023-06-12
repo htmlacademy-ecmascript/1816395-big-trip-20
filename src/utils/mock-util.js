@@ -14,14 +14,15 @@ const mockUtil = {
   },
 
   getRandomDate: function () {
-    const
-      start = new Date(CONST_MOCK_DATA.years[0], 0, 1),
-      end = new Date(CONST_MOCK_DATA.years[1], 0, 1);
-    return dayjs(
+    const start = new Date(CONST_MOCK_DATA.years[0], 0, 1);
+    const end = new Date(CONST_MOCK_DATA.years[1], 0, 1);
+
+    const randomDate = dayjs(
       new Date(start.getTime()
         + Math.random() * (end.getTime() - start.getTime()))
     )
       .format(CONST_COMMON_DATA.formatDate);
+    return randomDate;
   },
 
   getRandomBooleanValue: function () {
@@ -41,10 +42,21 @@ const mockUtil = {
   },
 
   getRandomPeriod: function () {
+
+    const isDateAfter = function (firstDate, secondDate) {
+      return dayjs(firstDate).isAfter(secondDate);
+    };
+
+    const isExtensionLimit = function (firstDate, SecondDate) {
+      return dayjs(firstDate).diff(SecondDate) < CONST_MOCK_DATA.millisecondsInMonth;
+    };
     const period = [];
     period.push(mockUtil.getRandomDate());
     let endPeriod = mockUtil.getRandomDate();
-    while (dayjs(period[0]).isAfter(endPeriod)) {
+
+
+    while (isDateAfter(period[0], endPeriod) ) {
+      console.log('+')
       endPeriod = mockUtil.getRandomDate();
     }
     period.push(endPeriod);
