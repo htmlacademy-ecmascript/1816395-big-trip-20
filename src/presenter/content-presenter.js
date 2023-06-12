@@ -24,6 +24,7 @@ export default class ContentPresenter {
   #tripPointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
+  #headerPresenter = null;
 
   #tripPointPresenters = new Map();
   #tripPoints = [];
@@ -35,11 +36,13 @@ export default class ContentPresenter {
     tripPointsModel,
     destinationsModel,
     offersModel,
+    headerPresenter
   }) {
     this.#contentContainer = contentContainer;
     this.#tripPointsModel = tripPointsModel;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
+    this.#headerPresenter = headerPresenter;
     this.#tripPoints = sortUtil[this.#SortTypes.DAY]([...this.#tripPointsModel.tripPoints]);
 
     this.#contentBox = this.#contentComponent.element;
@@ -84,17 +87,16 @@ export default class ContentPresenter {
   #renderTripPoints() {
     const tripPoints = this.#tripPoints;
 
-    for (let i = 0; i < tripPoints.length; i++) {
+    tripPoints.forEach((tripPoint) => {
       this.#renderTripPoint(
         this.#contentBox,
-        tripPoints[i],
-        this.#destinationsModel.getById(tripPoints[i].destination),
-        this.#offersModel.getByType(tripPoints[i].type),
+        tripPoint,
+        this.#destinationsModel.getById(tripPoint.destination),
+        this.#offersModel.getByType(tripPoint.type),
         this.#destinationsModel,
         this.#offersModel
       );
-    }
-
+    });
   }
 
 
@@ -193,11 +195,15 @@ export default class ContentPresenter {
    */
 
   #handleTripPointUpdate = (updatedTripPoint) => {
+
     this.#tripPoints = commonUtil.updateTripPoint(this.#tripPoints, updatedTripPoint);
+    this.#tripPointsModel.update(this.#tripPoints);
     this.#sortedTripPoints = commonUtil.updateTripPoint(this.#sortedTripPoints, updatedTripPoint);
     this.#tripPointPresenters.get(updatedTripPoint.id).init(updatedTripPoint);
     this.#clearTripPoints();
     this.#renderTripPoints(this.#contentComponent.element);
+    this.#headerPresenter.init();
+
   };
 
   /**

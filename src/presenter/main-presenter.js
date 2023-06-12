@@ -57,7 +57,8 @@ export default class MainPresenter {
       tripPointsModel: this.#tripPointsModel,
       destinationsModel: this.#destinationsModel,
       offersModel: this.#offersModel,
-      filters: this.#filters
+      filters: this.#filters,
+      headerPresenter: this.#headerPresenter,
     });
 
     this.#headerPresenter.init();

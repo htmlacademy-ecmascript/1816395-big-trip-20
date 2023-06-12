@@ -1,6 +1,6 @@
 import TripEventsInfoView from '../view/trip-event-info-view.js';
 
-import { render, RenderPosition } from '../framework/render.js';
+import { render, RenderPosition, remove } from '../framework/render.js';
 import FilterPresenter from './filter-presenter.js';
 import { TripPointCoastView } from '../view/trip-point-coast-view.js';
 
@@ -16,7 +16,9 @@ export default class HeaderPresenter {
   #offersModel = null;
   #filters = null;
   #component = null;
-  #tripPointsCostComponent = null;
+  #costComponent = null;
+
+  #filterPresenter = null;
 
   /**
    * Инициализация получения сущностей от MainPresenter
@@ -27,7 +29,14 @@ export default class HeaderPresenter {
    * @param {object} offersModel Объект с сущностью модели дополнительных предложений
    */
 
-  constructor({ filterContainer, infoContainer, tripPointsModel, destinationsModel, offersModel, filters }) {
+  constructor({
+    filterContainer,
+    infoContainer,
+    tripPointsModel,
+    destinationsModel,
+    offersModel,
+    filters
+  }) {
     this.#filterContainer = filterContainer;
     this.#infoContainer = infoContainer;
     this.#tripPointsModel = tripPointsModel;
@@ -41,9 +50,19 @@ export default class HeaderPresenter {
    */
 
   init() {
-    this.#setComponent();
-    this.#render();
+    if (this.#component) {
+      remove(this.#component);
+    }
 
+    if(this.#costComponent){
+      remove(this.#costComponent);
+    }
+    this.#setComponent();
+
+
+    this.#setCostComponent();
+
+    this.#render();
   }
 
   /**
@@ -62,8 +81,11 @@ export default class HeaderPresenter {
    */
 
   #renderFilterPresenter() {
-    const filterPresenter = new FilterPresenter({ filterContainer: this.#filterContainer });
-    filterPresenter.init(this.#filters);
+    if (!this.#filterPresenter) {
+      this.#filterPresenter = new FilterPresenter({ filterContainer: this.#filterContainer });
+    }
+
+    this.#filterPresenter.init(this.#filters);
   }
 
   #renderTripInfoComponent() {
@@ -71,24 +93,29 @@ export default class HeaderPresenter {
   }
 
   #renderTripPointsCostComponent() {
-    const tripPoints = this.#tripPointsModel.tripPoints;
-    const tripPointCoastComponentContainer = this.#component.element;
 
-    render(new TripPointCoastView({
-      tripPoints: tripPoints,
-      offersModel: this.#offersModel
-    }), tripPointCoastComponentContainer);
+    const tripPointCoastComponentContainer = this.#component.element;
+    render(this.#costComponent, tripPointCoastComponentContainer);
   }
 
   #setComponent() {
     const tripPoints = this.#tripPointsModel.tripPoints;
-    const destinationsList = this.#destinationsModel.destinations;
+    const destinationsIds = tripPoints.map((tripPoint) => tripPoint.destination);
+    const destinationsList = destinationsIds.map((destinationId) => this.#destinationsModel.getById(destinationId));
     const offersList = this.#offersModel.offers;
 
     this.#component = new TripEventsInfoView({
       destinationsList: destinationsList,
       offersList: offersList,
       tripPoints: tripPoints
+    });
+  }
+
+  #setCostComponent() {
+    const tripPoints = this.#tripPointsModel.tripPoints;
+    this.#costComponent = new TripPointCoastView({
+      tripPoints: tripPoints,
+      offersModel: this.#offersModel
     });
   }
 

@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { render, remove } from '../framework/render.js';
 import TripFiltersView from '../view/trip-filters-view.js';
 
 
@@ -26,6 +26,9 @@ export default class FilterPresenter {
    */
 
   init(filters) {
+    if (this.#component) {
+      remove(this.#component);
+    }
     this.#setComponent(filters);
     this.#render();
   }
