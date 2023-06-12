@@ -8,7 +8,7 @@ const CONST_COMMON_DATA = {
   formatDate: 'YYYY-MM-DDTHH:mm:ss',
   formatDateInfo: 'MMM DD',
   formatDatePoint: 'HH:mm',
-  formatDateAddPoint: 'DD/MM/YY mm:ss',
+  formatDateAddPoint: 'DD/MM/YY hh:mm',
   typeOffers: [
     'taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'
   ],

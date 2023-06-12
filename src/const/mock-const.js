@@ -1,4 +1,5 @@
 const CONST_MOCK_DATA = {
+  millisecondsInMonth: 2629800000,
   pictureURL: 'https://loremflickr.com/248/152?random=',
   years: [2022, 2023],
   booleanValue: [true, false],
