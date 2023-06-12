@@ -8,10 +8,9 @@ import { commonUtil } from '../utils/common-util.js';
  */
 
 function getBasePrice(tripPoints) {
-  return commonUtil.getSumOfValues(
-    tripPoints
-      .map((tripPoint) => tripPoint.basePrice)
-  );
+  const basePrices = tripPoints.map((tripPoint) => tripPoint.basePrice);
+  console.log(basePrices)
+  return commonUtil.getSumOfValues(basePrices);
 }
 
 /**
@@ -47,7 +46,7 @@ function createTripCoastHTML(tripPoints, offersModel) {
     );
 
   const offersPrice = getOffersPrice(allOffersOfTripPoints);
-
+  console.log(offersPrice, basePrice)
   return basePrice + offersPrice;
 }
 
