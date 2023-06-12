@@ -26,4 +26,8 @@ export default class TripPointsModel {
   get tripPoints() {
     return this.#tripPoints;
   }
+
+  update(updatedTripPoints) {
+    this.#tripPoints = updatedTripPoints;
+  }
 }

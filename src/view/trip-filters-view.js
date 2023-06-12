@@ -16,15 +16,15 @@ function createTripFilterHTML(filter, isChecked) {
     `
   <div class="trip-filters__filter">
     <input
-      id="filter-${type}"
+      id="filter-${type.toLowerCase()}"
       class="trip-filters__filter-input  visually-hidden"
       type="radio"
       name="trip-filter"
-      value="everything"
+      value="${type.toLowerCase()}"
       ${isChecked ? 'checked' : ''}
       ${count === 0 ? 'disabled' : ''}
     >
-    <label class="trip-filters__filter-label" for="filter-everything">${type}</label>
+    <label class="trip-filters__filter-label" for="filter-${type.toLowerCase()}">${type}</label>
   </div>
   `
   );

@@ -1,6 +1,9 @@
 import { CONST_COMMON_DATA } from '../const/common-const.js';
 import { commonUtil } from '../utils/common-util.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 /**
  * Создание разметки всплывающего меню выбора типа поездки
@@ -8,7 +11,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
  * @returns Строку с разметкой всплывающего меню выбора типа поездки
  */
 
-function createEventTypeWrapperHTML(tripPointType) {
+function createEventTypeWrapperHTML(tripPointType, offersModel) {
 
   const eventTypeBtn = createEventTypeBtnHTML(tripPointType);
   /**
@@ -35,11 +38,29 @@ function createEventTypeWrapperHTML(tripPointType) {
    */
 
   function createTypeItemHTML(type) {
+    const capitalizeType = commonUtil.getCapitalize(type);
+
     return (/*html*/
       `
-      <div class="event__type-item">
-        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="${type}" value="${type}">
-        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type}">${type}</label>
+      <div class="event__type-item"
+        ${offersModel.getByType(type) ?
+        '' :
+        'hidden'
+      }
+      >
+        <input
+          id="event-type-${type}-1"
+          class="event__type-input  visually-hidden"
+          type="radio"
+          name="event-type"
+          value="${type}"
+          >
+        <label
+          class="event__type-label  event__type-label--${type}"
+          for="event-type-${type}-1"
+          >
+          ${capitalizeType}
+        </label>
       </div>
   `
     );
@@ -71,6 +92,12 @@ function createEventTypeWrapperHTML(tripPointType) {
   `);
 }
 
+function createDestinationsOptions(destinations) {
+  return destinations
+    .map((destination) => `<option value="${destination.name}"></option>`)
+    .join('');
+}
+
 /**
  * Создает разметку с названием пункта назначения
  * @param {string} tripPointType Строка с типом точки путешествия
@@ -78,20 +105,19 @@ function createEventTypeWrapperHTML(tripPointType) {
  * @returns Строку с разметкой названия пункта назначения
  */
 
-function createTripEventDestinationHTML(tripPointType, destinationName) {
+function createTripEventDestinationHTML(tripPointType, destinationName, destinationsModel) {
+  const destinations = destinationsModel.destinations;
   return (/*html*/ `
   <div class="event__field-group  event__field-group--destination">
-  <label class="event__label  event__type-output" for="event-destination-1">
-    ${tripPointType}
-  </label>
-  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination"
-    value=${destinationName} list="destination-list-1">
-  <datalist id="destination-list-1">
-    <option value="Amsterdam"></option>
-    <option value="Geneva"></option>
-    <option value="Chamonix"></option>
-  </datalist>
-</div>
+    <label class="event__label  event__type-output" for="event-destination-1">
+      ${tripPointType}
+    </label>
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination"
+      value=${destinationName} list="destination-list-1">
+    <datalist id="destination-list-1">
+      ${createDestinationsOptions(destinations)}
+    </datalist>
+  </div>
   `);
 }
 
@@ -127,9 +153,25 @@ function createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd) {
  * @returns Строку с разметкой  возможных и выбранных дополнительных предложений для точки путешествия
  */
 
-function createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint) {
+function createTripEventAvailableOffersHtml(tripPoint, offersModel) {
 
+  const availableOffersTripPoint = offersModel.getByType(tripPoint.type);
   const tripPointsOffersIds = tripPoint.offers;
+
+  /**
+   * Метод возвращает название класса для ДОМ элемента специального предложения
+   * @param {string} offerTitle Строка с названием специального предложения
+   * @returns Строку с названием класса ДОМ элемента специального предложения
+   */
+
+  function createOfferClass(offerTitle) {
+    const wordsOfferTitle = offerTitle.split(' ');
+    if (wordsOfferTitle[wordsOfferTitle.length - 1] === 'class') {
+      return wordsOfferTitle[wordsOfferTitle.length - 2];
+    }
+    return wordsOfferTitle[wordsOfferTitle.length - 1];
+  }
+
   /**
    * Создает разметку с дополнительного предложения
    * @param {object} offer Объект с дополнительным предложением
@@ -138,13 +180,22 @@ function createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint)
    */
 
   function createAvailableOfferHtml(offer, checked) {
-    const
-      offerTitle = offer.title,
-      offerPrice = offer.price;
+    const offerTitle = offer.title;
+    const offerPrice = offer.price;
+    const offerId = offer.id;
+    const offerClass = createOfferClass(offerTitle);
+
     return (/*html*/`
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${checked}>
-      <label class="event__offer-label" for="event-offer-luggage-1">
+      <input class="event__offer-checkbox  visually-hidden"
+        id="event-offer-${offerClass}-1"
+        type="checkbox"
+        name="event-offer-luggage"
+        ${checked}
+        data-offer-id="${offerId}"
+        >
+      <label class="event__offer-label"
+        for="event-offer-${offerClass}-1">
         <span class="event__offer-title">${offerTitle}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offerPrice}</span>
@@ -246,7 +297,13 @@ function createTripEventDestinationDetailsHTML(destinationName, destinationDescr
  * @returns Строку с разметкой компонента добавления или редактирования точки путешествия
  */
 
-function createEditTripPointTemplate(tripPoint, destination, availableOffersTripPoint) {
+function createEditTripPointTemplate(
+  tripPoint,
+  destinationsModel,
+  offersModel
+) {
+  const destination = destinationsModel.getById(tripPoint.destination);
+
   const destinationName = destination.name;
   const destinationDescription = destination.description;
   const destinationPictures = destination.pictures;
@@ -255,11 +312,11 @@ function createEditTripPointTemplate(tripPoint, destination, availableOffersTrip
   const tripPointDateEnd = tripPoint.dateTo;
   const tripPointPrice = tripPoint.basePrice;
 
-  const tripEventTypeWrapperHTML = createEventTypeWrapperHTML(tripPointType);
-  const tripEventDestinationHTML = createTripEventDestinationHTML(tripPointType, destinationName);
+  const tripEventTypeWrapperHTML = createEventTypeWrapperHTML(tripPointType, offersModel);
+  const tripEventDestinationHTML = createTripEventDestinationHTML(tripPointType, destinationName, destinationsModel);
   const tripEventTimeHTML = createTripEventTimeHTML(tripPointDateStart, tripPointDateEnd);
   const tripEventPriceHTML = createTripEventPriceHTML(tripPointPrice);
-  const tripEventAvailableOffersHTML = createTripEventAvailableOffersHtml(tripPoint, availableOffersTripPoint);
+  const tripEventAvailableOffersHTML = createTripEventAvailableOffersHtml(tripPoint, offersModel);
   const tripEventDestinationDetailsHTML = createTripEventDestinationDetailsHTML(destinationName, destinationDescription, destinationPictures);
   return (/*html*/
     `
@@ -293,12 +350,13 @@ function createEditTripPointTemplate(tripPoint, destination, availableOffersTrip
   );
 }
 export default class EditPointView extends AbstractStatefulView {
-  #tripPoint = null;
-  #destination = null;
-  #availableOffersTripPoint = null;
+  #destinationsModel = null;
+  #offersModel = null;
 
   #handleFormSubmit = null;
   #handleCloseEditClick = null;
+  #datepickerStart = null;
+  #datePickerEnd = null;
 
   /**
  * Инициализация данных из Points-presenter
@@ -308,11 +366,19 @@ export default class EditPointView extends AbstractStatefulView {
  * @param {object} handleFormSubmit Объект с функцией которая будет срабатывать при подтверждении формы
  */
 
-  constructor({ tripPoint, destination, availableOffersTripPoint, onFormSubmit, onCloseEditClick }) {
+  constructor({
+    tripPoint,
+    destinationsModel,
+    offersModel,
+
+    onFormSubmit,
+    onCloseEditClick
+  }) {
     super();
     this._setState(EditPointView.parseTripPointToState(tripPoint));
-    this.#destination = destination;
-    this.#availableOffersTripPoint = availableOffersTripPoint;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
+
     this.#handleFormSubmit = onFormSubmit;
     this.#handleCloseEditClick = onCloseEditClick;
 
@@ -328,21 +394,51 @@ export default class EditPointView extends AbstractStatefulView {
   get template() {
     return createEditTripPointTemplate(
       this._state,
-      this.#destination,
-      this.#availableOffersTripPoint,
+      this.#destinationsModel,
+      this.#offersModel,
     );
   }
 
-  _restoreHandlers(){
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+
+    if (this.#datePickerEnd) {
+      this.#datePickerEnd.destroy();
+      this.#datePickerEnd = null;
+    }
+  }
+
+  /**
+   * Метод подключает слушатели событий
+   */
+
+  _restoreHandlers() {
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
 
     this.element.querySelector('.event__rollup-btn')
       .addEventListener('click', this.#closeEditClickHandler);
 
-    this.element.querySelectorAll('.event__type-label')
+    this.element.querySelectorAll('.event__type-input')
       .forEach((element) => element.addEventListener('click', this.#typeClickHandler));
+
+    this.element.querySelector('.event__input--destination')
+      .addEventListener('change', this.#destinationChangeHandler);
+
+    this.element.querySelector('.event__field-group--price')
+      .addEventListener('change', this.#priceChangeHandler);
+
+    this.element.querySelectorAll('.event__offer-selector')
+      .forEach((element) => element.addEventListener('click', this.#offersClickHandler));
+
+    this.#setDatePickers();
   }
+
   /**
  * Метод описывает приватный обработчик события и используется стрелочная функция, что бы this
  * у функции был по месту вызова функции
@@ -361,9 +457,80 @@ export default class EditPointView extends AbstractStatefulView {
 
   #typeClickHandler = (evt) => {
     evt.preventDefault();
-    this._state.type = evt.target.textContent;
+
+    this._state.type = evt.target.value;
+
+    this._state.offers = [];
     this.updateElement(this._state);
   };
+
+  #destinationChangeHandler = (evt) => {
+    const newDEstinationId = this.#destinationsModel.getByName(evt.target.value).id;
+    this._state.destination = newDEstinationId;
+    this.updateElement(this._state);
+  };
+
+  #priceChangeHandler = (evt) => {
+    this._state.basePrice = +evt.target.value;
+    this.updateElement(this._state);
+  };
+
+  #offersClickHandler = (evt) => {
+    if (evt.target.tagName === 'INPUT') {
+      if (this._state.offers.find((offerId) => offerId === evt.target.dataset.offerId)) {
+        this._state.offers = this._state.offers.filter((offerId) =>
+          offerId !== evt.target.dataset.offerId);
+      } else {
+        this._state.offers.push(evt.target.dataset.offerId);
+      }
+      this.updateElement(this._state);
+    }
+  };
+
+  #startDateChangeHandler = ([dateFrom]) => {
+    this.updateElement({
+      dateFrom: dateFrom
+    });
+  };
+
+  #endDateChangeHandler = ([dateTo]) => {
+    this.updateElement({
+      dateTo: dateTo
+    });
+  };
+
+  #setDatePickers() {
+
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: commonUtil.humanizeDateEditPoint(this._state.dateFrom),
+        onChange: this.#startDateChangeHandler,
+        enableTime: true,
+        maxDate: commonUtil.humanizeDateEditPoint(this._state.dateTo),
+        locale:{
+          firstDayOfWeek: 1,
+        },
+        'time_24r':true,
+      }
+    );
+
+    this.#datePickerEnd = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: commonUtil.humanizeDateEditPoint(this._state.dateTo),
+        onChange: this.#endDateChangeHandler,
+        enableTime: true,
+        minDate: commonUtil.humanizeDateEditPoint(this._state.dateFrom),
+        locale:{
+          firstDayOfWeek: 1,
+        },
+        'time_24r':true,
+      }
+    );
+  }
 
   static parseTripPointToState(tripPoint) {
     return {

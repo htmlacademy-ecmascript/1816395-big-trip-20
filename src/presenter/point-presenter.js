@@ -11,8 +11,8 @@ export default class PointPresenter {
   #pointPresenterContainer = null;
   #editPointPresenter = null;
 
-  #destination = null;
-  #availableOfferTripPoint = null;
+  #destinationsModel = null;
+  #offersModel = null;
 
   #component = null;
   #tripPoint = null;
@@ -33,17 +33,21 @@ export default class PointPresenter {
    */
 
   constructor({
+
     pointPresenterContainer,
-    destination,
-    availableOfferTripPoint,
     editPointPresenter,
+    destinationsModel,
+    offersModel,
+
     onTripPointUpdate,
     onViewChange
+
   }) {
     this.#pointPresenterContainer = pointPresenterContainer;
-    this.#destination = destination;
-    this.#availableOfferTripPoint = availableOfferTripPoint;
     this.#editPointPresenter = editPointPresenter;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
+
     this.#handleTripPointUpdate = onTripPointUpdate;
     this.#handleViewChange = onViewChange;
   }
@@ -59,8 +63,10 @@ export default class PointPresenter {
 
     const prevTripPointComponent = this.#component;
     const prevEditTripPointComponent = this.#editPointPresenter.component;
+    if (this.component === null) {
+      this.#setComponent(this.#tripPoint);
+    }
 
-    this.#setComponent(this.#tripPoint);
 
     if (prevTripPointComponent === null) {
       this.#renderTripPoint();
@@ -101,7 +107,6 @@ export default class PointPresenter {
  */
 
   #replaceFormToTripPoint() {
-    // console.log(this.#component.element)
     replace(this.component, this.#editPointPresenter.component);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#view = CONST_COMMON_DATA.modeViewTripPoint.DEFAULT;
@@ -170,8 +175,8 @@ export default class PointPresenter {
   #setComponent(tripPoint) {
     this.#component = new TripPointView({
       tripPoint,
-      destination: this.#destination,
-      offer: this.#availableOfferTripPoint,
+      destination: this.#destinationsModel.getById(tripPoint.destination),
+      availableOffersTripPoint: this.#offersModel.getByType(tripPoint.type),
       onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick
     });

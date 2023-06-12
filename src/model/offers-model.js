@@ -56,7 +56,28 @@ export default class OffersModel {
         );
     }
     return [];
-
   }
 
+  getOffersIds(typeOffer) {
+    return this.getByType(typeOffer)
+      .map((offer)=>offer.id);
+  }
+
+}
+
+function generateTripPointOffers(AllOffers, typeOffer) {
+
+  function getOffersByType(type) {
+    return AllOffers.find((offer) => offer.type === type);
+  }
+
+  function shuffleArray(offersAvailable) {
+    return offersAvailable.sort(() => Math.random() - 0.5);
+  }
+
+  const tripPointAvailableOffer = [...getOffersByType(typeOffer).offers];
+  const tripPointOffersIds = shuffleArray(tripPointAvailableOffer)
+    .map((offer) => offer.id)
+    .splice(0, Math.floor(Math.random() * tripPointAvailableOffer.length));
+  return tripPointOffersIds;
 }

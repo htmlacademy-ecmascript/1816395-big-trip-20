@@ -15,7 +15,8 @@ function generateTripPointOffers(AllOffers, typeOffer) {
 
   const tripPointAvailableOffer = [...getOffersByType(typeOffer).offers];
   const tripPointOffersIds = shuffleArray(tripPointAvailableOffer)
-    .map((offer) => offer.id).splice(0, tripPointAvailableOffer.length - 1);
+    .map((offer) => offer.id)
+    .splice(0, Math.floor(Math.random() * tripPointAvailableOffer.length));
   return tripPointOffersIds;
 }
 

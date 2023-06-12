@@ -8,15 +8,9 @@ const CONST_COMMON_DATA = {
   formatDate: 'YYYY-MM-DDTHH:mm:ss',
   formatDateInfo: 'MMM DD',
   formatDatePoint: 'HH:mm',
-  formatDateAddPoint: 'DD/MM/YY mm:ss',
-  offersTitle: [
-    'Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'
-  ],
-  typeTripPoint: [
-    'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
-  ],
+  formatDateAddPoint: 'DD/MM/YY hh:mm',
   typeOffers: [
-    'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
+    'taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'
   ],
   FilterType: {
     EVERYTHING: 'Everything',

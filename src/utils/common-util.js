@@ -17,6 +17,7 @@ const commonUtil = {
   },
 
   humanizeDateInfo: function (date) {
+    console.log(date,dayjs(date))
     return date ? dayjs(date).format(CONST_COMMON_DATA.formatDateInfo) : '';
   },
 
@@ -79,6 +80,10 @@ const commonUtil = {
 
   getPointsPriceDifference: function (firstPoint, secondPoint) {
     return secondPoint.basePrice - firstPoint.basePrice;
+  },
+
+  getCapitalize: function (str) {
+    return str[0].toUpperCase() + str.slice(1);
   }
 
 };
